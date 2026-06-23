@@ -2,7 +2,7 @@
 
 Automated weekly dashboard for El Niño / La Niña conditions, hosted free on **GitHub Pages** and emailed to you every Monday.
 
-**Data sources:** NOAA/CPC · IRI Columbia · Australian BoM
+**Data sources:** NOAA/CPC 
 
 ---
 
