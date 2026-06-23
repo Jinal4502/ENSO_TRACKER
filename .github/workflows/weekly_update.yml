@@ -38,9 +38,9 @@ jobs:
         run: |
           git config user.name  "ENSO Bot"
           git config user.email "actions@github.com"
+          git pull --rebase origin main
           git add docs/index.html enso_data.json enso_history.json
           git diff --staged --quiet || git commit -m "chore: ENSO update $(date -u +%Y-%m-%d)"
-          git pull --rebase origin main
           git push
 
   deploy-pages:
