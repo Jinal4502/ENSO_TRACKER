@@ -26,6 +26,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Sync with remote
+        run: |
+          git config user.name  "ENSO Bot"
+          git config user.email "actions@github.com"
+          git pull --rebase origin main
+
       - name: Fetch, render, email
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
@@ -38,9 +44,6 @@ jobs:
 
       - name: Commit updated dashboard and history
         run: |
-          git config user.name  "ENSO Bot"
-          git config user.email "actions@github.com"
-          git pull --rebase origin main
           git add docs/index.html enso_data.json enso_history.json
           git diff --staged --quiet || git commit -m "chore: ENSO update $(date -u +%Y-%m-%d)"
           git push
