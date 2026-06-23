@@ -35,32 +35,19 @@ def save_history(history: list[dict]) -> None:
 
 
 def diff_summary(current: dict, previous: Optional[dict]) -> str:
-    """One-paragraph change summary to include in the email."""
-    if not previous:
-        return "First run — baseline established."
+    """Current conditions summary for the email body."""
+    cur_date   = current.get("fetched_utc", "")[:10]
+    cur_anom   = current.get("latest_weekly", {}).get("nino34_anom")
+    cur_label, _ = classify(cur_anom or 0.0)
+    cur_oni    = current.get("latest_oni", {}).get("oni")
+    cur_status = current.get("discussion", {}).get("status", "")
 
-    lines = []
-    cur_anom  = current.get("latest_weekly", {}).get("nino34_anom")
-    prev_anom = previous.get("latest_weekly", {}).get("nino34_anom")
-    if cur_anom is not None and prev_anom is not None:
-        delta = cur_anom - prev_anom
-        direction = "rose" if delta > 0 else "fell"
-        lines.append(
-            f"Niño-3.4 anomaly {direction} {abs(delta):+.2f} °C "
-            f"(was {prev_anom:+.2f}, now {cur_anom:+.2f})."
-        )
-
-    cur_status  = current.get("discussion", {}).get("status", "")
-    prev_status = previous.get("discussion", {}).get("status", "")
-    if cur_status and cur_status != prev_status:
-        lines.append(f"Advisory status changed: {prev_status} → {cur_status}.")
-
-    cur_oni  = current.get("latest_oni", {}).get("oni")
-    prev_oni = previous.get("latest_oni", {}).get("oni")
-    if cur_oni is not None and prev_oni is not None and cur_oni != prev_oni:
-        lines.append(f"ONI updated to {cur_oni:+.2f} (was {prev_oni:+.2f}).")
-
-    return " ".join(lines) if lines else "No significant changes this week."
+    return (
+        f"As of {cur_date}, the Niño-3.4 SST anomaly stands at {cur_anom:+.2f} °C, "
+        f"indicative of {cur_label} conditions. "
+        f"The Oceanic Niño Index (ONI) is {cur_oni:+.2f} °C. "
+        f"Current NOAA/CPC advisory status: {cur_status}."
+    )
 
 
 def build_email_html(data: dict, diff: str, pages_url: str) -> str:
@@ -86,8 +73,7 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
     </a>
   </div>
   <div style="padding:12px 24px;background:#f6f8fa;font-size:.75rem;color:#888">
-    Sources: NOAA/CPC · IRI Columbia · Australian BoM ·
-    <a href="https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/">CPC Advisory</a>
+    Source: <a href="https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/">NOAA/CPC</a>
   </div>
 </div>
 </body></html>
@@ -131,13 +117,8 @@ def main() -> None:
     # 2. Render dashboard
     render(data, DASHBOARD)
 
-    # 3. History diff
+    # 3. History — append current snapshot, then find last week's entry
     history = load_history()
-    previous = history[-1] if history else None
-    diff = diff_summary(data, previous)
-    print(f"Change summary: {diff}")
-
-    # Append snapshot (lightweight — only latest values + metadata)
     snapshot = {
         "fetched_utc":   data["fetched_utc"],
         "latest_weekly": data["latest_weekly"],
@@ -147,6 +128,9 @@ def main() -> None:
     }
     history.append(snapshot)
     save_history(history)
+
+    diff = diff_summary(data, None)
+    print(f"Change summary: {diff}")
 
     # 4. Send email (skip if env vars not set — safe for local runs)
     if os.environ.get("SMTP_USER") and os.environ.get("SMTP_PASS"):
