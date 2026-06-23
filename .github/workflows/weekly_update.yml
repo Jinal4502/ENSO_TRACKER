@@ -1,0 +1,64 @@
+name: ENSO Weekly Update
+
+on:
+  schedule:
+    # Every Monday at 14:00 UTC (after CPC updates typically post Mon morning)
+    - cron: "0 14 * * 1"
+  workflow_dispatch:   # lets you trigger manually from GitHub UI
+
+permissions:
+  contents: write      # needed to commit history + dashboard to the repo
+  pages: write
+  id-token: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch, render, email
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO:  ${{ secrets.EMAIL_TO }}
+          PAGES_URL: ${{ secrets.PAGES_URL }}
+        run: python update_enso.py
+
+      - name: Commit updated dashboard and history
+        run: |
+          git config user.name  "ENSO Bot"
+          git config user.email "actions@github.com"
+          git add docs/index.html enso_data.json enso_history.json
+          git diff --staged --quiet || git commit -m "chore: ENSO update $(date -u +%Y-%m-%d)"
+          git push
+
+  deploy-pages:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main   # pick up the just-pushed dashboard
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

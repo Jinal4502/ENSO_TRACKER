@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python fetch_enso.py)",
+      "Bash(python3 *)",
+      "Bash(python *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}

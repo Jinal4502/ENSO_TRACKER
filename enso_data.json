@@ -1,0 +1,1041 @@
+{
+  "fetched_utc": "2026-06-23T01:21:47.456387+00:00",
+  "discussion": {
+    "status": "El Ni\u00f1o Advisory",
+    "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+    "issued": ""
+  },
+  "latest_weekly": {
+    "date": "2026-06-17",
+    "nino12": 26.1,
+    "nino12_anom": 3.0,
+    "nino3": 28.5,
+    "nino3_anom": 1.9,
+    "nino34": 29.3,
+    "nino34_anom": 1.7,
+    "nino4": 30.2,
+    "nino4_anom": 1.3
+  },
+  "latest_oni": {
+    "year": 2026,
+    "season": "MAM",
+    "sst": 28.06,
+    "oni": 0.48
+  },
+  "latest_roni": {
+    "year": 2026,
+    "month": 5,
+    "season": "May",
+    "roni": 0.93
+  },
+  "weekly_history": [
+    {
+      "date": "2025-06-25",
+      "nino12": 23.2,
+      "nino12_anom": 0.4,
+      "nino3": 26.4,
+      "nino3_anom": 0.0,
+      "nino34": 27.7,
+      "nino34_anom": 0.1,
+      "nino4": 29.1,
+      "nino4_anom": 0.3
+    },
+    {
+      "date": "2025-07-02",
+      "nino12": 22.8,
+      "nino12_anom": 0.4,
+      "nino3": 26.2,
+      "nino3_anom": 0.1,
+      "nino34": 27.5,
+      "nino34_anom": 0.0,
+      "nino4": 28.9,
+      "nino4_anom": 0.1
+    },
+    {
+      "date": "2025-07-09",
+      "nino12": 22.5,
+      "nino12_anom": 0.4,
+      "nino3": 26.2,
+      "nino3_anom": 0.2,
+      "nino34": 27.5,
+      "nino34_anom": 0.1,
+      "nino4": 28.9,
+      "nino4_anom": 0.2
+    },
+    {
+      "date": "2025-07-16",
+      "nino12": 22.2,
+      "nino12_anom": 0.4,
+      "nino3": 25.7,
+      "nino3_anom": -0.1,
+      "nino34": 27.1,
+      "nino34_anom": -0.2,
+      "nino4": 28.8,
+      "nino4_anom": 0.1
+    },
+    {
+      "date": "2025-07-23",
+      "nino12": 22.2,
+      "nino12_anom": 0.6,
+      "nino3": 25.5,
+      "nino3_anom": -0.1,
+      "nino34": 27.0,
+      "nino34_anom": -0.2,
+      "nino4": 28.7,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2025-07-30",
+      "nino12": 21.8,
+      "nino12_anom": 0.4,
+      "nino3": 25.3,
+      "nino3_anom": -0.2,
+      "nino34": 26.7,
+      "nino34_anom": -0.3,
+      "nino4": 28.6,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2025-08-06",
+      "nino12": 21.9,
+      "nino12_anom": 0.8,
+      "nino3": 25.2,
+      "nino3_anom": -0.1,
+      "nino34": 26.7,
+      "nino34_anom": -0.3,
+      "nino4": 28.7,
+      "nino4_anom": 0.0
+    },
+    {
+      "date": "2025-08-13",
+      "nino12": 21.6,
+      "nino12_anom": 0.6,
+      "nino3": 25.2,
+      "nino3_anom": 0.0,
+      "nino34": 26.6,
+      "nino34_anom": -0.3,
+      "nino4": 28.6,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2025-08-20",
+      "nino12": 20.8,
+      "nino12_anom": -0.1,
+      "nino3": 24.7,
+      "nino3_anom": -0.3,
+      "nino34": 26.4,
+      "nino34_anom": -0.4,
+      "nino4": 28.6,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2025-08-27",
+      "nino12": 20.5,
+      "nino12_anom": -0.3,
+      "nino3": 24.3,
+      "nino3_anom": -0.6,
+      "nino34": 26.3,
+      "nino34_anom": -0.4,
+      "nino4": 28.5,
+      "nino4_anom": -0.2
+    },
+    {
+      "date": "2025-09-03",
+      "nino12": 20.5,
+      "nino12_anom": -0.2,
+      "nino3": 24.5,
+      "nino3_anom": -0.4,
+      "nino34": 26.4,
+      "nino34_anom": -0.3,
+      "nino4": 28.5,
+      "nino4_anom": -0.2
+    },
+    {
+      "date": "2025-09-10",
+      "nino12": 20.5,
+      "nino12_anom": -0.2,
+      "nino3": 24.4,
+      "nino3_anom": -0.5,
+      "nino34": 26.2,
+      "nino34_anom": -0.5,
+      "nino4": 28.3,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-09-17",
+      "nino12": 20.6,
+      "nino12_anom": -0.0,
+      "nino3": 24.5,
+      "nino3_anom": -0.4,
+      "nino34": 26.3,
+      "nino34_anom": -0.4,
+      "nino4": 28.3,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-09-24",
+      "nino12": 20.6,
+      "nino12_anom": -0.1,
+      "nino3": 24.6,
+      "nino3_anom": -0.4,
+      "nino34": 26.2,
+      "nino34_anom": -0.5,
+      "nino4": 28.4,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-10-01",
+      "nino12": 20.6,
+      "nino12_anom": -0.1,
+      "nino3": 24.6,
+      "nino3_anom": -0.3,
+      "nino34": 26.2,
+      "nino34_anom": -0.5,
+      "nino4": 28.3,
+      "nino4_anom": -0.4
+    },
+    {
+      "date": "2025-10-08",
+      "nino12": 20.8,
+      "nino12_anom": -0.1,
+      "nino3": 24.8,
+      "nino3_anom": -0.1,
+      "nino34": 26.4,
+      "nino34_anom": -0.3,
+      "nino4": 28.3,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-10-15",
+      "nino12": 20.6,
+      "nino12_anom": -0.4,
+      "nino3": 24.5,
+      "nino3_anom": -0.5,
+      "nino34": 26.1,
+      "nino34_anom": -0.6,
+      "nino4": 28.5,
+      "nino4_anom": -0.2
+    },
+    {
+      "date": "2025-10-22",
+      "nino12": 21.4,
+      "nino12_anom": 0.3,
+      "nino3": 24.6,
+      "nino3_anom": -0.5,
+      "nino34": 26.2,
+      "nino34_anom": -0.6,
+      "nino4": 28.3,
+      "nino4_anom": -0.4
+    },
+    {
+      "date": "2025-10-29",
+      "nino12": 21.3,
+      "nino12_anom": 0.1,
+      "nino3": 24.5,
+      "nino3_anom": -0.6,
+      "nino34": 26.1,
+      "nino34_anom": -0.6,
+      "nino4": 28.2,
+      "nino4_anom": -0.5
+    },
+    {
+      "date": "2025-11-05",
+      "nino12": 21.3,
+      "nino12_anom": -0.2,
+      "nino3": 24.5,
+      "nino3_anom": -0.6,
+      "nino34": 26.1,
+      "nino34_anom": -0.7,
+      "nino4": 28.1,
+      "nino4_anom": -0.5
+    },
+    {
+      "date": "2025-11-12",
+      "nino12": 20.9,
+      "nino12_anom": -0.8,
+      "nino3": 24.3,
+      "nino3_anom": -0.8,
+      "nino34": 26.0,
+      "nino34_anom": -0.8,
+      "nino4": 28.0,
+      "nino4_anom": -0.6
+    },
+    {
+      "date": "2025-11-19",
+      "nino12": 21.4,
+      "nino12_anom": -0.5,
+      "nino3": 24.4,
+      "nino3_anom": -0.7,
+      "nino34": 25.9,
+      "nino34_anom": -0.8,
+      "nino4": 28.1,
+      "nino4_anom": -0.5
+    },
+    {
+      "date": "2025-11-26",
+      "nino12": 22.0,
+      "nino12_anom": -0.1,
+      "nino3": 24.6,
+      "nino3_anom": -0.5,
+      "nino34": 26.1,
+      "nino34_anom": -0.6,
+      "nino4": 28.1,
+      "nino4_anom": -0.4
+    },
+    {
+      "date": "2025-12-03",
+      "nino12": 22.1,
+      "nino12_anom": -0.3,
+      "nino3": 24.7,
+      "nino3_anom": -0.5,
+      "nino34": 26.2,
+      "nino34_anom": -0.5,
+      "nino4": 28.2,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-12-10",
+      "nino12": 22.3,
+      "nino12_anom": -0.3,
+      "nino3": 24.4,
+      "nino3_anom": -0.8,
+      "nino34": 25.9,
+      "nino34_anom": -0.7,
+      "nino4": 28.2,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-12-17",
+      "nino12": 22.4,
+      "nino12_anom": -0.5,
+      "nino3": 24.3,
+      "nino3_anom": -0.9,
+      "nino34": 25.9,
+      "nino34_anom": -0.7,
+      "nino4": 28.2,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-12-24",
+      "nino12": 22.9,
+      "nino12_anom": -0.4,
+      "nino3": 24.5,
+      "nino3_anom": -0.7,
+      "nino34": 25.9,
+      "nino34_anom": -0.7,
+      "nino4": 28.1,
+      "nino4_anom": -0.3
+    },
+    {
+      "date": "2025-12-31",
+      "nino12": 22.7,
+      "nino12_anom": -0.9,
+      "nino3": 24.4,
+      "nino3_anom": -0.9,
+      "nino34": 25.9,
+      "nino34_anom": -0.6,
+      "nino4": 28.2,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2026-01-07",
+      "nino12": 23.4,
+      "nino12_anom": -0.6,
+      "nino3": 24.5,
+      "nino3_anom": -0.9,
+      "nino34": 25.8,
+      "nino34_anom": -0.7,
+      "nino4": 28.1,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2026-01-14",
+      "nino12": 24.2,
+      "nino12_anom": -0.2,
+      "nino3": 25.1,
+      "nino3_anom": -0.4,
+      "nino34": 25.9,
+      "nino34_anom": -0.6,
+      "nino4": 28.0,
+      "nino4_anom": -0.1
+    },
+    {
+      "date": "2026-01-21",
+      "nino12": 24.7,
+      "nino12_anom": -0.1,
+      "nino3": 25.5,
+      "nino3_anom": -0.2,
+      "nino34": 26.0,
+      "nino34_anom": -0.4,
+      "nino4": 28.2,
+      "nino4_anom": 0.1
+    },
+    {
+      "date": "2026-01-28",
+      "nino12": 25.5,
+      "nino12_anom": 0.3,
+      "nino3": 25.6,
+      "nino3_anom": -0.2,
+      "nino34": 26.0,
+      "nino34_anom": -0.5,
+      "nino4": 28.1,
+      "nino4_anom": 0.0
+    },
+    {
+      "date": "2026-02-04",
+      "nino12": 26.2,
+      "nino12_anom": 0.6,
+      "nino3": 25.9,
+      "nino3_anom": -0.1,
+      "nino34": 26.1,
+      "nino34_anom": -0.4,
+      "nino4": 28.1,
+      "nino4_anom": -0.0
+    },
+    {
+      "date": "2026-02-11",
+      "nino12": 26.7,
+      "nino12_anom": 0.8,
+      "nino3": 26.2,
+      "nino3_anom": 0.0,
+      "nino34": 26.4,
+      "nino34_anom": -0.2,
+      "nino4": 28.3,
+      "nino4_anom": 0.2
+    },
+    {
+      "date": "2026-02-18",
+      "nino12": 27.3,
+      "nino12_anom": 1.1,
+      "nino3": 26.5,
+      "nino3_anom": 0.1,
+      "nino34": 26.6,
+      "nino34_anom": -0.1,
+      "nino4": 28.4,
+      "nino4_anom": 0.3
+    },
+    {
+      "date": "2026-02-25",
+      "nino12": 27.4,
+      "nino12_anom": 1.0,
+      "nino3": 26.6,
+      "nino3_anom": 0.0,
+      "nino34": 26.7,
+      "nino34_anom": -0.1,
+      "nino4": 28.4,
+      "nino4_anom": 0.3
+    },
+    {
+      "date": "2026-03-04",
+      "nino12": 27.6,
+      "nino12_anom": 1.0,
+      "nino3": 27.0,
+      "nino3_anom": 0.2,
+      "nino34": 26.8,
+      "nino34_anom": -0.1,
+      "nino4": 28.2,
+      "nino4_anom": 0.1
+    },
+    {
+      "date": "2026-03-11",
+      "nino12": 28.0,
+      "nino12_anom": 1.4,
+      "nino3": 27.4,
+      "nino3_anom": 0.4,
+      "nino34": 27.0,
+      "nino34_anom": -0.1,
+      "nino4": 28.3,
+      "nino4_anom": 0.1
+    },
+    {
+      "date": "2026-03-18",
+      "nino12": 27.9,
+      "nino12_anom": 1.4,
+      "nino3": 27.5,
+      "nino3_anom": 0.3,
+      "nino34": 27.3,
+      "nino34_anom": 0.0,
+      "nino4": 28.4,
+      "nino4_anom": 0.3
+    },
+    {
+      "date": "2026-03-25",
+      "nino12": 27.6,
+      "nino12_anom": 1.3,
+      "nino3": 27.5,
+      "nino3_anom": 0.1,
+      "nino34": 27.5,
+      "nino34_anom": 0.1,
+      "nino4": 28.8,
+      "nino4_anom": 0.6
+    },
+    {
+      "date": "2026-04-01",
+      "nino12": 27.4,
+      "nino12_anom": 1.3,
+      "nino3": 27.5,
+      "nino3_anom": 0.1,
+      "nino34": 27.6,
+      "nino34_anom": 0.1,
+      "nino4": 28.9,
+      "nino4_anom": 0.6
+    },
+    {
+      "date": "2026-04-08",
+      "nino12": 27.5,
+      "nino12_anom": 1.6,
+      "nino3": 27.8,
+      "nino3_anom": 0.3,
+      "nino34": 27.9,
+      "nino34_anom": 0.2,
+      "nino4": 29.1,
+      "nino4_anom": 0.7
+    },
+    {
+      "date": "2026-04-15",
+      "nino12": 27.4,
+      "nino12_anom": 1.7,
+      "nino3": 28.1,
+      "nino3_anom": 0.6,
+      "nino34": 28.3,
+      "nino34_anom": 0.5,
+      "nino4": 29.4,
+      "nino4_anom": 0.9
+    },
+    {
+      "date": "2026-04-22",
+      "nino12": 27.1,
+      "nino12_anom": 1.8,
+      "nino3": 28.4,
+      "nino3_anom": 0.9,
+      "nino34": 28.6,
+      "nino34_anom": 0.8,
+      "nino4": 29.6,
+      "nino4_anom": 1.0
+    },
+    {
+      "date": "2026-04-29",
+      "nino12": 26.4,
+      "nino12_anom": 1.3,
+      "nino3": 28.4,
+      "nino3_anom": 1.0,
+      "nino34": 28.8,
+      "nino34_anom": 0.9,
+      "nino4": 29.5,
+      "nino4_anom": 0.9
+    },
+    {
+      "date": "2026-05-06",
+      "nino12": 26.5,
+      "nino12_anom": 1.6,
+      "nino3": 28.4,
+      "nino3_anom": 1.0,
+      "nino34": 28.7,
+      "nino34_anom": 0.8,
+      "nino4": 29.6,
+      "nino4_anom": 0.9
+    },
+    {
+      "date": "2026-05-13",
+      "nino12": 26.5,
+      "nino12_anom": 1.9,
+      "nino3": 28.4,
+      "nino3_anom": 1.1,
+      "nino34": 28.8,
+      "nino34_anom": 0.9,
+      "nino4": 29.8,
+      "nino4_anom": 1.0
+    },
+    {
+      "date": "2026-05-20",
+      "nino12": 26.4,
+      "nino12_anom": 2.1,
+      "nino3": 28.3,
+      "nino3_anom": 1.2,
+      "nino34": 28.8,
+      "nino34_anom": 0.9,
+      "nino4": 29.8,
+      "nino4_anom": 1.0
+    },
+    {
+      "date": "2026-05-27",
+      "nino12": 26.2,
+      "nino12_anom": 2.2,
+      "nino3": 28.2,
+      "nino3_anom": 1.3,
+      "nino34": 28.8,
+      "nino34_anom": 1.0,
+      "nino4": 29.9,
+      "nino4_anom": 1.1
+    },
+    {
+      "date": "2026-06-03",
+      "nino12": 26.3,
+      "nino12_anom": 2.6,
+      "nino3": 28.4,
+      "nino3_anom": 1.5,
+      "nino34": 29.0,
+      "nino34_anom": 1.3,
+      "nino4": 30.0,
+      "nino4_anom": 1.1
+    },
+    {
+      "date": "2026-06-10",
+      "nino12": 26.1,
+      "nino12_anom": 2.7,
+      "nino3": 28.3,
+      "nino3_anom": 1.6,
+      "nino34": 29.2,
+      "nino34_anom": 1.5,
+      "nino4": 30.1,
+      "nino4_anom": 1.3
+    },
+    {
+      "date": "2026-06-17",
+      "nino12": 26.1,
+      "nino12_anom": 3.0,
+      "nino3": 28.5,
+      "nino3_anom": 1.9,
+      "nino34": 29.3,
+      "nino34_anom": 1.7,
+      "nino4": 30.2,
+      "nino4_anom": 1.3
+    }
+  ],
+  "oni_history": [
+    {
+      "year": 2023,
+      "season": "AMJ",
+      "sst": 28.31,
+      "oni": 0.57
+    },
+    {
+      "year": 2023,
+      "season": "MJJ",
+      "sst": 28.42,
+      "oni": 0.84
+    },
+    {
+      "year": 2023,
+      "season": "JJA",
+      "sst": 28.36,
+      "oni": 1.12
+    },
+    {
+      "year": 2023,
+      "season": "JAS",
+      "sst": 28.28,
+      "oni": 1.37
+    },
+    {
+      "year": 2023,
+      "season": "ASO",
+      "sst": 28.32,
+      "oni": 1.6
+    },
+    {
+      "year": 2023,
+      "season": "SON",
+      "sst": 28.49,
+      "oni": 1.83
+    },
+    {
+      "year": 2023,
+      "season": "OND",
+      "sst": 28.6,
+      "oni": 1.99
+    },
+    {
+      "year": 2023,
+      "season": "NDJ",
+      "sst": 28.57,
+      "oni": 2.06
+    },
+    {
+      "year": 2024,
+      "season": "DJF",
+      "sst": 28.42,
+      "oni": 1.92
+    },
+    {
+      "year": 2024,
+      "season": "JFM",
+      "sst": 28.35,
+      "oni": 1.62
+    },
+    {
+      "year": 2024,
+      "season": "FMA",
+      "sst": 28.43,
+      "oni": 1.26
+    },
+    {
+      "year": 2024,
+      "season": "MAM",
+      "sst": 28.39,
+      "oni": 0.82
+    },
+    {
+      "year": 2024,
+      "season": "AMJ",
+      "sst": 28.22,
+      "oni": 0.49
+    },
+    {
+      "year": 2024,
+      "season": "MJJ",
+      "sst": 27.8,
+      "oni": 0.22
+    },
+    {
+      "year": 2024,
+      "season": "JJA",
+      "sst": 27.33,
+      "oni": 0.08
+    },
+    {
+      "year": 2024,
+      "season": "JAS",
+      "sst": 26.85,
+      "oni": -0.07
+    },
+    {
+      "year": 2024,
+      "season": "ASO",
+      "sst": 26.55,
+      "oni": -0.17
+    },
+    {
+      "year": 2024,
+      "season": "SON",
+      "sst": 26.46,
+      "oni": -0.21
+    },
+    {
+      "year": 2024,
+      "season": "OND",
+      "sst": 26.3,
+      "oni": -0.3
+    },
+    {
+      "year": 2024,
+      "season": "NDJ",
+      "sst": 26.09,
+      "oni": -0.42
+    },
+    {
+      "year": 2025,
+      "season": "DJF",
+      "sst": 26.05,
+      "oni": -0.45
+    },
+    {
+      "year": 2025,
+      "season": "JFM",
+      "sst": 26.48,
+      "oni": -0.24
+    },
+    {
+      "year": 2025,
+      "season": "FMA",
+      "sst": 27.11,
+      "oni": -0.06
+    },
+    {
+      "year": 2025,
+      "season": "MAM",
+      "sst": 27.6,
+      "oni": 0.02
+    },
+    {
+      "year": 2025,
+      "season": "AMJ",
+      "sst": 27.72,
+      "oni": -0.02
+    },
+    {
+      "year": 2025,
+      "season": "MJJ",
+      "sst": 27.54,
+      "oni": -0.04
+    },
+    {
+      "year": 2025,
+      "season": "JJA",
+      "sst": 27.1,
+      "oni": -0.14
+    },
+    {
+      "year": 2025,
+      "season": "JAS",
+      "sst": 26.63,
+      "oni": -0.28
+    },
+    {
+      "year": 2025,
+      "season": "ASO",
+      "sst": 26.32,
+      "oni": -0.4
+    },
+    {
+      "year": 2025,
+      "season": "SON",
+      "sst": 26.16,
+      "oni": -0.51
+    },
+    {
+      "year": 2025,
+      "season": "OND",
+      "sst": 26.05,
+      "oni": -0.55
+    },
+    {
+      "year": 2025,
+      "season": "NDJ",
+      "sst": 25.97,
+      "oni": -0.54
+    },
+    {
+      "year": 2026,
+      "season": "DJF",
+      "sst": 26.13,
+      "oni": -0.37
+    },
+    {
+      "year": 2026,
+      "season": "JFM",
+      "sst": 26.58,
+      "oni": -0.14
+    },
+    {
+      "year": 2026,
+      "season": "FMA",
+      "sst": 27.3,
+      "oni": 0.13
+    },
+    {
+      "year": 2026,
+      "season": "MAM",
+      "sst": 28.06,
+      "oni": 0.48
+    }
+  ],
+  "roni_history": [
+    {
+      "year": 2023,
+      "month": 6,
+      "season": "Jun",
+      "roni": 0.89
+    },
+    {
+      "year": 2023,
+      "month": 7,
+      "season": "Jul",
+      "roni": 1.07
+    },
+    {
+      "year": 2023,
+      "month": 8,
+      "season": "Aug",
+      "roni": 1.39
+    },
+    {
+      "year": 2023,
+      "month": 9,
+      "season": "Sep",
+      "roni": 1.64
+    },
+    {
+      "year": 2023,
+      "month": 10,
+      "season": "Oct",
+      "roni": 1.77
+    },
+    {
+      "year": 2023,
+      "month": 11,
+      "season": "Nov",
+      "roni": 2.08
+    },
+    {
+      "year": 2023,
+      "month": 12,
+      "season": "Dec",
+      "roni": 2.13
+    },
+    {
+      "year": 2024,
+      "month": 1,
+      "season": "Jan",
+      "roni": 1.98
+    },
+    {
+      "year": 2024,
+      "month": 2,
+      "season": "Feb",
+      "roni": 1.67
+    },
+    {
+      "year": 2024,
+      "month": 3,
+      "season": "Mar",
+      "roni": 1.22
+    },
+    {
+      "year": 2024,
+      "month": 4,
+      "season": "Apr",
+      "roni": 0.89
+    },
+    {
+      "year": 2024,
+      "month": 5,
+      "season": "May",
+      "roni": 0.34
+    },
+    {
+      "year": 2024,
+      "month": 6,
+      "season": "Jun",
+      "roni": 0.23
+    },
+    {
+      "year": 2024,
+      "month": 7,
+      "season": "Jul",
+      "roni": 0.09
+    },
+    {
+      "year": 2024,
+      "month": 8,
+      "season": "Aug",
+      "roni": -0.07
+    },
+    {
+      "year": 2024,
+      "month": 9,
+      "season": "Sep",
+      "roni": -0.22
+    },
+    {
+      "year": 2024,
+      "month": 10,
+      "season": "Oct",
+      "roni": -0.22
+    },
+    {
+      "year": 2024,
+      "month": 11,
+      "season": "Nov",
+      "roni": -0.19
+    },
+    {
+      "year": 2024,
+      "month": 12,
+      "season": "Dec",
+      "roni": -0.49
+    },
+    {
+      "year": 2025,
+      "month": 1,
+      "season": "Jan",
+      "roni": -0.56
+    },
+    {
+      "year": 2025,
+      "month": 2,
+      "season": "Feb",
+      "roni": -0.28
+    },
+    {
+      "year": 2025,
+      "month": 3,
+      "season": "Mar",
+      "roni": 0.11
+    },
+    {
+      "year": 2025,
+      "month": 4,
+      "season": "Apr",
+      "roni": -0.02
+    },
+    {
+      "year": 2025,
+      "month": 5,
+      "season": "May",
+      "roni": -0.02
+    },
+    {
+      "year": 2025,
+      "month": 6,
+      "season": "Jun",
+      "roni": -0.01
+    },
+    {
+      "year": 2025,
+      "month": 7,
+      "season": "Jul",
+      "roni": -0.1
+    },
+    {
+      "year": 2025,
+      "month": 8,
+      "season": "Aug",
+      "roni": -0.32
+    },
+    {
+      "year": 2025,
+      "month": 9,
+      "season": "Sep",
+      "roni": -0.43
+    },
+    {
+      "year": 2025,
+      "month": 10,
+      "season": "Oct",
+      "roni": -0.45
+    },
+    {
+      "year": 2025,
+      "month": 11,
+      "season": "Nov",
+      "roni": -0.64
+    },
+    {
+      "year": 2025,
+      "month": 12,
+      "season": "Dec",
+      "roni": -0.57
+    },
+    {
+      "year": 2026,
+      "month": 1,
+      "season": "Jan",
+      "roni": -0.41
+    },
+    {
+      "year": 2026,
+      "month": 2,
+      "season": "Feb",
+      "roni": -0.12
+    },
+    {
+      "year": 2026,
+      "month": 3,
+      "season": "Mar",
+      "roni": 0.09
+    },
+    {
+      "year": 2026,
+      "month": 4,
+      "season": "Apr",
+      "roni": 0.42
+    },
+    {
+      "year": 2026,
+      "month": 5,
+      "season": "May",
+      "roni": 0.93
+    }
+  ]
+}

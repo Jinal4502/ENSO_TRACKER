@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENSO Tracker — 2026-06-23</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --accent: #d4380d;
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; padding: 1.5rem; }
+  h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .subtitle { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .card h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 0.6rem; }
+  .big-num { font-size: 2.4rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .label { font-size: 1rem; font-weight: 600; color: var(--accent); margin-top: 0.3rem; }
+  .badge { display: inline-block; background: var(--accent); color: #fff; border-radius: 4px; padding: 0.15rem 0.5rem; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .row { display: flex; gap: 0.5rem; align-items: baseline; }
+  .row span { font-size: 0.8rem; color: var(--muted); }
+  /* Gauge — half-circle with linear gradient, stops sin()-mapped so needle tip matches zone */
+  /* At anomaly A°C: needle angle = A/3*90°, tip x-pos = 50% + sin(angle)*50%             */
+  /* ±0.5→63/37%, ±1.0→75/25%, ±1.5→85/15%, ±2.0→93/7%                                   */
+  .gauge-wrap { display: flex; flex-direction: column; align-items: center; }
+  .gauge { width: 160px; height: 80px; position: relative; }
+  .gauge-arc { width: 160px; height: 80px; border-radius: 80px 80px 0 0; background: linear-gradient(to right,
+    #003a8c 0%,
+    #1d39c4 15%,
+    #2f54eb 25%,
+    #389e0d 37%,
+    #389e0d 63%,
+    #faad14 63%,
+    #fa8c16 75%,
+    #d4380d 85%,
+    #b22222 93%,
+    #b22222 100%
+  ); }
+  .gauge-needle { position: absolute; bottom: 0; left: 50%; width: 2px; height: 74px; background: white; transform-origin: bottom center; transform: rotate(51.0deg); border-radius: 2px; }
+  .gauge-label { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; display: flex; justify-content: space-between; width: 160px; }
+  /* Chart */
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+  .chart-card h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 0.8rem; }
+  canvas { max-height: 220px; }
+  /* Impacts */
+  .impacts ul { list-style: disc; padding-left: 1.2rem; }
+  .impacts li { font-size: 0.85rem; margin-bottom: 0.35rem; line-height: 1.4; }
+  /* Synopsis */
+  .synopsis { font-size: 0.82rem; line-height: 1.55; color: var(--text); }
+  /* Footer */
+  footer { font-size: 0.75rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<h1>ENSO Tracker</h1>
+<p class="subtitle">Updated 2026-06-23 · Source: NOAA/CPC</p>
+
+<div class="grid">
+  <!-- Current State -->
+  <div class="card">
+    <h2>Current State</h2>
+    <span class="badge">El Niño Advisory</span>
+    <div class="big-num">+1.70 °C</div>
+    <div class="label">Strong El Niño</div>
+    <div class="row" style="margin-top:.6rem">
+      <span>Niño-3.4 SST anomaly (weekly)</span>
+    </div>
+  </div>
+
+  <!-- Gauge -->
+  <div class="card">
+    <h2>Anomaly Gauge</h2>
+    <div class="gauge-wrap">
+      <div class="gauge">
+        <div class="gauge-arc"></div>
+        <div class="gauge-needle"></div>
+      </div>
+      <div class="gauge-label"><span>La Niña</span><span>Neutral</span><span>El Niño</span></div>
+    </div>
+    <div style="margin-top:.8rem">
+      <div class="row"><strong>ONI</strong>&nbsp;<span>0.48 (MAM 2026)</span></div>
+      <div class="row"><strong>RONI</strong>&nbsp;<span>0.93 (May 2026)</span></div>
+    </div>
+  </div>
+
+  <!-- Advisory -->
+  <div class="card">
+    <h2>CPC Advisory</h2>
+    
+    <p class="synopsis">Synopsis: El Niño conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.</p>
+  </div>
+</div>
+
+<!-- Weekly anomaly chart -->
+<div class="chart-card">
+  <h2>Niño-3.4 Weekly Anomaly — Last 52 Weeks</h2>
+  <canvas id="weeklyChart"></canvas>
+</div>
+
+<!-- ONI vs RONI chart -->
+<div class="chart-card">
+  <h2>ONI vs RONI — Last 3 Years (Monthly)</h2>
+  <canvas id="oniChart"></canvas>
+</div>
+
+<!-- Impacts -->
+<div class="card impacts" style="margin-bottom:1rem">
+  <h2>Regional Impacts — Strong El Niño</h2>
+  <ul><li>SW United States & California: Above-normal precipitation likely Nov–Mar</li>
+<li>Gulf Coast: Enhanced flood and tornado risk through spring</li>
+<li>Pacific Northwest & Great Lakes: Warmer, drier winter typical</li>
+<li>Colorado River Basin: Improved reservoir recharge potential</li>
+<li>Atlantic Hurricane Season: Suppressed activity expected</li>
+<li>Australia / SE Asia: Drought risk, elevated wildfire danger</li>
+<li>Horn of Africa: Above-normal rainfall, flooding risk</li>
+<li>Peru / Ecuador: Extreme coastal rainfall and flooding</li></ul>
+</div>
+
+<footer>
+  Data: NOAA/CPC
+</footer>
+
+<script>
+const chartDefaults = {
+  plugins: { legend: { labels: { color: '#8b949e', font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { color: '#8b949e', maxRotation: 45, font: { size: 10 } }, grid: { color: '#21262d' } },
+    y: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: '#21262d' } }
+  }
+};
+
+// Weekly anomaly
+new Chart(document.getElementById('weeklyChart'), {
+  type: 'bar',
+  data: {
+    labels: ["2025-06-25", "2025-07-02", "2025-07-09", "2025-07-16", "2025-07-23", "2025-07-30", "2025-08-06", "2025-08-13", "2025-08-20", "2025-08-27", "2025-09-03", "2025-09-10", "2025-09-17", "2025-09-24", "2025-10-01", "2025-10-08", "2025-10-15", "2025-10-22", "2025-10-29", "2025-11-05", "2025-11-12", "2025-11-19", "2025-11-26", "2025-12-03", "2025-12-10", "2025-12-17", "2025-12-24", "2025-12-31", "2026-01-07", "2026-01-14", "2026-01-21", "2026-01-28", "2026-02-04", "2026-02-11", "2026-02-18", "2026-02-25", "2026-03-04", "2026-03-11", "2026-03-18", "2026-03-25", "2026-04-01", "2026-04-08", "2026-04-15", "2026-04-22", "2026-04-29", "2026-05-06", "2026-05-13", "2026-05-20", "2026-05-27", "2026-06-03", "2026-06-10", "2026-06-17"],
+    datasets: [{
+      label: 'Niño-3.4 Anomaly (°C)',
+      data: [0.1, 0.0, 0.1, -0.2, -0.2, -0.3, -0.3, -0.3, -0.4, -0.4, -0.3, -0.5, -0.4, -0.5, -0.5, -0.3, -0.6, -0.6, -0.6, -0.7, -0.8, -0.8, -0.6, -0.5, -0.7, -0.7, -0.7, -0.6, -0.7, -0.6, -0.4, -0.5, -0.4, -0.2, -0.1, -0.1, -0.1, -0.1, 0.0, 0.1, 0.1, 0.2, 0.5, 0.8, 0.9, 0.8, 0.9, 0.9, 1.0, 1.3, 1.5, 1.7],
+      backgroundColor: [0.1, 0.0, 0.1, -0.2, -0.2, -0.3, -0.3, -0.3, -0.4, -0.4, -0.3, -0.5, -0.4, -0.5, -0.5, -0.3, -0.6, -0.6, -0.6, -0.7, -0.8, -0.8, -0.6, -0.5, -0.7, -0.7, -0.7, -0.6, -0.7, -0.6, -0.4, -0.5, -0.4, -0.2, -0.1, -0.1, -0.1, -0.1, 0.0, 0.1, 0.1, 0.2, 0.5, 0.8, 0.9, 0.8, 0.9, 0.9, 1.0, 1.3, 1.5, 1.7].map(v =>
+        v >= 0.5 ? '#fa8c16' : v <= -0.5 ? '#2f54eb' : '#389e0d'
+      ),
+      borderWidth: 0,
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    plugins: { ...chartDefaults.plugins, annotation: { annotations: {
+      el: { type:'line', yMin:0.5, yMax:0.5, borderColor:'#fa8c16', borderDash:[4,4], borderWidth:1 },
+      la: { type:'line', yMin:-0.5, yMax:-0.5, borderColor:'#2f54eb', borderDash:[4,4], borderWidth:1 }
+    } } },
+    scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, title: { display:true, text:'°C', color:'#8b949e' } } }
+  }
+});
+
+// ONI vs RONI
+new Chart(document.getElementById('oniChart'), {
+  type: 'line',
+  data: {
+    labels: ["AMJ 2023", "MJJ 2023", "JJA 2023", "JAS 2023", "ASO 2023", "SON 2023", "OND 2023", "NDJ 2023", "DJF 2024", "JFM 2024", "FMA 2024", "MAM 2024", "AMJ 2024", "MJJ 2024", "JJA 2024", "JAS 2024", "ASO 2024", "SON 2024", "OND 2024", "NDJ 2024", "DJF 2025", "JFM 2025", "FMA 2025", "MAM 2025", "AMJ 2025", "MJJ 2025", "JJA 2025", "JAS 2025", "ASO 2025", "SON 2025", "OND 2025", "NDJ 2025", "DJF 2026", "JFM 2026", "FMA 2026", "MAM 2026"],
+    datasets: [
+      {
+        label: 'ONI (traditional)',
+        data: [0.57, 0.84, 1.12, 1.37, 1.6, 1.83, 1.99, 2.06, 1.92, 1.62, 1.26, 0.82, 0.49, 0.22, 0.08, -0.07, -0.17, -0.21, -0.3, -0.42, -0.45, -0.24, -0.06, 0.02, -0.02, -0.04, -0.14, -0.28, -0.4, -0.51, -0.55, -0.54, -0.37, -0.14, 0.13, 0.48],
+        borderColor: '#fa8c16',
+        backgroundColor: 'rgba(250,140,22,0.08)',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 3,
+        fill: false,
+      },
+      {
+        label: 'RONI (official, 2025–)',
+        data: [0.89, 1.07, 1.39, 1.64, 1.77, 2.08, 2.13, 1.98, 1.67, 1.22, 0.89, 0.34, 0.23, 0.09, -0.07, -0.22, -0.22, -0.19, -0.49, -0.56, -0.28, 0.11, -0.02, -0.02, -0.01, -0.1, -0.32, -0.43, -0.45, -0.64, -0.57, -0.41, -0.12, 0.09, 0.42, 0.93],
+        borderColor: '#4dabf7',
+        backgroundColor: 'rgba(77,171,247,0.08)',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 3,
+        fill: false,
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      ...chartDefaults.scales,
+      y: { ...chartDefaults.scales.y, title: { display:true, text:'°C anomaly', color:'#8b949e' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
