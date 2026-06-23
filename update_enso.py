@@ -99,19 +99,19 @@ def send_email(subject: str, html_body: str) -> None:
     smtp_port   = int(os.environ.get("SMTP_PORT", "587"))
     smtp_user   = os.environ["SMTP_USER"]
     smtp_pass   = os.environ["SMTP_PASS"]
-    to_addr     = os.environ["EMAIL_TO"]
+    to_addrs    = [a.strip() for a in os.environ["EMAIL_TO"].split(",")]
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"]    = smtp_user
-    msg["To"]      = to_addr
+    msg["To"]      = ", ".join(to_addrs)
     msg.attach(MIMEText(html_body, "html"))
 
     with smtplib.SMTP(smtp_host, smtp_port) as s:
         s.starttls()
         s.login(smtp_user, smtp_pass)
-        s.sendmail(smtp_user, to_addr, msg.as_string())
-    print(f"Email sent → {to_addr}")
+        s.sendmail(smtp_user, to_addrs, msg.as_string())
+    print(f"Email sent → {', '.join(to_addrs)}")
 
 
 def main() -> None:
