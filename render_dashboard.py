@@ -461,7 +461,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 <body>
 
 <h1>ENSO Tracker</h1>
-<p class="subtitle">Updated {fetched} · Source: NOAA/CPC</p>
+<p class="subtitle">Updated {fetched} · Sources: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank" style="color:#58a6ff">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank" style="color:#58a6ff">IRI</a></p>
 
 <div class="grid">
   <!-- Current State -->
@@ -564,7 +564,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 </div>
 
 <footer>
-  Data: NOAA/CPC
+  Data: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank">IRI</a>
 </footer>
 
 <script>
