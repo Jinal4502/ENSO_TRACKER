@@ -386,10 +386,10 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     def _tip(text):
         return f'<span class="info-icon"><span class="tip">{text}</span></span>'
 
-    TIP_STATE    = _tip("The Niño-3.4 region (5°N–5°S, 170°W–120°W) SST anomaly is the primary ENSO index. Values above +0.5 °C indicate El Niño; below −0.5 °C indicate La Niña. This weekly reading comes from NOAA's OISST v2.1 dataset.")
+    TIP_STATE    = _tip("The Niño-3.4 region (5°N–5°S, 170°W–120°W) SST anomaly is the primary ENSO index. Values above +0.5 °C indicate El Niño; below −0.5 °C indicate La Niña. This weekly reading comes from NOAA/CPC's Reynolds OI SST file (wksst9120.for), using a 1991–2020 climatological base period.")
     TIP_GAUGE    = _tip("Visual indicator of ENSO phase and intensity. The needle maps the current Niño-3.4 anomaly to ±0.5 °C (weak), ±1.0 °C (moderate), ±1.5 °C (strong), and ±2.0 °C (very strong) thresholds. ONI and RONI below are 3-month running means.")
     TIP_ADVISORY = _tip("The official NOAA/CPC ENSO Diagnostic Discussion, issued monthly. An El Niño or La Niña Advisory is declared when the Oceanic Niño Index (ONI) meets or exceeds ±0.5 °C for five consecutive overlapping 3-month seasons.")
-    TIP_WEEKLY   = _tip("Weekly Niño-3.4 SST anomaly over the past 52 weeks, from NOAA's high-resolution OISST v2.1 dataset. Dashed lines at ±0.5 °C mark the boundary between ENSO phases.")
+    TIP_WEEKLY   = _tip("Weekly Niño-3.4 SST anomaly over the past 52 weeks, from NOAA/CPC's Reynolds OI SST file (wksst9120.for, base period 1991–2020). Dashed lines at ±0.5 °C mark the boundary between ENSO phases.")
     TIP_ONI      = _tip("ONI (Oceanic Niño Index) is the standard 3-month running mean of the Niño-3.4 anomaly — the primary metric NOAA uses to classify El Niño and La Niña events. RONI (Relative ONI) applies a linear detrending to remove the long-term warming signal.")
     TIP_IMPACTS  = _tip("Typical regional climate impacts associated with the current ENSO phase, based on historical composites from NOAA/CPC. Actual impacts vary by location, season, and event intensity.")
     TIP_FIG1     = _tip("CPC's probabilistic forecast showing the likelihood of El Niño, Neutral, and La Niña conditions for each upcoming season, based on a consolidation of dynamical and statistical model guidance.")
