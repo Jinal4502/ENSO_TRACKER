@@ -114,9 +114,20 @@ def main() -> None:
 
     # 1b. Fetch IRI data
     print("Fetching IRI strength categories ...")
-    data["iri_strength"]      = fetch_strength_plot()
-    data["iri_images"]        = get_iri_image_urls()
-    data["iri_model_predictions"] = fetch_iri_model_predictions()
+    data["iri_strength"] = fetch_strength_plot()
+    data["iri_images"]   = get_iri_image_urls()
+
+    pred = fetch_iri_model_predictions()
+    if pred is None and Path(DATA_FILE).exists():
+        try:
+            with open(DATA_FILE) as f:
+                prev = json.load(f)
+            pred = prev.get("iri_model_predictions")
+            if pred:
+                print(f"  [INFO] Using cached model predictions ({len(pred)} records from previous run)")
+        except Exception:
+            pass
+    data["iri_model_predictions"] = pred
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, default=str)

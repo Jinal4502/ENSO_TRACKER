@@ -76,10 +76,14 @@ def fetch_iri_model_predictions() -> Optional[list]:
             page.goto(
                 "https://iri.columbia.edu/our-expertise/climate/forecasts/"
                 "enso/current/?enso_tab=enso-sst_table",
-                wait_until="networkidle",
-                timeout=45000,
+                wait_until="domcontentloaded",
+                timeout=60000,
             )
-            page.wait_for_timeout(4000)   # let Highcharts finish rendering
+            page.wait_for_function(
+                "typeof Highcharts !== 'undefined' && Highcharts.charts.filter(Boolean).length > 0",
+                timeout=30000,
+            )
+            page.wait_for_timeout(2000)   # brief settle for all series to render
             records = page.evaluate("""
             () => {
                 // Standard ENSO 3-month season labels — skip time-axis historical data
