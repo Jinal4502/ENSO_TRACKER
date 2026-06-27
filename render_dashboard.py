@@ -497,6 +497,14 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     border: 5px solid transparent; border-top-color: #444c56;
   }}
   .info-icon:hover .tip, .info-icon.active .tip {{ display: block; }}
+  /* Flip tooltip below when icon is near the top of the viewport */
+  .info-icon.tip-below .tip {{
+    bottom: auto; top: calc(100% + 8px);
+  }}
+  .info-icon.tip-below .tip::after {{
+    top: auto; bottom: 100%;
+    border-top-color: transparent; border-bottom-color: #444c56;
+  }}
 </style>
 </head>
 <body>
@@ -713,10 +721,16 @@ new Chart(document.getElementById('oniChart'), {{
 }})();
 </script>
 <script>
-// Info icon: click to toggle on touch devices; click outside to dismiss
+// Info icon: flip tooltip below when near viewport top; click-to-toggle on touch
 document.querySelectorAll('.info-icon').forEach(function(el) {{
+  function checkFlip() {{
+    var rect = el.getBoundingClientRect();
+    el.classList.toggle('tip-below', rect.top < 160);
+  }}
+  el.addEventListener('mouseenter', checkFlip);
   el.addEventListener('click', function(e) {{
     e.stopPropagation();
+    checkFlip();
     var wasActive = el.classList.contains('active');
     document.querySelectorAll('.info-icon.active').forEach(function(x) {{ x.classList.remove('active'); }});
     if (!wasActive) el.classList.add('active');
