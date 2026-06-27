@@ -69,21 +69,40 @@ def fetch_iri_model_predictions() -> Optional[list]:
         return None
 
     print("Fetching IRI SST model predictions via Playwright ...")
+    URL = ("https://iri.columbia.edu/our-expertise/climate/forecasts/"
+           "enso/current/?enso_tab=enso-sst_table")
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=["--no-sandbox"])
+        browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
         page = browser.new_page()
         try:
-            page.goto(
-                "https://iri.columbia.edu/our-expertise/climate/forecasts/"
-                "enso/current/?enso_tab=enso-sst_table",
-                wait_until="domcontentloaded",
-                timeout=60000,
-            )
-            page.wait_for_function(
-                "typeof Highcharts !== 'undefined' && Highcharts.charts.filter(Boolean).length > 0",
-                timeout=30000,
-            )
-            page.wait_for_timeout(2000)   # brief settle for all series to render
+            page.goto(URL, wait_until="domcontentloaded", timeout=60000)
+            print(f"  Page title: {page.title()!r}  URL: {page.url!r}")
+
+            # Explicitly click the SST table tab in case URL param isn't honoured headlessly
+            for selector in ['a[href*="sst_table"]', '[data-tab="enso-sst_table"]',
+                              '#enso-sst_table', 'a:has-text("SST")']:
+                try:
+                    page.click(selector, timeout=3000)
+                    print(f"  Clicked tab selector: {selector!r}")
+                    break
+                except Exception:
+                    pass
+
+            try:
+                page.wait_for_function(
+                    "typeof Highcharts !== 'undefined' && Highcharts.charts.filter(Boolean).length > 0",
+                    timeout=30000,
+                )
+                n_charts = page.evaluate("Highcharts.charts.filter(Boolean).length")
+                print(f"  Highcharts ready — {n_charts} chart(s) found")
+            except Exception as e:
+                hc_defined = page.evaluate("typeof Highcharts !== 'undefined'")
+                print(f"  [WARN] Highcharts wait failed: {e}")
+                print(f"  Highcharts defined on page: {hc_defined}")
+                page.screenshot(path="iri_debug.png", full_page=True)
+                print("  Screenshot saved → iri_debug.png")
+
+            page.wait_for_timeout(2000)
             records = page.evaluate("""
             () => {
                 // Standard ENSO 3-month season labels — skip time-axis historical data

@@ -47,6 +47,14 @@ jobs:
           PAGES_URL: ${{ secrets.PAGES_URL }}
         run: python update_enso.py
 
+      - name: Upload Playwright debug screenshot (if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: iri-debug-screenshot
+          path: iri_debug.png
+          if-no-files-found: ignore
+
       - name: Commit updated dashboard and history
         run: |
           git add docs/index.html enso_data.json enso_history.json
