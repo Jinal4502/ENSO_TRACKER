@@ -383,6 +383,21 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     # Gauge needle angle: maps -3..+3 anomaly → -90°..+90°
     needle_deg = max(-90, min(90, anom / 3.0 * 90))
 
+    def _tip(text):
+        return f'<span class="info-icon"><span class="tip">{text}</span></span>'
+
+    TIP_STATE    = _tip("The Niño-3.4 region (5°N–5°S, 170°W–120°W) SST anomaly is the primary ENSO index. Values above +0.5 °C indicate El Niño; below −0.5 °C indicate La Niña. This weekly reading comes from NOAA's OISST v2.1 dataset.")
+    TIP_GAUGE    = _tip("Visual indicator of ENSO phase and intensity. The needle maps the current Niño-3.4 anomaly to ±0.5 °C (weak), ±1.0 °C (moderate), ±1.5 °C (strong), and ±2.0 °C (very strong) thresholds. ONI and RONI below are 3-month running means.")
+    TIP_ADVISORY = _tip("The official NOAA/CPC ENSO Diagnostic Discussion, issued monthly. An El Niño or La Niña Advisory is declared when the Oceanic Niño Index (ONI) meets or exceeds ±0.5 °C for five consecutive overlapping 3-month seasons.")
+    TIP_WEEKLY   = _tip("Weekly Niño-3.4 SST anomaly over the past 52 weeks, from NOAA's high-resolution OISST v2.1 dataset. Dashed lines at ±0.5 °C mark the boundary between ENSO phases.")
+    TIP_ONI      = _tip("ONI (Oceanic Niño Index) is the standard 3-month running mean of the Niño-3.4 anomaly — the primary metric NOAA uses to classify El Niño and La Niña events. RONI (Relative ONI) applies a linear detrending to remove the long-term warming signal.")
+    TIP_IMPACTS  = _tip("Typical regional climate impacts associated with the current ENSO phase, based on historical composites from NOAA/CPC. Actual impacts vary by location, season, and event intensity.")
+    TIP_FIG1     = _tip("CPC's probabilistic forecast showing the likelihood of El Niño, Neutral, and La Niña conditions for each upcoming season, based on a consolidation of dynamical and statistical model guidance.")
+    TIP_FIG2     = _tip("Historical time series of observed Niño-3.4 SST anomalies, providing context for how the current state compares with recent years.")
+    TIP_FIG3     = _tip("IRI's probabilistic ENSO forecast, blending output from multiple dynamical models, statistical models, and expert judgment. Issued mid-month.")
+    TIP_PLUME    = _tip("Each line is one model's Niño-3.4 anomaly forecast for coming seasons. Filled circles = dynamical models (physics-based), open circles = statistical models (pattern-based), open diamonds = relative (dynamical-statistical blend). Stars = ensemble averages. Use the dropdown to filter by model type.")
+    TIP_STRENGTH = _tip("Stacked bar chart showing the percentage of IRI models predicting each ENSO strength category (Very Strong La Niña through Very Strong El Niño) for each upcoming season. Numbers inside bars show the model count. Taller red bars indicate stronger El Niño consensus.")
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -456,6 +471,32 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   /* Footer */
   footer {{ font-size: 0.75rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }}
   footer a {{ color: var(--muted); }}
+  /* Info tooltips */
+  .info-icon {{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 1px solid var(--muted); color: var(--muted);
+    font-size: 8px; font-style: italic; font-weight: 700;
+    cursor: pointer; margin-left: 6px; vertical-align: middle;
+    position: relative; flex-shrink: 0;
+    text-transform: none; letter-spacing: 0;
+  }}
+  .info-icon::before {{ content: 'i'; }}
+  .info-icon .tip {{
+    display: none; position: absolute;
+    bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #1c2128; border: 1px solid #444c56; border-radius: 6px;
+    padding: 9px 12px; font-size: 0.75rem; line-height: 1.55;
+    color: #c9d1d9; width: 260px; z-index: 200; text-align: left;
+    font-style: normal; font-weight: 400; pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5); white-space: normal;
+  }}
+  .info-icon .tip::after {{
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent; border-top-color: #444c56;
+  }}
+  .info-icon:hover .tip, .info-icon.active .tip {{ display: block; }}
 </style>
 </head>
 <body>
@@ -466,7 +507,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 <div class="grid">
   <!-- Current State -->
   <div class="card">
-    <h2>Current State</h2>
+    <h2>Current State {TIP_STATE}</h2>
     <span class="badge">{status_badge}</span>
     <div class="big-num">{anom:+.2f} °C</div>
     <div class="label">{label}</div>
@@ -477,7 +518,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 
   <!-- Gauge -->
   <div class="card">
-    <h2>Anomaly Gauge</h2>
+    <h2>Anomaly Gauge {TIP_GAUGE}</h2>
     <div class="gauge-wrap">
       <div class="gauge">
         <div class="gauge-arc"></div>
@@ -493,7 +534,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 
   <!-- Advisory -->
   <div class="card">
-    <h2>CPC Advisory</h2>
+    <h2>CPC Advisory {TIP_ADVISORY}</h2>
     {f'<p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">Issued: {issued}</p>' if issued else ''}
     <p class="synopsis">{synopsis or "Diagnostic Discussion not yet available for this week."}</p>
   </div>
@@ -501,19 +542,19 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 
 <!-- Weekly anomaly chart -->
 <div class="chart-card">
-  <h2>Niño-3.4 Weekly Anomaly — Last 52 Weeks</h2>
+  <h2>Niño-3.4 Weekly Anomaly — Last 52 Weeks {TIP_WEEKLY}</h2>
   <canvas id="weeklyChart"></canvas>
 </div>
 
 <!-- ONI vs RONI chart -->
 <div class="chart-card">
-  <h2>ONI vs RONI — Last 3 Years (Monthly)</h2>
+  <h2>ONI vs RONI — Last 3 Years (Monthly) {TIP_ONI}</h2>
   <canvas id="oniChart"></canvas>
 </div>
 
 <!-- Impacts -->
 <div class="card impacts" style="margin-bottom:1rem">
-  <h2>Regional Impacts — {label}</h2>
+  <h2>Regional Impacts — {label} {TIP_IMPACTS}</h2>
   <ul>{impact_li}</ul>
 </div>
 
@@ -525,25 +566,25 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     <img src="{img_cpc}" alt="CPC ENSO Probability Forecast"
          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="img-placeholder" style="display:none">Figure unavailable</div>
-    <p class="fig-caption">Figure 1 — CPC ENSO Probability Forecast</p>
+    <p class="fig-caption">Figure 1 — CPC ENSO Probability Forecast {TIP_FIG1}</p>
   </div>
   <div class="fig-card">
     <img src="{img_sst_hist}" alt="IRI Historical SST Anomaly"
          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="img-placeholder" style="display:none">Figure unavailable</div>
-    <p class="fig-caption">Figure 2 — Niño-3.4 Historical SST Anomaly</p>
+    <p class="fig-caption">Figure 2 — Niño-3.4 Historical SST Anomaly {TIP_FIG2}</p>
   </div>
   <div class="fig-card">
     <img src="{img_iri_probs}" alt="IRI ENSO Probability Forecast"
          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="img-placeholder" style="display:none">Figure unavailable</div>
-    <p class="fig-caption">Figure 3 — IRI ENSO Probability Forecast</p>
+    <p class="fig-caption">Figure 3 — IRI ENSO Probability Forecast {TIP_FIG3}</p>
   </div>
 </div>
 
 <!-- SST Model Plume -->
 <div class="chart-card" style="margin-bottom:1rem">
-  <h2>Figure 4 — IRI SST Model Forecast Plume (Niño-3.4 Anomaly)</h2>
+  <h2>Figure 4 — IRI SST Model Forecast Plume (Niño-3.4 Anomaly) {TIP_PLUME}</h2>
   <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
     Individual model forecasts coloured by model — hover any line to see its name and value.
     Ensemble averages and observed (dashed blue) are labelled in the legend.
@@ -554,7 +595,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 
 <!-- Strength Categories -->
 <div class="chart-card" style="margin-bottom:1rem">
-  <h2>{sp_title}</h2>
+  <h2>{sp_title} {TIP_STRENGTH}</h2>
   <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
     Percentage of IRI models predicting each ENSO strength category per season.
     Numbers inside bars show model count. Hover for details.
@@ -670,6 +711,20 @@ new Chart(document.getElementById('oniChart'), {{
     modeBarButtonsToRemove: ['lasso2d','select2d'],
   }});
 }})();
+</script>
+<script>
+// Info icon: click to toggle on touch devices; click outside to dismiss
+document.querySelectorAll('.info-icon').forEach(function(el) {{
+  el.addEventListener('click', function(e) {{
+    e.stopPropagation();
+    var wasActive = el.classList.contains('active');
+    document.querySelectorAll('.info-icon.active').forEach(function(x) {{ x.classList.remove('active'); }});
+    if (!wasActive) el.classList.add('active');
+  }});
+}});
+document.addEventListener('click', function() {{
+  document.querySelectorAll('.info-icon.active').forEach(function(x) {{ x.classList.remove('active'); }});
+}});
 </script>
 </body>
 </html>
