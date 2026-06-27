@@ -74,7 +74,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     label, color = classify(anom)
     impacts = impacts_for(label)
 
-    # chart data
+    # NOAA/CPC chart data
     weekly_dates  = [r["date"] for r in weekly]
     weekly_anoms  = [r["nino34_anom"] for r in weekly]
     oni_labels    = [f"{r['season']} {r['year']}" for r in oni_h]
@@ -89,6 +89,297 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     synopsis = disc.get("synopsis", "").replace("<", "&lt;").replace(">", "&gt;")
     issued   = disc.get("issued", "")
 
+    # IRI data
+    iri_imgs     = data.get("iri_images", {})
+    iri_strength = data.get("iri_strength") or {}
+    sp_seasons   = iri_strength.get("seasons", [])
+    sp_traces    = iri_strength.get("traces", [])
+    sp_title     = iri_strength.get("title", "ENSO Strength Categories")
+
+    # Build Chart.js datasets for strength stacked bar
+    # Note: borderRadius must NOT be set on stacked bar datasets in Chart.js 4 — it makes segments invisible
+    strength_datasets = json.dumps([
+        {
+            "label":           t["name"],
+            "data":            t["y"],
+            "backgroundColor": t["color"],
+            "borderWidth":     0,
+        }
+        for t in sp_traces
+    ])
+
+    img_cpc       = iri_imgs.get("cpc_probs", "")
+    img_sst_hist  = iri_imgs.get("iri_sst_history", "")
+    img_iri_probs = iri_imgs.get("iri_probs", "")
+
+    # SST model predictions (from Playwright Highcharts extraction)
+    import hashlib
+    from collections import defaultdict
+
+    SEASON_ORDER = ["MAM-OBS","May-OBS","MJJ","JJA","JAS","ASO","SON","OND","NDJ","DJF","JFM","FMA","MAM","AMJ"]
+    AVG_SERIES   = {"DYN AVG", "STAT AVG", "REL AVG"}  # stripped — .strip() removes trailing space
+    OBS_SERIES   = {"Observed"}
+
+    model_preds = data.get("iri_model_predictions") or []
+
+    # Group: model → season → [values]  (multiple runs → average)
+    raw: dict = defaultdict(lambda: defaultdict(list))
+    for rec in model_preds:
+        m = (rec.get("model") or "").strip()
+        s = (rec.get("season") or "").strip()
+        v = rec.get("nino34_anomaly")
+        if m and s and v is not None:
+            raw[m][s].append(float(v))
+
+    # Average duplicates, filtering NaN/None
+    pred_by_model: dict = {}
+    for m, sdict in raw.items():
+        pred_by_model[m] = {}
+        for s, vs in sdict.items():
+            clean_vs = [v for v in vs if v is not None and v == v]  # v!=v catches NaN
+            pred_by_model[m][s] = round(sum(clean_vs)/len(clean_vs), 3) if clean_vs else None
+
+    # Determine season order from data (only seasons present)
+    all_seasons_in_data = {s for sdict in pred_by_model.values() for s in sdict}
+    pred_seasons = [s for s in SEASON_ORDER if s in all_seasons_in_data]
+    # Add any remaining not in our ordered list
+    pred_seasons += [s for s in sorted(all_seasons_in_data) if s not in pred_seasons]
+
+    # ── Model type classification ────────────────────────────────────────────
+    DYNAMICAL_MODELS = {
+        "NCEP CFSv2","NASA GMAOv3","GFDL SPEAR","ECMWF","JMA","UKMO",
+        "MetFRANCE","DWD","CMC CANSIP","KMA","BCC_CSM11m","AUS-ACCESS",
+        "SINTEX-F","IOCAS ICM","CMCC-SPS4","COLA CCSM4","JAMSTEC CNN",
+        "NTU CODA","UW PSL-CSLIM","CS-IRI-MM","BCC DIAP",
+    }
+    STATISTICAL_MODELS = {
+        "CPC CA","CPC MRKOV","CSU CLIPR","LDEO","BCC_RZDM",
+        "IAP-NN","XRO","UCLA-TCD",
+    }
+    RELATIVE_MODELS = {"AUS-RELATIVE","CMCC RELATIVE","UW PSL-LIM"}
+
+    def _mtype(name):
+        if name in DYNAMICAL_MODELS: return "dyn"
+        if name in STATISTICAL_MODELS: return "stat"
+        if name in RELATIVE_MODELS: return "rel"
+        return "dyn"  # OBS-N and unknowns → treat as dynamical runs
+
+    # Type visual config
+    TYPE_CFG = {
+        "dyn":  {"symbol": "circle",        "opacity": 0.75, "size": 5,
+                 "legend_label": "Dynamical Models",   "legend_symbol": "circle"},
+        "stat": {"symbol": "circle-open",   "opacity": 0.85, "size": 6,
+                 "legend_label": "Statistical Models", "legend_symbol": "circle-open"},
+        "rel":  {"symbol": "diamond-open",  "opacity": 0.85, "size": 6,
+                 "legend_label": "Relative Models",    "legend_symbol": "diamond-open"},
+    }
+    # Distinct, highly separated colors for the three averages + observed
+    AVG_COLORS = {
+        "DYN AVG":  {"line": "#f5a623", "marker": "star",        "width": 3.5, "size": 10},
+        "STAT AVG": {"line": "#00e5ff", "marker": "star-square",  "width": 3.5, "size": 10},
+        "REL AVG":  {"line": "#e040fb", "marker": "star-diamond", "width": 3.5, "size": 10},
+    }
+
+    # Sort models: dyn → stat → rel alphabetically within each group
+    def _sort_key(name):
+        order = {"dyn": 0, "stat": 1, "rel": 2}
+        return (order[_mtype(name)], name)
+
+    forecast_model_names = sorted(
+        (m for m, sv in pred_by_model.items()
+         if m not in OBS_SERIES and m not in AVG_SERIES
+         and any(v is not None for v in [sv.get(s) for s in pred_seasons])),
+        key=_sort_key,
+    )
+
+    # Per-type color index counters for hue rotation within each band
+    type_counts = {"dyn": 0, "stat": 0, "rel": 0}
+    type_totals = {t: sum(1 for m in forecast_model_names if _mtype(m) == t)
+                   for t in ("dyn","stat","rel")}
+
+    def _mcolor(name):
+        mt = _mtype(name)
+        idx = type_counts[mt]
+        n   = max(type_totals[mt], 1)
+        type_counts[mt] += 1
+        if mt == "dyn":
+            hue = int(idx * 85 / n)        # 0–85°  reds/oranges/yellows
+        elif mt == "stat":
+            hue = 155 + int(idx * 85 / n)  # 155–240° greens/cyans/blues
+        else:
+            hue = 265 + int(idx * 50 / n)  # 265–315° purples/magentas
+        return f"hsl({hue},75%,62%)"
+
+    # ── Build Plotly traces ───────────────────────────────────────────────
+    plume_traces_list = []
+    trace_types: list = []   # parallel type-tag list for updatemenus visibility
+
+    # 1. Individual model lines (below averages in z-order)
+    for mname in forecast_model_names:
+        mt    = _mtype(mname)
+        cfg   = TYPE_CFG[mt]
+        color = _mcolor(mname)
+        row   = [pred_by_model[mname].get(s) for s in pred_seasons]
+        plume_traces_list.append({
+            "type": "scatter", "x": pred_seasons, "y": row,
+            "mode": "lines+markers", "name": mname,
+            "legendgroup": mt, "showlegend": False,
+            "connectgaps": True, "opacity": cfg["opacity"],
+            "line":   {"color": color, "width": 1.5},
+            "marker": {"color": color, "size": cfg["size"],
+                       "symbol": cfg["symbol"],
+                       "line": {"color": color, "width": 1.5}},
+            "hovertemplate": f"<b>{mname}</b> ({mt.upper()})<br>%{{x}}: %{{y:.2f}} °C<extra></extra>",
+        })
+        trace_types.append(mt)
+
+    # 2. Dummy legend entries for each present model type
+    for mt, cfg in TYPE_CFG.items():
+        n_mt = type_totals[mt]
+        if n_mt == 0:
+            continue
+        dummy_color = {"dyn": "#fa8c16", "stat": "#40c4ff", "rel": "#ce93d8"}[mt]
+        plume_traces_list.append({
+            "type": "scatter", "x": [None], "y": [None],
+            "mode": "markers+lines", "name": f"{cfg['legend_label']} (N={n_mt})",
+            "legendgroup": mt, "showlegend": True,
+            "line": {"color": dummy_color, "width": 1.5},
+            "marker": {"color": dummy_color, "size": 8,
+                       "symbol": cfg["legend_symbol"],
+                       "line": {"color": dummy_color, "width": 1.5}},
+        })
+        trace_types.append(f"dummy_{mt}")
+
+    # 3. Ensemble averages (rendered on top)
+    avg_order = ["DYN AVG", "STAT AVG", "REL AVG"]
+    for mname in avg_order:
+        if mname not in pred_by_model:
+            continue
+        cfg  = AVG_COLORS[mname]
+        row  = [pred_by_model[mname].get(s) for s in pred_seasons]
+        plume_traces_list.append({
+            "type": "scatter", "x": pred_seasons, "y": row,
+            "mode": "lines+markers", "name": mname,
+            "legendgroup": "avg", "showlegend": True,
+            "connectgaps": True,
+            "line":   {"color": cfg["line"], "width": cfg["width"]},
+            "marker": {"color": cfg["line"], "size": cfg["size"],
+                       "symbol": cfg["marker"],
+                       "line": {"color": "#fff", "width": 1}},
+            "hovertemplate": f"<b>{mname}</b><br>%{{x}}: %{{y:.2f}} °C<extra></extra>",
+        })
+        trace_types.append(f"avg_{mname}")
+
+    # 4. Observed (dashed blue, rendered last so it's always on top)
+    for mname in sorted(m for m in pred_by_model if m in OBS_SERIES):
+        row = [pred_by_model[mname].get(s) for s in pred_seasons]
+        plume_traces_list.append({
+            "type": "scatter", "x": pred_seasons, "y": row,
+            "mode": "lines+markers", "name": mname,
+            "legendgroup": "obs", "showlegend": True,
+            "connectgaps": True,
+            "line":   {"color": "#58a6ff", "width": 2.5, "dash": "dot"},
+            "marker": {"color": "#58a6ff", "size": 7, "symbol": "circle-dot"},
+            "hovertemplate": f"<b>{mname}</b><br>%{{x}}: %{{y:.2f}} °C<extra></extra>",
+        })
+        trace_types.append("obs")
+
+    # ── Dropdown updatemenus ──────────────────────────────────────────────
+    def _vis(show_tags):
+        return [True if t in show_tags else "legendonly" for t in trace_types]
+
+    all_tags     = set(trace_types)
+    avg_tags     = {t for t in all_tags if t.startswith("avg_")}
+    dummy_tags   = {t for t in all_tags if t.startswith("dummy_")}
+    dyn_tags     = {"dyn", "dummy_dyn"} | {t for t in avg_tags if "DYN" in t}
+    stat_tags    = {"stat", "dummy_stat"} | {t for t in avg_tags if "STAT" in t}
+    rel_tags     = {"rel", "dummy_rel"} | {t for t in avg_tags if "REL" in t}
+    avg_only_tags = avg_tags | dummy_tags | {"obs"}
+
+    dropdown_menu = {
+        "buttons": [
+            {"label": "All Models",        "method": "restyle",
+             "args": [{"visible": _vis(all_tags)}]},
+            {"label": "Dynamical Only",    "method": "restyle",
+             "args": [{"visible": _vis(dyn_tags | {"obs"})}]},
+            {"label": "Statistical Only",  "method": "restyle",
+             "args": [{"visible": _vis(stat_tags | {"obs"})}]},
+            {"label": "Relative Only",     "method": "restyle",
+             "args": [{"visible": _vis(rel_tags | {"obs"})}]},
+            {"label": "Averages Only",     "method": "restyle",
+             "args": [{"visible": _vis(avg_only_tags)}]},
+        ],
+        "direction": "down", "showactive": True, "type": "dropdown",
+        "x": 0.0, "y": 1.08, "xanchor": "left", "yanchor": "top",
+        "bgcolor": "#1c2128", "bordercolor": "#58a6ff", "borderwidth": 1,
+        "font": {"color": "#c9d1d9", "size": 12},
+        "pad": {"r": 10, "t": 5},
+        "active": 0,
+    }
+
+    plume_traces_json = json.dumps(plume_traces_list)
+    has_plume         = bool(plume_traces_list)
+
+    plume_layout_json = json.dumps({
+        "paper_bgcolor": "#161b22", "plot_bgcolor": "#0d1117",
+        "margin": {"l": 60, "r": 30, "t": 60, "b": 80},
+        "font": {"color": "#c9d1d9",
+                 "family": "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"},
+        "xaxis": {"gridcolor": "#21262d", "linecolor": "#30363d",
+                  "tickfont": {"color": "#8b949e", "size": 12}, "tickangle": -30},
+        "yaxis": {"title": "Niño-3.4 Anomaly (°C)",
+                  "titlefont": {"color": "#8b949e", "size": 12},
+                  "gridcolor": "#21262d", "linecolor": "#30363d",
+                  "tickfont": {"color": "#8b949e", "size": 11}, "ticksuffix": " °C",
+                  "zeroline": True, "zerolinecolor": "#444", "zerolinewidth": 1},
+        "legend": {"bgcolor": "#1c2128", "bordercolor": "#30363d", "borderwidth": 1,
+                   "font": {"color": "#c9d1d9", "size": 12},
+                   "x": 1.01, "y": 1, "xanchor": "left", "yanchor": "top"},
+        "hovermode": "closest",
+        "hoverlabel": {"bgcolor": "#1c2128", "bordercolor": "#30363d",
+                       "font": {"color": "#c9d1d9", "size": 13}},
+        "updatemenus": [dropdown_menu],
+    })
+
+    # Plotly traces for the strength stacked bar
+    sp_model_counts = iri_strength.get("model_counts", [])
+    strength_traces_list = []
+    for t in sp_traces:
+        texts, counts = [], []
+        for si, pct_val in enumerate(t["y"]):
+            n = sp_model_counts[si] if si < len(sp_model_counts) else 26
+            c = round(pct_val * n / 100)
+            counts.append(c)
+            texts.append(str(c) if c >= 2 else "")
+        strength_traces_list.append({
+            "type": "bar", "name": t["name"], "x": sp_seasons, "y": t["y"],
+            "text": texts, "textposition": "inside", "insidetextanchor": "middle",
+            "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"},
+            "marker": {"color": t["color"]},
+            "customdata": counts,
+            "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>",
+        })
+
+    strength_traces_json = json.dumps(strength_traces_list)
+    strength_layout_json = json.dumps({
+        "barmode": "stack",
+        "paper_bgcolor": "#161b22", "plot_bgcolor": "#161b22",
+        "margin": {"l": 55, "r": 20, "t": 10, "b": 160},
+        "font": {"color": "#c9d1d9", "family": "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"},
+        "xaxis": {"title": "Season", "titlefont": {"color": "#8b949e", "size": 12},
+                  "gridcolor": "#21262d", "linecolor": "#30363d",
+                  "tickfont": {"color": "#8b949e", "size": 13}},
+        "yaxis": {"title": "% of Models", "titlefont": {"color": "#8b949e", "size": 12},
+                  "range": [0, 100], "gridcolor": "#21262d", "linecolor": "#30363d",
+                  "tickfont": {"color": "#8b949e", "size": 11}, "ticksuffix": "%"},
+        "legend": {"orientation": "h", "y": -0.25, "x": 0.5, "xanchor": "center",
+                   "bgcolor": "rgba(0,0,0,0)", "font": {"color": "#c9d1d9", "size": 11}},
+        "hoverlabel": {"bgcolor": "#1c2128", "bordercolor": "#30363d",
+                       "font": {"color": "#c9d1d9", "size": 12}},
+    })
+
+    has_strength = bool(strength_traces_list)
+
     # Gauge needle angle: maps -3..+3 anomaly → -90°..+90°
     needle_deg = max(-90, min(90, anom / 3.0 * 90))
 
@@ -99,6 +390,8 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ENSO Tracker — {fetched}</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
 <style>
   :root {{
     --accent: {color};
@@ -148,6 +441,18 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   .impacts li {{ font-size: 0.85rem; margin-bottom: 0.35rem; line-height: 1.4; }}
   /* Synopsis */
   .synopsis {{ font-size: 0.82rem; line-height: 1.55; color: var(--text); }}
+  /* IRI figures */
+  .section-heading {{ font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); margin: 1.8rem 0 0.8rem; border-bottom: 1px solid var(--border);
+    padding-bottom: 0.4rem; }}
+  .fig-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem; margin-bottom: 1rem; }}
+  .fig-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden; }}
+  .fig-card img {{ width: 100%; display: block; }}
+  .fig-caption {{ font-size: 0.75rem; color: var(--muted); padding: 0.5rem 0.75rem; }}
+  .fig-card .img-placeholder {{ background: #1c2128; height: 180px; display: flex;
+    align-items: center; justify-content: center; color: var(--muted); font-size: 0.8rem; }}
   /* Footer */
   footer {{ font-size: 0.75rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }}
   footer a {{ color: var(--muted); }}
@@ -212,13 +517,66 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   <ul>{impact_li}</ul>
 </div>
 
+<!-- ── IRI Forecast Figures ────────────────────────────────────────── -->
+<p class="section-heading">IRI / CPC Forecast Figures</p>
+
+<div class="fig-grid">
+  <div class="fig-card">
+    <img src="{img_cpc}" alt="CPC ENSO Probability Forecast"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="img-placeholder" style="display:none">Figure unavailable</div>
+    <p class="fig-caption">Figure 1 — CPC ENSO Probability Forecast</p>
+  </div>
+  <div class="fig-card">
+    <img src="{img_sst_hist}" alt="IRI Historical SST Anomaly"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="img-placeholder" style="display:none">Figure unavailable</div>
+    <p class="fig-caption">Figure 2 — Niño-3.4 Historical SST Anomaly</p>
+  </div>
+  <div class="fig-card">
+    <img src="{img_iri_probs}" alt="IRI ENSO Probability Forecast"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="img-placeholder" style="display:none">Figure unavailable</div>
+    <p class="fig-caption">Figure 3 — IRI ENSO Probability Forecast</p>
+  </div>
+</div>
+
+<!-- SST Model Plume -->
+<div class="chart-card" style="margin-bottom:1rem">
+  <h2>Figure 4 — IRI SST Model Forecast Plume (Niño-3.4 Anomaly)</h2>
+  <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
+    Individual model forecasts coloured by model — hover any line to see its name and value.
+    Ensemble averages and observed (dashed blue) are labelled in the legend.
+  </p>
+  {'<div id="plumeDiv" style="height:480px"></div>' if has_plume else
+   '<p style="color:var(--muted);font-size:.82rem">Model prediction data unavailable — install playwright to enable.</p>'}
+</div>
+
+<!-- Strength Categories -->
+<div class="chart-card" style="margin-bottom:1rem">
+  <h2>{sp_title}</h2>
+  <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
+    Percentage of IRI models predicting each ENSO strength category per season.
+    Numbers inside bars show model count. Hover for details.
+  </p>
+  {'<div id="strengthDiv" style="height:480px"></div>' if has_strength else
+   '<p style="color:var(--muted);font-size:.82rem">Strength data unavailable.</p>'}
+</div>
+
 <footer>
   Data: NOAA/CPC
 </footer>
 
 <script>
+// Register datalabels globally; set display:false as the default so it only activates
+// on charts that explicitly opt in (strength chart overrides to a display function).
+Chart.register(ChartDataLabels);
+Chart.defaults.plugins.datalabels = {{ display: false }};
 const chartDefaults = {{
-  plugins: {{ legend: {{ labels: {{ color: '#8b949e', font: {{ size: 11 }} }} }} }},
+  plugins: {{
+    legend:     {{ labels: {{ color: '#8b949e', font: {{ size: 11 }} }} }},
+    datalabels: {{ display: false }},   // off for all charts unless overridden
+  }},
   scales: {{
     x: {{ ticks: {{ color: '#8b949e', maxRotation: 45, font: {{ size: 10 }} }}, grid: {{ color: '#21262d' }} }},
     y: {{ ticks: {{ color: '#8b949e', font: {{ size: 10 }} }}, grid: {{ color: '#21262d' }} }}
@@ -286,6 +644,32 @@ new Chart(document.getElementById('oniChart'), {{
     }}
   }}
 }});
+
+// ENSO Strength Categories — Plotly stacked bar with in-bar model counts
+(function() {{
+  const el = document.getElementById('strengthDiv');
+  if (!el) return;
+  const traces = {strength_traces_json};
+  if (!traces.length) return;
+  const layout = {strength_layout_json};
+  Plotly.newPlot(el, traces, layout, {{
+    responsive: true, displaylogo: false,
+    modeBarButtonsToRemove: ['lasso2d','select2d','autoScale2d'],
+  }});
+}})();
+
+// SST Model Forecast Plume — Plotly line chart, hover shows individual model
+(function() {{
+  const el = document.getElementById('plumeDiv');
+  if (!el) return;
+  const traces = {plume_traces_json};
+  if (!traces.length) return;
+  const layout = {plume_layout_json};
+  Plotly.newPlot(el, traces, layout, {{
+    responsive: true, displaylogo: false,
+    modeBarButtonsToRemove: ['lasso2d','select2d'],
+  }});
+}})();
 </script>
 </body>
 </html>
@@ -300,6 +684,8 @@ new Chart(document.getElementById('oniChart'), {{
 if __name__ == "__main__":
     import sys
     data_path = sys.argv[1] if len(sys.argv) > 1 else "enso_data.json"
+    # print(f"Rendering dashboard from {data_path} ...")
     with open(data_path) as f:
         data = json.load(f)
+    # print(f"Fetched data: {data}")
     render(data)
