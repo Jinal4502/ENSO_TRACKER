@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Optional
 
 from fetch_enso import fetch_all
+from fetch_iri import fetch_strength_plot, get_iri_image_urls, fetch_iri_model_predictions
 from render_dashboard import classify, render
 
 HISTORY_FILE = "enso_history.json"
@@ -108,10 +109,17 @@ def main() -> None:
 
     print("=== ENSO Tracker Update ===")
 
-    # 1. Fetch
+    # 1. Fetch NOAA/CPC data
     data = fetch_all()
+
+    # 1b. Fetch IRI data
+    print("Fetching IRI strength categories ...")
+    data["iri_strength"]      = fetch_strength_plot()
+    data["iri_images"]        = get_iri_image_urls()
+    data["iri_model_predictions"] = fetch_iri_model_predictions()
+
     with open(DATA_FILE, "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, default=str)
     print(f"Data saved → {DATA_FILE}")
 
     # 2. Render dashboard

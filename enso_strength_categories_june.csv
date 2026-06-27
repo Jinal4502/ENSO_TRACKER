@@ -1,0 +1,82 @@
+season,category,model_count
+"JJA","Very Strong La Niña (≤ -2.0)",0
+"JAS","Very Strong La Niña (≤ -2.0)",0
+"ASO","Very Strong La Niña (≤ -2.0)",0
+"SON","Very Strong La Niña (≤ -2.0)",0
+"OND","Very Strong La Niña (≤ -2.0)",0
+"NDJ","Very Strong La Niña (≤ -2.0)",0
+"DJF","Very Strong La Niña (≤ -2.0)",0
+"JFM","Very Strong La Niña (≤ -2.0)",0
+"FMA","Very Strong La Niña (≤ -2.0)",0
+"JJA","Strong La Niña (-2.0 to -1.5)",0
+"JAS","Strong La Niña (-2.0 to -1.5)",0
+"ASO","Strong La Niña (-2.0 to -1.5)",0
+"SON","Strong La Niña (-2.0 to -1.5)",0
+"OND","Strong La Niña (-2.0 to -1.5)",0
+"NDJ","Strong La Niña (-2.0 to -1.5)",0
+"DJF","Strong La Niña (-2.0 to -1.5)",0
+"JFM","Strong La Niña (-2.0 to -1.5)",0
+"FMA","Strong La Niña (-2.0 to -1.5)",0
+"JJA","Moderate La Niña (-1.5 to -1.0)",0
+"JAS","Moderate La Niña (-1.5 to -1.0)",0
+"ASO","Moderate La Niña (-1.5 to -1.0)",0
+"SON","Moderate La Niña (-1.5 to -1.0)",0
+"OND","Moderate La Niña (-1.5 to -1.0)",0
+"NDJ","Moderate La Niña (-1.5 to -1.0)",0
+"DJF","Moderate La Niña (-1.5 to -1.0)",0
+"JFM","Moderate La Niña (-1.5 to -1.0)",0
+"FMA","Moderate La Niña (-1.5 to -1.0)",0
+"JJA","Weak La Niña (-1.0 to -0.5)",0
+"JAS","Weak La Niña (-1.0 to -0.5)",0
+"ASO","Weak La Niña (-1.0 to -0.5)",0
+"SON","Weak La Niña (-1.0 to -0.5)",0
+"OND","Weak La Niña (-1.0 to -0.5)",0
+"NDJ","Weak La Niña (-1.0 to -0.5)",0
+"DJF","Weak La Niña (-1.0 to -0.5)",0
+"JFM","Weak La Niña (-1.0 to -0.5)",0
+"FMA","Weak La Niña (-1.0 to -0.5)",0
+"JJA","Neutral (-0.5 to 0.5)",0
+"JAS","Neutral (-0.5 to 0.5)",0
+"ASO","Neutral (-0.5 to 0.5)",0
+"SON","Neutral (-0.5 to 0.5)",0
+"OND","Neutral (-0.5 to 0.5)",0
+"NDJ","Neutral (-0.5 to 0.5)",0
+"DJF","Neutral (-0.5 to 0.5)",0
+"JFM","Neutral (-0.5 to 0.5)",0
+"FMA","Neutral (-0.5 to 0.5)",0
+"JJA","Weak El Niño (0.5 to 1.0)",4
+"JAS","Weak El Niño (0.5 to 1.0)",0
+"ASO","Weak El Niño (0.5 to 1.0)",0
+"SON","Weak El Niño (0.5 to 1.0)",0
+"OND","Weak El Niño (0.5 to 1.0)",0
+"NDJ","Weak El Niño (0.5 to 1.0)",0
+"DJF","Weak El Niño (0.5 to 1.0)",0
+"JFM","Weak El Niño (0.5 to 1.0)",7
+"FMA","Weak El Niño (0.5 to 1.0)",13
+"JJA","Moderate El Niño (1.0 to 1.5)",46
+"JAS","Moderate El Niño (1.0 to 1.5)",23
+"ASO","Moderate El Niño (1.0 to 1.5)",19
+"SON","Moderate El Niño (1.0 to 1.5)",15
+"OND","Moderate El Niño (1.0 to 1.5)",10
+"NDJ","Moderate El Niño (1.0 to 1.5)",5
+"DJF","Moderate El Niño (1.0 to 1.5)",12
+"JFM","Moderate El Niño (1.0 to 1.5)",13
+"FMA","Moderate El Niño (1.0 to 1.5)",40
+"JJA","Strong El Niño (1.5 to 2.0)",35
+"JAS","Strong El Niño (1.5 to 2.0)",35
+"ASO","Strong El Niño (1.5 to 2.0)",19
+"SON","Strong El Niño (1.5 to 2.0)",19
+"OND","Strong El Niño (1.5 to 2.0)",35
+"NDJ","Strong El Niño (1.5 to 2.0)",39
+"DJF","Strong El Niño (1.5 to 2.0)",35
+"JFM","Strong El Niño (1.5 to 2.0)",47
+"FMA","Strong El Niño (1.5 to 2.0)",27
+"JJA","Very Strong El Niño (≥ 2.0)",15
+"JAS","Very Strong El Niño (≥ 2.0)",42
+"ASO","Very Strong El Niño (≥ 2.0)",62
+"SON","Very Strong El Niño (≥ 2.0)",66
+"OND","Very Strong El Niño (≥ 2.0)",55
+"NDJ","Very Strong El Niño (≥ 2.0)",56
+"DJF","Very Strong El Niño (≥ 2.0)",53
+"JFM","Very Strong El Niño (≥ 2.0)",33
+"FMA","Very Strong El Niño (≥ 2.0)",20
