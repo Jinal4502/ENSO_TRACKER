@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Playwright
         run: |
-          pip install playwright
+          python -m pip install playwright
           python -m playwright install --with-deps chromium
 
       - name: Sync with remote
