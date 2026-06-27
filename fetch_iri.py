@@ -127,7 +127,9 @@ def fetch_iri_model_predictions() -> Optional[list]:
                 })
             return clean if clean else None
         except Exception as exc:
+            import traceback
             print(f"  [WARN] Playwright fetch failed: {exc}")
+            traceback.print_exc()
             return None
         finally:
             browser.close()
