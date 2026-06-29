@@ -34,7 +34,7 @@ jobs:
       - name: Sync with remote
         run: |
           git config user.name  "ENSO Bot"
-          git config user.email "actions@github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin main
 
       - name: Fetch, render, email
