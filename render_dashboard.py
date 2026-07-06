@@ -614,6 +614,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 
 <footer>
   Data: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank">IRI</a>
+  &nbsp;·&nbsp; <a href="hurricanes.html">🌀 Global Tropical Cyclone Tracker →</a>
 </footer>
 
 <script>

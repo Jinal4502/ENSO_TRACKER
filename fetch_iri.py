@@ -24,6 +24,19 @@ def _fetch_bytes(url: str, timeout: int = 20) -> Optional[bytes]:
         return None
 
 
+def _url_exists(url: str, timeout: int = 10) -> bool:
+    try:
+        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "ENSOTracker/1.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
+def _prev_month(year: int, month: int) -> tuple[int, int]:
+    return (year, month - 1) if month > 1 else (year - 1, 12)
+
+
 def _decode_bdata(encoded: str, dtype: str) -> list:
     """Decode Plotly's base64-encoded typed binary array."""
     binary = base64.b64decode(encoded)
@@ -69,8 +82,8 @@ def fetch_iri_model_predictions() -> Optional[list]:
         return None
 
     print("Fetching IRI SST model predictions via Playwright ...")
-    URL = ("https://iri.columbia.edu/our-expertise/climate/forecasts/"
-           "enso/current/?enso_tab=enso-sst_table")
+    URL = ("https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/"
+           "?enso_tab=enso-sst_table")
     with sync_playwright() as p:
         browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
         page = browser.new_page()
@@ -162,16 +175,22 @@ def fetch_strength_plot() -> Optional[dict]:
     """
     Fetch ENSO strength categories from IRI's Plotly endpoint.
     URL pattern: /strength_plot/{year}/{month-1}
-    (IRI's month param = current month − 1, the model initialization month)
+    Falls back to month-2 if the current initialization month isn't published yet.
     """
     now = datetime.now(timezone.utc)
     year, month = now.year, now.month
-    month_param = month - 1 if month > 1 else 12
-    year_param  = year     if month > 1 else year - 1
 
-    url = f"https://ensoforecast.iri.columbia.edu/strength_plot/{year_param}/{month_param}"
-    print(f"Fetching IRI strength plot ({url}) ...")
-    raw = _fetch_bytes(url)
+    raw = None
+    year_param, month_param = None, None
+    for offset in (1, 2):
+        y, m = _prev_month(year, month) if offset == 1 else _prev_month(*_prev_month(year, month))
+        url = f"https://ensoforecast.iri.columbia.edu/strength_plot/{y}/{m}"
+        print(f"Fetching IRI strength plot ({url}) ...")
+        raw = _fetch_bytes(url)
+        if raw:
+            year_param, month_param = y, m
+            break
+
     if not raw:
         return None
 
@@ -224,27 +243,36 @@ def fetch_strength_plot() -> Optional[dict]:
 
 def get_iri_image_urls() -> dict:
     """
-    Build IRI / CPC forecast image URLs for the current issuance month.
-    IRI publishes figures mid-month; SST/strength endpoints use month − 1.
+    Build IRI / CPC forecast image URLs.
+    Checks whether the current month's figures are published; falls back to
+    the previous month if not (IRI typically publishes mid-month).
     """
     now = datetime.now(timezone.utc)
     year, month = now.year, now.month
 
-    sst_month = month - 1 if month > 1 else 12
-    sst_year  = year      if month > 1 else year - 1
+    # Determine which month's figures are actually available
+    fig_year, fig_month = year, month
+    test_url = (f"https://iri.columbia.edu/wp-content/uploads/"
+                f"{fig_year}/{fig_month:02d}/figure2.png")
+    if not _url_exists(test_url):
+        fig_year, fig_month = _prev_month(year, month)
+        print(f"  [INFO] IRI figures not yet published for {year}/{month:02d} "
+              f"— using {fig_year}/{fig_month:02d}")
+
+    sst_year, sst_month = _prev_month(fig_year, fig_month)
 
     return {
         "cpc_probs": (
-            f"https://cpc.ncep.noaa.gov/archives/enso/roni/images/{year}/"
-            f"enso-probs-{month:02d}{year}.png"
+            f"https://cpc.ncep.noaa.gov/archives/enso/roni/images/{fig_year}/"
+            f"enso-probs-{fig_month:02d}{fig_year}.png"
         ),
         "iri_sst_history": (
             f"https://iri.columbia.edu/wp-content/uploads/"
-            f"{year}/{month:02d}/figure2.png"
+            f"{fig_year}/{fig_month:02d}/figure2.png"
         ),
         "iri_probs": (
             f"https://iri.columbia.edu/wp-content/uploads/"
-            f"{year}/{month:02d}/figure3.png"
+            f"{fig_year}/{fig_month:02d}/figure3.png"
         ),
         "sst_plume": (
             f"https://ensoforecast.iri.columbia.edu/cgi-bin/"

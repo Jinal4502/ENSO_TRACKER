@@ -16,7 +16,9 @@ from typing import Optional
 
 from fetch_enso import fetch_all
 from fetch_iri import fetch_strength_plot, get_iri_image_urls, fetch_iri_model_predictions
+from fetch_hurricanes import fetch_hurricane_data
 from render_dashboard import classify, render
+from render_hurricanes import render_hurricanes
 
 HISTORY_FILE = "enso_history.json"
 DATA_FILE    = "enso_data.json"
@@ -69,9 +71,14 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
     <p style="font-size:1.6rem;font-weight:700;color:{color};margin:0">{anom:+.2f} °C</p>
     <p style="margin:4px 0 16px;color:#555">{label} · {disc.get('status','')}</p>
     <p style="color:#333;font-size:.9rem;line-height:1.5">{diff}</p>
-    <a href="{pages_url}" style="display:inline-block;margin-top:16px;background:{color};color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem">
-      View Full Dashboard →
-    </a>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <a href="{pages_url}" style="display:inline-block;background:{color};color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem">
+        View ENSO Dashboard →
+      </a>
+      <a href="{pages_url}hurricanes.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
+        🌀 Cyclone Tracker →
+      </a>
+    </div>
   </div>
   <div style="padding:12px 24px;background:#f6f8fa;font-size:.75rem;color:#888">
     Source: <a href="https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/">NOAA/CPC</a>
@@ -135,6 +142,11 @@ def main() -> None:
 
     # 2. Render dashboard
     render(data, DASHBOARD)
+
+    # 2b. Render hurricane page
+    print("Generating hurricane page ...")
+    hurricane_data = fetch_hurricane_data()
+    render_hurricanes(hurricane_data, "docs/hurricanes.html")
 
     # 3. History — append current snapshot, then find last week's entry
     history = load_history()

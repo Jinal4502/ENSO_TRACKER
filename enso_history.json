@@ -992,7 +992,7 @@
     }
   },
   {
-    "fetched_utc": "2026-06-29T16:54:47.803030+00:00",
+    "fetched_utc": "2026-07-05T23:12:42.509404+00:00",
     "latest_weekly": {
       "date": "2026-06-24",
       "nino12": 25.9,
@@ -1006,15 +1006,232 @@
     },
     "latest_oni": {
       "year": 2026,
-      "season": "MAM",
-      "sst": 28.06,
-      "oni": 0.48
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
     },
     "latest_roni": {
       "year": 2026,
-      "month": 5,
-      "season": "May",
-      "roni": 0.93
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-05T23:14:29.013196+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-05T23:15:36.939929+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-05T23:26:21.419328+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-05T23:28:31.580291+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-05T23:32:57.752708+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-06T00:07:46.441913+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
+      "issued": ""
+    }
+  },
+  {
+    "fetched_utc": "2026-07-06T01:02:03.348370+00:00",
+    "latest_weekly": {
+      "date": "2026-06-24",
+      "nino12": 25.9,
+      "nino12_anom": 3.1,
+      "nino3": 28.4,
+      "nino3_anom": 2.1,
+      "nino34": 29.3,
+      "nino34_anom": 1.8,
+      "nino4": 30.0,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
     },
     "discussion": {
       "status": "El Ni\u00f1o Advisory",

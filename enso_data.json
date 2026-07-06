@@ -1,5 +1,5 @@
 {
-  "fetched_utc": "2026-06-29T16:54:47.803030+00:00",
+  "fetched_utc": "2026-07-06T01:02:03.348370+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "Synopsis: El Ni\u00f1o conditions are present and expected to strengthen into the Northern Hemisphere winter 2026-27.",
@@ -18,15 +18,15 @@
   },
   "latest_oni": {
     "year": 2026,
-    "season": "MAM",
-    "sst": 28.06,
-    "oni": 0.48
+    "season": "AMJ",
+    "sst": 28.71,
+    "oni": 0.98
   },
   "latest_roni": {
     "year": 2026,
-    "month": 5,
-    "season": "May",
-    "roni": 0.93
+    "month": 6,
+    "season": "Jun",
+    "roni": 1.5
   },
   "weekly_history": [
     {
@@ -605,12 +605,6 @@
   "oni_history": [
     {
       "year": 2023,
-      "season": "AMJ",
-      "sst": 28.31,
-      "oni": 0.57
-    },
-    {
-      "year": 2023,
       "season": "MJJ",
       "sst": 28.42,
       "oni": 0.84
@@ -816,17 +810,17 @@
     {
       "year": 2026,
       "season": "MAM",
-      "sst": 28.06,
-      "oni": 0.48
+      "sst": 28.08,
+      "oni": 0.51
+    },
+    {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
     }
   ],
   "roni_history": [
-    {
-      "year": 2023,
-      "month": 6,
-      "season": "Jun",
-      "roni": 0.89
-    },
     {
       "year": 2023,
       "month": 7,
@@ -1035,7 +1029,13 @@
       "year": 2026,
       "month": 5,
       "season": "May",
-      "roni": 0.93
+      "roni": 1.01
+    },
+    {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
     }
   ],
   "iri_strength": {
