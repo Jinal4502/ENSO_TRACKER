@@ -134,17 +134,7 @@ def main() -> None:
         except Exception:
             pass
 
-    print("Fetching IRI strength categories ...")
-    iri_strength = fetch_strength_plot()
-    # svg_url means the JSON endpoint is gone — compute from model predictions instead
-    if iri_strength and iri_strength.get("svg_url"):
-        iri_strength = None
-    if iri_strength is None and prev_cache.get("iri_strength") and not (
-            prev_cache["iri_strength"] or {}).get("svg_url"):
-        iri_strength = prev_cache["iri_strength"]
-        print("  [INFO] Using cached IRI strength data from previous run")
-    data["iri_strength"] = iri_strength
-    data["iri_images"]   = get_iri_image_urls()
+    data["iri_images"] = get_iri_image_urls()
 
     pred = fetch_iri_model_predictions()
     if pred is None and prev_cache.get("iri_model_predictions"):
@@ -152,12 +142,12 @@ def main() -> None:
         print(f"  [INFO] Using cached model predictions ({len(pred)} records from previous run)")
     data["iri_model_predictions"] = pred
 
-    # Derive strength categories from model predictions when endpoint returns no JSON
-    if data["iri_strength"] is None and pred:
-        derived = compute_strength_from_predictions(pred)
-        if derived:
-            data["iri_strength"] = derived
-            print(f"  [INFO] Strength categories derived from {len(pred)} model predictions")
+    # Always derive strength categories fresh from predictions (IRI endpoint is SVG-only now)
+    if pred:
+        data["iri_strength"] = compute_strength_from_predictions(pred)
+        print(f"  [INFO] Strength categories derived from {len(pred)} model predictions")
+    else:
+        data["iri_strength"] = None
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, default=str)
