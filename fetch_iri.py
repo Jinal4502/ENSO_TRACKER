@@ -173,14 +173,18 @@ def fetch_iri_model_predictions() -> Optional[list]:
 
 def fetch_strength_plot() -> Optional[dict]:
     """
-    Fetch ENSO strength categories from IRI's Plotly endpoint.
-    URL pattern: /strength_plot/{year}/{month-1}
-    Falls back to month-2 if the current initialization month isn't published yet.
+    Fetch ENSO strength categories from IRI's endpoint.
+    IRI previously returned Plotly JSON; as of mid-2026 the endpoint returns
+    an SVG image instead. We detect which format is served and handle both:
+      - SVG  → return {"svg_url": url, "year": y, "month": m}
+      - JSON → parse traces and return the full dict (legacy path)
+    Falls back to month-2 if the current month isn't published yet.
     """
     now = datetime.now(timezone.utc)
     year, month = now.year, now.month
 
     raw = None
+    url_used = None
     year_param, month_param = None, None
     for offset in (1, 2):
         y, m = _prev_month(year, month) if offset == 1 else _prev_month(*_prev_month(year, month))
@@ -188,16 +192,22 @@ def fetch_strength_plot() -> Optional[dict]:
         print(f"Fetching IRI strength plot ({url}) ...")
         raw = _fetch_bytes(url)
         if raw:
-            year_param, month_param = y, m
+            year_param, month_param, url_used = y, m, url
             break
 
     if not raw:
         return None
 
+    # IRI now serves SVG — display directly as an image
+    if raw.lstrip()[:5] in (b"<?xml", b"<svg "):
+        print(f"  IRI strength plot is SVG — will embed as image")
+        return {"svg_url": url_used, "year": year_param, "month": month_param}
+
+    # Legacy: Plotly JSON path (kept in case IRI reverts)
     try:
         fig = json.loads(raw)
     except json.JSONDecodeError as exc:
-        print(f"  [WARN] Could not parse strength plot JSON: {exc}")
+        print(f"  [WARN] Could not parse strength plot response: {exc}")
         return None
 
     seasons = []
@@ -206,7 +216,6 @@ def fetch_strength_plot() -> Optional[dict]:
         x = list(trace.get("x", []))
         if not seasons and x:
             seasons = x
-
         y_raw = trace.get("y", [])
         if isinstance(y_raw, dict) and "bdata" in y_raw:
             y = _decode_bdata(y_raw["bdata"], y_raw.get("dtype", "i1"))
@@ -214,12 +223,10 @@ def fetch_strength_plot() -> Optional[dict]:
             y = y_raw
         else:
             y = []
-
         plotly_color = trace.get("marker", {}).get("color", "")
         color = STRENGTH_COLORS[i] if i < len(STRENGTH_COLORS) else plotly_color
         traces.append({"name": trace.get("name", ""), "y": y, "color": color})
 
-    # Back-calculate model counts per season from percentage values
     n_seasons = len(seasons)
     model_counts = []
     for si in range(n_seasons):
@@ -232,12 +239,9 @@ def fetch_strength_plot() -> Optional[dict]:
         title = title.get("text", "")
 
     return {
-        "seasons":      seasons,
-        "traces":       traces,
-        "model_counts": model_counts,
-        "title":        title,
-        "year":         year_param,
-        "month":        month_param,
+        "seasons": seasons, "traces": traces,
+        "model_counts": model_counts, "title": title,
+        "year": year_param, "month": month_param,
     }
 
 
