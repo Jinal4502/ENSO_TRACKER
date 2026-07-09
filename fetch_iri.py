@@ -101,7 +101,9 @@ def compute_strength_from_predictions(predictions: list) -> Optional[dict]:
 
     from collections import defaultdict
 
-    # Step 1+2: ensemble mean per (model, season), forecast models only
+    # Step 1+2: ensemble mean per (model, season), forecast models only.
+    # Each modelling centre gets one vote regardless of how many ensemble members
+    # they submitted — prevents UKMO (10 members) from having 10× the weight of XRO (1 member).
     raw: dict = defaultdict(list)
     for rec in predictions:
         name   = rec.get("model", "")
@@ -111,7 +113,6 @@ def compute_strength_from_predictions(predictions: list) -> Optional[dict]:
             continue
         raw[(name, season)].append(float(val))
 
-    # model_season_mean[(model, season)] = mean anomaly
     model_season_mean = {k: sum(v) / len(v) for k, v in raw.items()}
 
     if not model_season_mean:
