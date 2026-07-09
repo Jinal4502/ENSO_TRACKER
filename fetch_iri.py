@@ -73,7 +73,7 @@ _STRENGTH_CATEGORIES = [
 ]
 
 # Canonical season order for sorting forecast seasons
-_SEASON_ORDER = ["DJF","JFM","FMA","MJJ","JJA","JAS","ASO","SON","OND","NDJ"]
+_SEASON_ORDER = ["DJF","JFM","FMA","MAM","MJJ","JJA","JAS","ASO","SON","OND","NDJ"]
 
 
 _EXCLUDE_SERIES = {"AVG", "RELATIVE", "OBS", "Observed"}
@@ -218,25 +218,16 @@ def fetch_iri_model_predictions() -> Optional[list]:
                 // MAM and AMJ are never shown as standalone forecast labels on this chart.
                 const SEASONS = new Set([
                     'MAM-OBS','May-OBS',
-                    'MJJ','JJA','JAS','ASO','SON','OND','NDJ','DJF','JFM','FMA'
+                    'MJJ','JJA','JAS','ASO','SON','OND','NDJ','DJF','JFM','FMA', 'MAM'
                 ]);
                 const out = [];
                 if (typeof Highcharts === 'undefined') return out;
 
-                // Target only the Model Predictions chart via its known div ID.
-                // Fall back to scanning all category-axis charts if the div is absent.
-                const container = document.getElementById('figure4_highchart');
-                let charts = [];
-                if (container) {
-                    const idx = parseInt(container.getAttribute('data-highcharts-chart'));
-                    const c = Highcharts.charts[idx];
-                    if (c) charts = [c];
-                }
-                if (!charts.length) {
-                    charts = Highcharts.charts.filter(
-                        c => c && c.xAxis[0] && c.xAxis[0].categories
-                    );
-                }
+                // Scan all category-axis charts — picks up both DYN and STAT model charts.
+                // OBS/AVG series are filtered out in Python; ensemble members are averaged.
+                const charts = Highcharts.charts.filter(
+                    c => c && c.xAxis[0] && c.xAxis[0].categories
+                );
 
                 charts.forEach(chart => {
                     chart.series.forEach(series => {
