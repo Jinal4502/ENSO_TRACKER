@@ -355,6 +355,7 @@ def render_hurricanes(data: dict, output: str = "docs/hurricanes.html") -> None:
   Track data: <a href="https://www.ncdc.noaa.gov/ibtracs/" target="_blank">IBTrACS</a>
   (NOAA/NCEI best-track archive) ·
   ENSO classification: <a href="https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt" target="_blank">NOAA/CPC ONI</a>
+  &nbsp;·&nbsp; <a href="precipitation.html">🌧 Arizona Precipitation →</a>
 </footer>
 
 <script>

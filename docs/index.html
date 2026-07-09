@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ENSO Tracker — 2026-07-06</title>
+<title>ENSO Tracker — 2026-07-09</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
@@ -110,7 +110,7 @@
 <body>
 
 <h1>ENSO Tracker</h1>
-<p class="subtitle">Updated 2026-07-06 · Sources: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank" style="color:#58a6ff">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank" style="color:#58a6ff">IRI</a></p>
+<p class="subtitle">Updated 2026-07-09 · Sources: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank" style="color:#58a6ff">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank" style="color:#58a6ff">IRI</a></p>
 
 <div class="grid">
   <!-- Current State -->
@@ -209,17 +209,18 @@
 
 <!-- Strength Categories -->
 <div class="chart-card" style="margin-bottom:1rem">
-  <h2>CCSR/IRI ENSO Strength Categories (Model Count: June, 2026) <span class="info-icon"><span class="tip">Stacked bar chart showing the percentage of IRI models predicting each ENSO strength category (Very Strong La Niña through Very Strong El Niño) for each upcoming season. Numbers inside bars show the model count. Taller red bars indicate stronger El Niño consensus.</span></span></h2>
+  <h2>ENSO Strength Categories <span class="info-icon"><span class="tip">Stacked bar chart showing the percentage of IRI models predicting each ENSO strength category (Very Strong La Niña through Very Strong El Niño) for each upcoming season. Numbers inside bars show the model count. Taller red bars indicate stronger El Niño consensus.</span></span></h2>
   <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
     Percentage of IRI models predicting each ENSO strength category per season.
     Numbers inside bars show model count. Hover for details.
   </p>
-  <div id="strengthDiv" style="height:480px"></div>
+  <p style="color:var(--muted);font-size:.82rem">Strength data unavailable.</p>
 </div>
 
 <footer>
   Data: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank">IRI</a>
   &nbsp;·&nbsp; <a href="hurricanes.html">🌀 Global Tropical Cyclone Tracker →</a>
+  &nbsp;·&nbsp; <a href="precipitation.html">🌧 Arizona Precipitation →</a>
 </footer>
 
 <script>
@@ -304,7 +305,7 @@ new Chart(document.getElementById('oniChart'), {
 (function() {
   const el = document.getElementById('strengthDiv');
   if (!el) return;
-  const traces = [{"type": "bar", "name": "Very Strong La Ni\u00f1a (\u2264 -2.0)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [0, 0, 0, 0, 0, 0, 0, 0, 0], "text": ["", "", "", "", "", "", "", "", ""], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#1a237e"}, "customdata": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Strong La Ni\u00f1a (-2.0 to -1.5)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [0, 0, 0, 0, 0, 0, 0, 0, 0], "text": ["", "", "", "", "", "", "", "", ""], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#1565c0"}, "customdata": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Moderate La Ni\u00f1a (-1.5 to -1.0)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [0, 0, 0, 0, 0, 0, 0, 0, 0], "text": ["", "", "", "", "", "", "", "", ""], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#1e88e5"}, "customdata": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Weak La Ni\u00f1a (-1.0 to -0.5)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [0, 0, 0, 0, 0, 0, 0, 0, 0], "text": ["", "", "", "", "", "", "", "", ""], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#90caf9"}, "customdata": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Neutral (-0.5 to 0.5)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [0, 0, 0, 0, 0, 0, 0, 0, 0], "text": ["", "", "", "", "", "", "", "", ""], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#66bb6a"}, "customdata": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Weak El Ni\u00f1o (0.5 to 1.0)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [4, 0, 0, 0, 0, 0, 0, 7, 13], "text": ["", "", "", "", "", "", "", "2", "3"], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#ffee58"}, "customdata": [1, 0, 0, 0, 0, 0, 0, 2, 3], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Moderate El Ni\u00f1o (1.0 to 1.5)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [46, 23, 19, 15, 10, 5, 12, 13, 40], "text": ["12", "6", "5", "4", "2", "", "3", "3", "10"], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#ffa726"}, "customdata": [12, 6, 5, 4, 2, 1, 3, 3, 10], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Strong El Ni\u00f1o (1.5 to 2.0)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [35, 35, 19, 19, 35, 39, 35, 47, 27], "text": ["9", "9", "5", "5", "9", "10", "9", "12", "7"], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#ef5350"}, "customdata": [9, 9, 5, 5, 9, 10, 9, 12, 7], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}, {"type": "bar", "name": "Very Strong El Ni\u00f1o (\u2265 2.0)", "x": ["JJA", "JAS", "ASO", "SON", "OND", "NDJ", "DJF", "JFM", "FMA"], "y": [15, 42, 62, 66, 55, 56, 53, 33, 20], "text": ["4", "10", "16", "16", "14", "14", "13", "8", "5"], "textposition": "inside", "insidetextanchor": "middle", "textfont": {"size": 15, "color": "white", "family": "Arial Black, sans-serif"}, "marker": {"color": "#b71c1c"}, "customdata": [4, 10, 16, 16, 14, 14, 13, 8, 5], "hovertemplate": "<b>%{fullData.name}</b><br>Season: %{x}<br>%{y:.0f}% (%{customdata} models)<extra></extra>"}];
+  const traces = [];
   if (!traces.length) return;
   const layout = {"barmode": "stack", "paper_bgcolor": "#161b22", "plot_bgcolor": "#161b22", "margin": {"l": 55, "r": 20, "t": 10, "b": 160}, "font": {"color": "#c9d1d9", "family": "-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"}, "xaxis": {"title": "Season", "titlefont": {"color": "#8b949e", "size": 12}, "gridcolor": "#21262d", "linecolor": "#30363d", "tickfont": {"color": "#8b949e", "size": 13}}, "yaxis": {"title": "% of Models", "titlefont": {"color": "#8b949e", "size": 12}, "range": [0, 100], "gridcolor": "#21262d", "linecolor": "#30363d", "tickfont": {"color": "#8b949e", "size": 11}, "ticksuffix": "%"}, "legend": {"orientation": "h", "y": -0.25, "x": 0.5, "xanchor": "center", "bgcolor": "rgba(0,0,0,0)", "font": {"color": "#c9d1d9", "size": 11}}, "hoverlabel": {"bgcolor": "#1c2128", "bordercolor": "#30363d", "font": {"color": "#c9d1d9", "size": 12}}};
   Plotly.newPlot(el, traces, layout, {

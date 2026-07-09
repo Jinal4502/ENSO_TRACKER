@@ -17,8 +17,10 @@ from typing import Optional
 from fetch_enso import fetch_all
 from fetch_iri import fetch_strength_plot, get_iri_image_urls, fetch_iri_model_predictions
 from fetch_hurricanes import fetch_hurricane_data
+from fetch_precipitation import fetch_precipitation_data
 from render_dashboard import classify, render
 from render_hurricanes import render_hurricanes
+from render_precipitation import render_precipitation
 
 HISTORY_FILE = "enso_history.json"
 DATA_FILE    = "enso_data.json"
@@ -77,6 +79,9 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
       </a>
       <a href="{pages_url}hurricanes.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
         🌀 Cyclone Tracker →
+      </a>
+      <a href="{pages_url}precipitation.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
+        🌧 Arizona Precipitation →
       </a>
     </div>
   </div>
@@ -147,6 +152,11 @@ def main() -> None:
     print("Generating hurricane page ...")
     hurricane_data = fetch_hurricane_data()
     render_hurricanes(hurricane_data, "docs/hurricanes.html")
+
+    # 2c. Render precipitation page
+    print("Generating precipitation page ...")
+    prcp_meta = fetch_precipitation_data()
+    render_precipitation(prcp_meta, "docs/precipitation.html")
 
     # 3. History — append current snapshot, then find last week's entry
     history = load_history()
