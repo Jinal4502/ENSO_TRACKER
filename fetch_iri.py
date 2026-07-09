@@ -73,7 +73,7 @@ _STRENGTH_CATEGORIES = [
 ]
 
 # Canonical season order for sorting forecast seasons
-_SEASON_ORDER = ["DJF","JFM","FMA","MAM","AMJ","MJJ","JJA","JAS","ASO","SON","OND","NDJ"]
+_SEASON_ORDER = ["DJF","JFM","FMA","MJJ","JJA","JAS","ASO","SON","OND","NDJ"]
 
 
 _EXCLUDE_SERIES = {"AVG", "RELATIVE", "OBS", "Observed"}
@@ -121,8 +121,8 @@ def compute_strength_from_predictions(predictions: list) -> Optional[dict]:
     # Determine the first upcoming season based on current month,
     # then rotate _SEASON_ORDER so the chart reads chronologically from now.
     _MONTH_TO_START = {
-        1: "MAM", 2: "AMJ", 3: "MJJ", 4: "JJA",
-        5: "JAS", 6: "JAS", 7: "JAS", 8: "ASO",
+        1: "MJJ", 2: "MJJ", 3: "MJJ", 4: "JJA",
+        5: "JAS", 6: "MJJ", 7: "JAS", 8: "ASO",
         9: "SON", 10: "OND", 11: "NDJ", 12: "DJF",
     }
     start = _MONTH_TO_START[datetime.now(timezone.utc).month]
@@ -212,17 +212,33 @@ def fetch_iri_model_predictions() -> Optional[list]:
             page.wait_for_timeout(2000)
             records = page.evaluate("""
             () => {
-                // Standard ENSO 3-month season labels — skip time-axis historical data
+                // Seasons present on the IRI Model Predictions plume chart.
+                // MAM-OBS / May-OBS are the most-recent observed points;
+                // MJJ onward are forecast seasons.
+                // MAM and AMJ are never shown as standalone forecast labels on this chart.
                 const SEASONS = new Set([
-                    'MAM','AMJ','MJJ','JJA','JAS','ASO','SON','OND','NDJ','DJF','JFM','FMA',
-                    'May-OBS','MAM-OBS'
+                    'MAM-OBS','May-OBS',
+                    'MJJ','JJA','JAS','ASO','SON','OND','NDJ','DJF','JFM','FMA'
                 ]);
                 const out = [];
                 if (typeof Highcharts === 'undefined') return out;
-                // Target only charts that use category x-axis (the SST plume chart)
-                Highcharts.charts.filter(Boolean).forEach(chart => {
-                    const hasCategories = chart.xAxis[0] && chart.xAxis[0].categories;
-                    if (!hasCategories) return;
+
+                // Target only the Model Predictions chart via its known div ID.
+                // Fall back to scanning all category-axis charts if the div is absent.
+                const container = document.getElementById('figure4_highchart');
+                let charts = [];
+                if (container) {
+                    const idx = parseInt(container.getAttribute('data-highcharts-chart'));
+                    const c = Highcharts.charts[idx];
+                    if (c) charts = [c];
+                }
+                if (!charts.length) {
+                    charts = Highcharts.charts.filter(
+                        c => c && c.xAxis[0] && c.xAxis[0].categories
+                    );
+                }
+
+                charts.forEach(chart => {
                     chart.series.forEach(series => {
                         series.data.forEach(point => {
                             const season = point.category || String(point.x);
