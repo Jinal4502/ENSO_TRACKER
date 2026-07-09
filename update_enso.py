@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Optional
 
 from fetch_enso import fetch_all
-from fetch_iri import fetch_strength_plot, get_iri_image_urls, fetch_iri_model_predictions
+from fetch_iri import fetch_strength_plot, get_iri_image_urls, fetch_iri_model_predictions, compute_strength_from_predictions
 from fetch_hurricanes import fetch_hurricane_data
 from fetch_precipitation import fetch_precipitation_data
 from render_dashboard import classify, render
@@ -136,7 +136,11 @@ def main() -> None:
 
     print("Fetching IRI strength categories ...")
     iri_strength = fetch_strength_plot()
-    if iri_strength is None and prev_cache.get("iri_strength"):
+    # svg_url means the JSON endpoint is gone — compute from model predictions instead
+    if iri_strength and iri_strength.get("svg_url"):
+        iri_strength = None
+    if iri_strength is None and prev_cache.get("iri_strength") and not (
+            prev_cache["iri_strength"] or {}).get("svg_url"):
         iri_strength = prev_cache["iri_strength"]
         print("  [INFO] Using cached IRI strength data from previous run")
     data["iri_strength"] = iri_strength
@@ -147,6 +151,13 @@ def main() -> None:
         pred = prev_cache["iri_model_predictions"]
         print(f"  [INFO] Using cached model predictions ({len(pred)} records from previous run)")
     data["iri_model_predictions"] = pred
+
+    # Derive strength categories from model predictions when endpoint returns no JSON
+    if data["iri_strength"] is None and pred:
+        derived = compute_strength_from_predictions(pred)
+        if derived:
+            data["iri_strength"] = derived
+            print(f"  [INFO] Strength categories derived from {len(pred)} model predictions")
 
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2, default=str)

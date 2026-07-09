@@ -60,6 +60,70 @@ STRENGTH_COLORS = [
 ]
 
 
+_STRENGTH_CATEGORIES = [
+    ("Very Strong La Niña", None, -2.0),
+    ("Strong La Niña",      -2.0, -1.5),
+    ("Moderate La Niña",    -1.5, -1.0),
+    ("Weak La Niña",        -1.0, -0.5),
+    ("Neutral",             -0.5,  0.5),
+    ("Weak El Niño",         0.5,  1.0),
+    ("Moderate El Niño",     1.0,  1.5),
+    ("Strong El Niño",       1.5,  2.0),
+    ("Very Strong El Niño",  2.0, None),
+]
+
+# Canonical season order for sorting forecast seasons
+_SEASON_ORDER = ["DJF","JFM","FMA","MAM","AMJ","MJJ","JJA","JAS","ASO","SON","OND","NDJ"]
+
+
+def compute_strength_from_predictions(predictions: list) -> Optional[dict]:
+    """
+    Derive ENSO strength category percentages from the model prediction
+    anomalies already fetched via Playwright. Each model's Niño-3.4 anomaly
+    is classified into one of 9 strength bins; percentages are computed per
+    forecast season. Returns the same dict structure as fetch_strength_plot().
+    """
+    if not predictions:
+        return None
+
+    from collections import defaultdict
+    season_vals: dict = defaultdict(list)
+    for rec in predictions:
+        season = rec.get("season", "")
+        val    = rec.get("nino34_anomaly")
+        if val is None or "OBS" in season:
+            continue
+        season_vals[season].append(float(val))
+
+    if not season_vals:
+        return None
+
+    # Sort seasons in calendar order
+    seasons = sorted(season_vals.keys(),
+                     key=lambda s: _SEASON_ORDER.index(s) if s in _SEASON_ORDER else 99)
+
+    traces       = []
+    model_counts = []
+    for i, (name, lo, hi) in enumerate(_STRENGTH_CATEGORIES):
+        y = []
+        for si, season in enumerate(seasons):
+            vals = season_vals[season]
+            n    = len(vals)
+            cnt  = sum(1 for v in vals
+                       if (lo is None or v >= lo) and (hi is None or v < hi))
+            y.append(round(100 * cnt / n) if n else 0)
+            if i == 0:
+                model_counts.append(n)
+        traces.append({"name": name, "y": y, "color": STRENGTH_COLORS[i]})
+
+    return {
+        "seasons":      seasons,
+        "traces":       traces,
+        "model_counts": model_counts,
+        "title":        "ENSO Strength Categories",
+    }
+
+
 def _find_model_count(season_percents: list) -> int:
     """Back-calculate total model count from integer percentages.
     IRI ensembles have 25-35 models; start search at 25 to skip spurious small solutions."""

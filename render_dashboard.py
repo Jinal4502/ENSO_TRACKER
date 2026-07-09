@@ -91,11 +91,10 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 
     # IRI data
     iri_imgs     = data.get("iri_images", {})
-    iri_strength   = data.get("iri_strength") or {}
-    sp_svg_url     = iri_strength.get("svg_url")          # new SVG path
-    sp_seasons     = iri_strength.get("seasons", [])
-    sp_traces      = iri_strength.get("traces", [])
-    sp_title       = iri_strength.get("title", "ENSO Strength Categories")
+    iri_strength = data.get("iri_strength") or {}
+    sp_seasons   = iri_strength.get("seasons", [])
+    sp_traces    = iri_strength.get("traces", [])
+    sp_title     = iri_strength.get("title", "ENSO Strength Categories")
 
     # Build Chart.js datasets for strength stacked bar
     # Note: borderRadius must NOT be set on stacked bar datasets in Chart.js 4 — it makes segments invisible
@@ -609,9 +608,8 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     Percentage of IRI models predicting each ENSO strength category per season.
     Numbers inside bars show model count. Hover for details.
   </p>
-  {f'<div style="background:#fff;border-radius:8px;padding:8px;display:inline-block;width:100%"><img src="{sp_svg_url}" style="width:100%;display:block" alt="IRI ENSO Strength Categories"></div>' if sp_svg_url else
-   ('<div id="strengthDiv" style="height:480px"></div>' if has_strength else
-    '<p style="color:var(--muted);font-size:.82rem">Strength data unavailable.</p>')}
+  {'<div id="strengthDiv" style="height:480px"></div>' if has_strength else
+   '<p style="color:var(--muted);font-size:.82rem">Strength data unavailable.</p>'}
 </div>
 
 <footer>
