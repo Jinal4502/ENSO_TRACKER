@@ -45,14 +45,16 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_TO:  ${{ secrets.EMAIL_TO }}
           PAGES_URL: ${{ secrets.PAGES_URL }}
-        run: python update_enso.py
+        run: python update_enso.py 2>&1 | tee update_log.txt; exit ${PIPESTATUS[0]}
 
-      - name: Upload Playwright debug screenshot (if any)
+      - name: Upload debug artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: iri-debug-screenshot
-          path: iri_debug.png
+          name: debug-artifacts
+          path: |
+            iri_debug.png
+            update_log.txt
           if-no-files-found: ignore
 
       - name: Commit updated dashboard and history
