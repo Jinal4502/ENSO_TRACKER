@@ -117,11 +117,19 @@ def compute_strength_from_predictions(predictions: list) -> Optional[dict]:
     if not model_season_mean:
         return None
 
-    # Unique forecast seasons present
-    seasons = sorted(
-        {s for (_, s) in model_season_mean},
-        key=lambda s: _SEASON_ORDER.index(s) if s in _SEASON_ORDER else 99,
-    )
+    # Determine the first upcoming season based on current month,
+    # then rotate _SEASON_ORDER so the chart reads chronologically from now.
+    _MONTH_TO_START = {
+        1: "MAM", 2: "AMJ", 3: "MJJ", 4: "JJA",
+        5: "JAS", 6: "JAS", 7: "JAS", 8: "ASO",
+        9: "SON", 10: "OND", 11: "NDJ", 12: "DJF",
+    }
+    start = _MONTH_TO_START[datetime.now(timezone.utc).month]
+    si    = _SEASON_ORDER.index(start) if start in _SEASON_ORDER else 0
+    rotated_order = _SEASON_ORDER[si:] + _SEASON_ORDER[:si]
+
+    avail = {s for (_, s) in model_season_mean}
+    seasons = [s for s in rotated_order if s in avail]
 
     traces       = []
     model_counts = []
