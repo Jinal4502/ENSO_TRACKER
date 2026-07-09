@@ -218,16 +218,26 @@ def fetch_iri_model_predictions() -> Optional[list]:
                 // MAM and AMJ are never shown as standalone forecast labels on this chart.
                 const SEASONS = new Set([
                     'MAM-OBS','May-OBS',
-                    'MJJ','JJA','JAS','ASO','SON','OND','NDJ','DJF','JFM','FMA', 'MAM'
+                    'MJJ','JJA','JAS','ASO','SON','OND','NDJ','DJF','JFM','FMA','MAM'
                 ]);
                 const out = [];
                 if (typeof Highcharts === 'undefined') return out;
 
-                // Scan all category-axis charts — picks up both DYN and STAT model charts.
-                // OBS/AVG series are filtered out in Python; ensemble members are averaged.
-                const charts = Highcharts.charts.filter(
-                    c => c && c.xAxis[0] && c.xAxis[0].categories
-                );
+                // Target the main Model Predictions chart by its known div ID.
+                // This gives one value per model per season (~260 records total).
+                // Fall back to all category-axis charts only if the div is missing.
+                let charts = [];
+                const container = document.getElementById('figure4_highchart');
+                if (container) {
+                    const idx = parseInt(container.getAttribute('data-highcharts-chart'));
+                    const c = Highcharts.charts[idx];
+                    if (c) charts = [c];
+                }
+                if (!charts.length) {
+                    charts = Highcharts.charts.filter(
+                        c => c && c.xAxis[0] && c.xAxis[0].categories
+                    );
+                }
 
                 charts.forEach(chart => {
                     chart.series.forEach(series => {
