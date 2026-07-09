@@ -125,20 +125,27 @@ def main() -> None:
     data = fetch_all()
 
     # 1b. Fetch IRI data
+    # Load previous run's cache once so both strength + predictions can fall back to it
+    prev_cache = {}
+    if Path(DATA_FILE).exists():
+        try:
+            with open(DATA_FILE) as f:
+                prev_cache = json.load(f)
+        except Exception:
+            pass
+
     print("Fetching IRI strength categories ...")
-    data["iri_strength"] = fetch_strength_plot()
+    iri_strength = fetch_strength_plot()
+    if iri_strength is None and prev_cache.get("iri_strength"):
+        iri_strength = prev_cache["iri_strength"]
+        print("  [INFO] Using cached IRI strength data from previous run")
+    data["iri_strength"] = iri_strength
     data["iri_images"]   = get_iri_image_urls()
 
     pred = fetch_iri_model_predictions()
-    if pred is None and Path(DATA_FILE).exists():
-        try:
-            with open(DATA_FILE) as f:
-                prev = json.load(f)
-            pred = prev.get("iri_model_predictions")
-            if pred:
-                print(f"  [INFO] Using cached model predictions ({len(pred)} records from previous run)")
-        except Exception:
-            pass
+    if pred is None and prev_cache.get("iri_model_predictions"):
+        pred = prev_cache["iri_model_predictions"]
+        print(f"  [INFO] Using cached model predictions ({len(pred)} records from previous run)")
     data["iri_model_predictions"] = pred
 
     with open(DATA_FILE, "w") as f:
