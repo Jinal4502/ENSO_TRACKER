@@ -62,7 +62,8 @@ jobs:
                   docs/data/az_climatology.csv docs/data/az_meta.json \
                   enso_data.json enso_history.json
           git diff --staged --quiet || git commit -m "chore: ENSO update $(date -u +%Y-%m-%d)"
-          git push
+          git pull --rebase origin main
+          git push origin main
 
   deploy-pages:
     needs: update
