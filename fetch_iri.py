@@ -76,38 +76,59 @@ _STRENGTH_CATEGORIES = [
 _SEASON_ORDER = ["DJF","JFM","FMA","MAM","AMJ","MJJ","JJA","JAS","ASO","SON","OND","NDJ"]
 
 
+_EXCLUDE_SERIES = {"AVG", "RELATIVE", "OBS", "Observed"}
+
+
+def _is_forecast_model(name: str) -> bool:
+    """Exclude observed data, ensemble averages, and relative-anomaly series."""
+    return not any(tag in name for tag in _EXCLUDE_SERIES)
+
+
 def compute_strength_from_predictions(predictions: list) -> Optional[dict]:
     """
-    Derive ENSO strength category percentages from the model prediction
-    anomalies already fetched via Playwright. Each model's Niño-3.4 anomaly
-    is classified into one of 9 strength bins; percentages are computed per
-    forecast season. Returns the same dict structure as fetch_strength_plot().
+    Derive ENSO strength category percentages from iri_model_predictions.
+
+    Steps:
+      1. Drop non-forecast series (OBS-*, DYN/STAT/REL AVG, RELATIVE).
+      2. Average ensemble members within each model centre → one value per model per season.
+      3. Classify each model mean into one of 9 strength bins.
+      4. Compute % per bin per season.
+
+    Returns the same dict structure as fetch_strength_plot() (JSON path).
     """
     if not predictions:
         return None
 
     from collections import defaultdict
-    season_vals: dict = defaultdict(list)
+
+    # Step 1+2: ensemble mean per (model, season), forecast models only
+    raw: dict = defaultdict(list)
     for rec in predictions:
+        name   = rec.get("model", "")
         season = rec.get("season", "")
         val    = rec.get("nino34_anomaly")
-        if val is None or "OBS" in season:
+        if val is None or "OBS" in season or not _is_forecast_model(name):
             continue
-        season_vals[season].append(float(val))
+        raw[(name, season)].append(float(val))
 
-    if not season_vals:
+    # model_season_mean[(model, season)] = mean anomaly
+    model_season_mean = {k: sum(v) / len(v) for k, v in raw.items()}
+
+    if not model_season_mean:
         return None
 
-    # Sort seasons in calendar order
-    seasons = sorted(season_vals.keys(),
-                     key=lambda s: _SEASON_ORDER.index(s) if s in _SEASON_ORDER else 99)
+    # Unique forecast seasons present
+    seasons = sorted(
+        {s for (_, s) in model_season_mean},
+        key=lambda s: _SEASON_ORDER.index(s) if s in _SEASON_ORDER else 99,
+    )
 
     traces       = []
     model_counts = []
     for i, (name, lo, hi) in enumerate(_STRENGTH_CATEGORIES):
         y = []
         for si, season in enumerate(seasons):
-            vals = season_vals[season]
+            vals = [v for (_, s), v in model_season_mean.items() if s == season]
             n    = len(vals)
             cnt  = sum(1 for v in vals
                        if (lo is None or v >= lo) and (hi is None or v < hi))
