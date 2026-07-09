@@ -176,12 +176,22 @@ def parse_discussion(text: str) -> dict:
         else:
             result["status"] = raw  # fallback: use raw text
 
-    # First substantive paragraph (synopsis)
-    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if len(p.strip()) > 80]
-    for p in paragraphs:
-        if any(kw in p.upper() for kw in ["NINO", "NINA", "SST", "CONDITION", "FORECAST"]):
-            result["synopsis"] = " ".join(p.split())[:800]
-            break
+    # Prefer the "Synopsis:" one-liner CPC includes at the top of the advisory.
+    # Fall back to the first substantive paragraph if the Synopsis line is absent.
+    def _clean(s: str) -> str:
+        s = re.sub(r"\s*\(Fig\.?\s*\d+\)", "", s)   # remove (Fig. X) references
+        s = re.sub(r"\s+", " ", s)
+        return s.strip()
+
+    m_syn = re.search(r"Synopsis:\s*(.+)", text, re.IGNORECASE)
+    if m_syn:
+        result["synopsis"] = _clean(m_syn.group(1))
+    else:
+        paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if len(p.strip()) > 80]
+        for p in paragraphs:
+            if any(kw in p.upper() for kw in ["NINO", "NINA", "SST", "CONDITION", "FORECAST"]):
+                result["synopsis"] = _clean(" ".join(p.split()))[:800]
+                break
 
     return result
 
