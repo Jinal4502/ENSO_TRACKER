@@ -418,6 +418,12 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ background: var(--bg); color: var(--text); font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; padding: 1.5rem; }}
+  .topnav {{ display:flex; align-items:center; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }}
+  .nav-brand {{ font-weight:700; font-size:.95rem; color:var(--text); text-decoration:none; }}
+  .nav-links {{ display:flex; gap:.4rem; }}
+  .nav-links a {{ color:var(--muted); text-decoration:none; font-size:.82rem; padding:.3rem .7rem; border-radius:5px; }}
+  .nav-links a:hover {{ color:var(--text); background:var(--card); }}
+  .nav-links a.nav-active {{ color:#fff; background:var(--accent); font-weight:600; }}
   h1 {{ font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem; }}
   .subtitle {{ color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }}
   .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
@@ -508,7 +514,14 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 </style>
 </head>
 <body>
-
+<nav class="topnav">
+  <a class="nav-brand" href="index.html">ENSO Tracker</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-active">ENSO Dashboard</a>
+    <a href="hurricanes.html">Cyclone Tracker</a>
+    <a href="precipitation.html">AZ Precipitation</a>
+  </div>
+</nav>
 <h1>ENSO Tracker</h1>
 <p class="subtitle">Updated {fetched} · Sources: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank" style="color:#58a6ff">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank" style="color:#58a6ff">IRI</a></p>
 

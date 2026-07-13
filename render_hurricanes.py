@@ -300,16 +300,24 @@ def render_hurricanes(data: dict, output: str = "docs/hurricanes.html") -> None:
   .wind-key span {{ padding: 1px 7px; border-radius: 3px; font-weight: 600; }}
   footer {{ font-size: 0.75rem; color: #8b949e; margin-top: 1rem; text-align: center; }}
   footer a {{ color: #8b949e; }}
-  .back {{ color: #58a6ff; font-size: 0.85rem; text-decoration: none;
-           display: inline-block; margin-bottom: 1rem; }}
-  .back:hover {{ text-decoration: underline; }}
   .note {{ font-size: 0.75rem; color: #8b949e; margin-bottom: 0.6rem; line-height: 1.5; }}
+  .topnav {{ display:flex; align-items:center; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid #30363d; margin-bottom:1.2rem; }}
+  .nav-brand {{ font-weight:700; font-size:.95rem; color:#c9d1d9; text-decoration:none; }}
+  .nav-links {{ display:flex; gap:.4rem; }}
+  .nav-links a {{ color:#8b949e; text-decoration:none; font-size:.82rem; padding:.3rem .7rem; border-radius:5px; }}
+  .nav-links a:hover {{ color:#c9d1d9; background:#161b22; }}
+  .nav-links a.nav-active {{ color:#fff; background:#e74c3c; font-weight:600; }}
 </style>
 </head>
 <body>
-
-<a class="back" href="index.html">← Back to ENSO Tracker</a>
-
+<nav class="topnav">
+  <a class="nav-brand" href="index.html">ENSO Tracker</a>
+  <div class="nav-links">
+    <a href="index.html">ENSO Dashboard</a>
+    <a href="hurricanes.html" class="nav-active">Cyclone Tracker</a>
+    <a href="precipitation.html">AZ Precipitation</a>
+  </div>
+</nav>
 <h1>Global Tropical Cyclone Tracks &amp; ENSO</h1>
 <p class="subtitle">
   IBTrACS best-track data across all 6 ocean basins ·

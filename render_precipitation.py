@@ -41,18 +41,26 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
   .subtitle a {{ color: #58a6ff; text-decoration: none; }}
   .card {{ background: var(--card); border: 1px solid var(--border);
            border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; }}
-  .back {{ display: inline-block; margin-bottom: 1rem; color: #58a6ff;
-           text-decoration: none; font-size: 0.85rem; }}
-  .back:hover {{ text-decoration: underline; }}
   #content {{ display: none; }}
+  .topnav {{ display:flex; align-items:center; justify-content:space-between; padding:.5rem 0; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }}
+  .nav-brand {{ font-weight:700; font-size:.95rem; color:var(--text); text-decoration:none; }}
+  .nav-links {{ display:flex; gap:.4rem; }}
+  .nav-links a {{ color:var(--muted); text-decoration:none; font-size:.82rem; padding:.3rem .7rem; border-radius:5px; }}
+  .nav-links a:hover {{ color:var(--text); background:var(--card); }}
+  .nav-links a.nav-active {{ color:#fff; background:#f5a623; font-weight:600; }}
   footer {{ font-size: 0.75rem; color: var(--muted); margin-top: 1.5rem; text-align: center; }}
   footer a {{ color: var(--muted); }}
 </style>
 </head>
 <body>
-
-<a class="back" href="index.html">← Back to ENSO Tracker</a>
-
+<nav class="topnav">
+  <a class="nav-brand" href="index.html">ENSO Tracker</a>
+  <div class="nav-links">
+    <a href="index.html">ENSO Dashboard</a>
+    <a href="hurricanes.html">Cyclone Tracker</a>
+    <a href="precipitation.html" class="nav-active">AZ Precipitation</a>
+  </div>
+</nav>
 <h1>Arizona Precipitation</h1>
 <p class="subtitle">
   NClimGrid monthly total · {first[:4]}–{last[:4]} · 0.25° grid ·
