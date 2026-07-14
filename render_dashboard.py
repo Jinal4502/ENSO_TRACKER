@@ -565,6 +565,11 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
 <div class="chart-card">
   <h2>Niño-3.4 Weekly Anomaly — Last 52 Weeks {TIP_WEEKLY}</h2>
   <canvas id="weeklyChart"></canvas>
+  <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;display:flex;gap:1rem;flex-wrap:wrap">
+    <span><span style="display:inline-block;width:10px;height:10px;background:#fa8c16;border-radius:2px;margin-right:4px"></span>El Niño (≥ +0.5 °C)</span>
+    <span><span style="display:inline-block;width:10px;height:10px;background:#389e0d;border-radius:2px;margin-right:4px"></span>Neutral</span>
+    <span><span style="display:inline-block;width:10px;height:10px;background:#2f54eb;border-radius:2px;margin-right:4px"></span>La Niña (≤ −0.5 °C)</span>
+  </p>
 </div>
 
 <!-- ONI vs RONI chart -->
@@ -647,7 +652,7 @@ const chartDefaults = {{
   }}
 }};
 
-// Weekly anomaly
+// Weekly anomaly — per-bar color by phase; default legend hidden (HTML color key shown instead)
 new Chart(document.getElementById('weeklyChart'), {{
   type: 'bar',
   data: {{
@@ -664,35 +669,41 @@ new Chart(document.getElementById('weeklyChart'), {{
   }},
   options: {{
     ...chartDefaults,
-    plugins: {{ ...chartDefaults.plugins, annotation: {{ annotations: {{
-      el: {{ type:'line', yMin:0.5, yMax:0.5, borderColor:'#fa8c16', borderDash:[4,4], borderWidth:1 }},
-      la: {{ type:'line', yMin:-0.5, yMax:-0.5, borderColor:'#2f54eb', borderDash:[4,4], borderWidth:1 }}
-    }} }} }},
+    plugins: {{ ...chartDefaults.plugins,
+      legend: {{ display: false }},
+      annotation: {{ annotations: {{
+        el: {{ type:'line', yMin:0.5, yMax:0.5, borderColor:'#fa8c16', borderDash:[4,4], borderWidth:1 }},
+        la: {{ type:'line', yMin:-0.5, yMax:-0.5, borderColor:'#2f54eb', borderDash:[4,4], borderWidth:1 }}
+      }} }}
+    }},
     scales: {{ ...chartDefaults.scales, y: {{ ...chartDefaults.scales.y, title: {{ display:true, text:'°C', color:'#8b949e' }} }} }}
   }}
 }});
 
 // ONI vs RONI
+// Purple = ONI index line, teal = RONI index line.
+// Orange/blue dashed reference lines mark the El Niño / La Niña ±0.5 °C thresholds
+// (matches semantic color convention used in the weekly anomaly bar chart above).
 new Chart(document.getElementById('oniChart'), {{
   type: 'line',
   data: {{
     labels: {json.dumps(oni_labels)},
     datasets: [
       {{
-        label: 'ONI (traditional)',
+        label: 'ONI — Oceanic Niño Index (3-month mean)',
         data: {json.dumps(oni_values)},
-        borderColor: '#fa8c16',
-        backgroundColor: 'rgba(250,140,22,0.08)',
+        borderColor: '#a78bfa',
+        backgroundColor: 'rgba(167,139,250,0.08)',
         borderWidth: 2,
         tension: 0.3,
         pointRadius: 3,
         fill: false,
       }},
       {{
-        label: 'RONI (official, 2025–)',
+        label: 'RONI — Relative ONI, detrended (official since 2025)',
         data: {json.dumps(roni_values)},
-        borderColor: '#4dabf7',
-        backgroundColor: 'rgba(77,171,247,0.08)',
+        borderColor: '#2dd4bf',
+        backgroundColor: 'rgba(45,212,191,0.08)',
         borderWidth: 2,
         tension: 0.3,
         pointRadius: 3,
@@ -702,6 +713,10 @@ new Chart(document.getElementById('oniChart'), {{
   }},
   options: {{
     ...chartDefaults,
+    plugins: {{ ...chartDefaults.plugins, annotation: {{ annotations: {{
+      el: {{ type:'line', yMin:0.5,  yMax:0.5,  borderColor:'#fa8c16', borderDash:[4,4], borderWidth:1, label:{{ display:true, content:'El Niño threshold', color:'#fa8c16', font:{{size:9}}, position:'end' }} }},
+      la: {{ type:'line', yMin:-0.5, yMax:-0.5, borderColor:'#4dabf7', borderDash:[4,4], borderWidth:1, label:{{ display:true, content:'La Niña threshold', color:'#4dabf7', font:{{size:9}}, position:'end' }} }}
+    }} }} }},
     scales: {{
       ...chartDefaults.scales,
       y: {{ ...chartDefaults.scales.y, title: {{ display:true, text:'°C anomaly', color:'#8b949e' }} }}
