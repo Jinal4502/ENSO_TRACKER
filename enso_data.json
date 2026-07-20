@@ -1,20 +1,20 @@
 {
-  "fetched_utc": "2026-07-14T17:47:30.918578+00:00",
+  "fetched_utc": "2026-07-20T15:53:51.763454+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o continues and will strengthen through the end of the year, with a 97% chance it will persist through early spring 2027.",
     "issued": ""
   },
   "latest_weekly": {
-    "date": "2026-07-08",
+    "date": "2026-07-15",
     "nino12": 25.5,
-    "nino12_anom": 3.4,
-    "nino3": 28.3,
+    "nino12_anom": 3.6,
+    "nino3": 28.1,
     "nino3_anom": 2.3,
-    "nino34": 29.4,
-    "nino34_anom": 2.0,
-    "nino4": 30.0,
-    "nino4_anom": 1.2
+    "nino34": 29.3,
+    "nino34_anom": 2.1,
+    "nino4": 29.9,
+    "nino4_anom": 1.1
   },
   "latest_oni": {
     "year": 2026,
@@ -29,17 +29,6 @@
     "roni": 1.5
   },
   "weekly_history": [
-    {
-      "date": "2025-07-16",
-      "nino12": 22.2,
-      "nino12_anom": 0.4,
-      "nino3": 25.7,
-      "nino3_anom": -0.1,
-      "nino34": 27.1,
-      "nino34_anom": -0.2,
-      "nino4": 28.8,
-      "nino4_anom": 0.1
-    },
     {
       "date": "2025-07-23",
       "nino12": 22.2,
@@ -573,7 +562,7 @@
       "nino12": 25.9,
       "nino12_anom": 3.1,
       "nino3": 28.4,
-      "nino3_anom": 2.1,
+      "nino3_anom": 2.0,
       "nino34": 29.3,
       "nino34_anom": 1.8,
       "nino4": 30.0,
@@ -600,6 +589,17 @@
       "nino34_anom": 2.0,
       "nino4": 30.0,
       "nino4_anom": 1.2
+    },
+    {
+      "date": "2026-07-15",
+      "nino12": 25.5,
+      "nino12_anom": 3.6,
+      "nino3": 28.1,
+      "nino3_anom": 2.3,
+      "nino34": 29.3,
+      "nino34_anom": 2.1,
+      "nino4": 29.9,
+      "nino4_anom": 1.1
     }
   ],
   "oni_history": [
@@ -1456,22 +1456,22 @@
       "nino34_anomaly": 2.15
     },
     {
-      "model": "CMCC-SPS4",
+      "model": "CMCC SPS4",
       "season": "JJA",
       "nino34_anomaly": 1.86
     },
     {
-      "model": "CMCC-SPS4",
+      "model": "CMCC SPS4",
       "season": "JAS",
       "nino34_anomaly": 2.32
     },
     {
-      "model": "CMCC-SPS4",
+      "model": "CMCC SPS4",
       "season": "ASO",
       "nino34_anomaly": 2.87
     },
     {
-      "model": "CMCC-SPS4",
+      "model": "CMCC SPS4",
       "season": "SON",
       "nino34_anomaly": 3.47
     },
