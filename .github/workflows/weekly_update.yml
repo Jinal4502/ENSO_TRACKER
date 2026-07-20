@@ -60,8 +60,7 @@ jobs:
       - name: Commit updated dashboard and history
         run: |
           git add docs/index.html docs/hurricanes.html docs/precipitation.html \
-                  docs/data/az_monthly_grid.csv docs/data/az_annual.csv \
-                  docs/data/az_climatology.csv docs/data/az_meta.json \
+                  docs/data/sw_meta.json \
                   enso_data.json enso_history.json
           git diff --staged --quiet || git commit -m "chore: ENSO update $(date -u +%Y-%m-%d)"
           git pull --rebase origin main
