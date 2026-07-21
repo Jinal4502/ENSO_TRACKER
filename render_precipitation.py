@@ -316,7 +316,7 @@ document.getElementById("mapTabs").addEventListener("click", e => {{
     document.getElementById("compositeControls").style.display = "none";
     // Restore tracker layout (frames are still registered)
     const fd = monthlyData[sortedKeys[0]];
-    Plotly.react("mapDiv",[makeTrace(fd.orderedVals)],
+    Plotly.react("mapDiv",[makeTrace(fd.vals)],
       makeTrackerLayout(fd, cachedSliderSteps),{{responsive:true}});
   }} else {{
     document.getElementById("trackerDesc").style.display = "none";
@@ -363,7 +363,18 @@ function renderTimeSeries(stateKey) {{
   const msY   = keys.map(k=>+(mdata[k].sum/mdata[k].cnt).toFixed(2));
   const msENSO= keys.map(k=>mdata[k].enso);
 
+  // Percentile reference lines
+  const sorted=[...msY].sort((a,b)=>a-b);
+  function pct(arr,p){{const i=Math.max(0,Math.round(p/100*(arr.length-1)));return arr[i];}}
+  const PCT_LINES=[
+    {{p:25,val:pct(sorted,25),color:"#58a6ff",dash:"dot"}},
+    {{p:50,val:pct(sorted,50),color:"#3fb950",dash:"dash"}},
+    {{p:75,val:pct(sorted,75),color:"#f5a623",dash:"dash"}},
+    {{p:90,val:pct(sorted,90),color:"#ef5350",dash:"dot"}},
+  ];
+
   const shapes=[];
+  const annotations=[];
   for(let si=0;si<msX.length;){{
     let ei=si;
     while(ei+1<msX.length&&msENSO[ei+1]===msENSO[si])ei++;
@@ -374,6 +385,14 @@ function renderTimeSeries(stateKey) {{
         x0:msX[si],x1,y0:0,y1:1,fillcolor:ENSO_FILL[msENSO[si]],line:{{width:0}}}});
     }}
     si=ei+1;
+  }}
+  for(const {{p,val,color,dash}} of PCT_LINES){{
+    shapes.push({{type:"line",xref:"paper",yref:"y",x0:0,x1:1,y0:val,y1:val,
+      layer:"above",line:{{color,dash,width:1.2}}}});
+    annotations.push({{xref:"paper",yref:"y",x:1.0,y:val,
+      text:"P"+p,showarrow:false,
+      font:{{color,size:9}},xanchor:"left",yanchor:"middle",
+      bgcolor:"rgba(13,17,23,0.7)",borderpad:2}});
   }}
   const label=stateKey==="all"?"All SW":stateKey;
   document.getElementById("lineTitle").textContent =
@@ -392,7 +411,7 @@ function renderTimeSeries(stateKey) {{
       marker:{{color:"rgba(139,148,158,0.5)",symbol:"square",size:11}},showlegend:true}},
   ],{{
     autosize:true,paper_bgcolor:DARK.paper,plot_bgcolor:DARK.paper,height:280,
-    margin:{{l:55,r:20,t:15,b:40}},shapes,
+    margin:{{l:55,r:45,t:15,b:40}},shapes,annotations,
     xaxis:{{type:"date",dtick:"M60",tickformat:"%Y",color:DARK.muted,gridcolor:DARK.grid}},
     yaxis:{{title:"mm / month",rangemode:"tozero",color:DARK.muted,gridcolor:DARK.grid}},
     legend:{{x:0.01,y:0.99,font:{{color:DARK.text,size:11}},
@@ -500,7 +519,7 @@ async function init() {{
 
   await Plotly.newPlot(
     "mapDiv",
-    [makeTrace(fd0.orderedVals)],
+    [makeTrace(fd0.vals)],
     makeTrackerLayout(fd0, cachedSliderSteps),
     {{responsive:true}}
   );
@@ -510,7 +529,7 @@ async function init() {{
     const fd=monthlyData[k];
     return {{
       name:k,
-      data:[{{marker:{{color:fd.orderedVals}}}}],
+      data:[{{marker:{{color:fd.vals}}}}],
       traces:[0],
       layout:{{annotations:trackerAnnotations(fd)}},
     }};
