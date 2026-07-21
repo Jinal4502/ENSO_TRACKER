@@ -58,14 +58,12 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
                  padding:.3rem .7rem; border-radius:5px; }}
   .nav-links a:hover {{ color:var(--text); background:var(--card); }}
   .nav-links a.nav-active {{ color:#fff; background:#f5a623; font-weight:600; }}
-  /* pill buttons */
   .btn-row {{ display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.8rem; }}
   .btn {{ background:var(--card); border:1px solid var(--border); color:var(--muted);
           padding:.3rem .8rem; border-radius:16px; font-size:.78rem; cursor:pointer;
           transition:border-color .15s, color .15s; }}
   .btn:hover {{ color:var(--text); border-color:#8b949e; }}
   .btn.active {{ background:#1f6feb; border-color:#388bfd; color:#fff; font-weight:600; }}
-  /* map mode tabs */
   .tab-row {{ display:flex; gap:0; margin-bottom:.8rem;
               border:1px solid var(--border); border-radius:6px; overflow:hidden;
               width:fit-content; }}
@@ -73,18 +71,6 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
           padding:.35rem 1rem; font-size:.8rem; cursor:pointer; }}
   .tab:hover {{ color:var(--text); background:rgba(255,255,255,.04); }}
   .tab.active {{ background:#1f6feb; color:#fff; font-weight:600; }}
-  /* tracker playback */
-  .tracker-bar {{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap;
-                  margin-bottom:.6rem; }}
-  .play-btn {{ background:#1f6feb; border:none; color:#fff;
-               padding:.3rem .8rem; border-radius:5px; font-size:.82rem; cursor:pointer; }}
-  .play-btn:hover {{ background:#388bfd; }}
-  .step-btn {{ background:var(--card); border:1px solid var(--border); color:var(--muted);
-               padding:.3rem .6rem; border-radius:5px; font-size:.82rem; cursor:pointer; }}
-  .step-btn:hover {{ color:var(--text); border-color:#8b949e; }}
-  #monthLabel {{ font-size:.9rem; font-weight:600; color:var(--text); min-width:90px; }}
-  #ensoLabel  {{ font-size:.78rem; padding:.2rem .6rem; border-radius:4px; }}
-  #yearSlider {{ flex:1; min-width:120px; accent-color:#1f6feb; }}
   footer {{ font-size:.75rem; color:var(--muted); margin-top:1.5rem; text-align:center; }}
   footer a {{ color:var(--muted); }}
 </style>
@@ -113,18 +99,24 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
 
 <div id="content">
 
-  <!-- Map card with two modes -->
   <div class="card">
     <h2>Precipitation Map &mdash; Southwest US</h2>
 
-    <!-- Mode tab switcher -->
     <div class="tab-row" id="mapTabs">
-      <button class="tab active" data-tab="composite">ENSO Composite</button>
-      <button class="tab"        data-tab="tracker">Monthly Tracker</button>
+      <button class="tab active" data-tab="tracker">Monthly Tracker</button>
+      <button class="tab"        data-tab="composite">ENSO Composite</button>
+    </div>
+
+    <!-- Monthly Tracker description -->
+    <div id="trackerDesc">
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
+        Use &nbsp;&#9654;&nbsp; Play or drag the year slider to step through every month from {yr0} to {yr1}.
+        ENSO phase shown on the map.
+      </p>
     </div>
 
     <!-- ENSO Composite controls -->
-    <div id="compositeControls">
+    <div id="compositeControls" style="display:none">
       <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
         Average precipitation per cell for each ENSO phase. Toggle to compare spatial patterns.
       </p>
@@ -136,27 +128,9 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
       </div>
     </div>
 
-    <!-- Monthly Tracker controls -->
-    <div id="trackerControls" style="display:none">
-      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
-        Step or play through every month from {yr0} to {yr1}.
-      </p>
-      <div class="tracker-bar">
-        <button class="step-btn" id="btnFirst"  title="First month">&laquo;</button>
-        <button class="step-btn" id="btnPrev"   title="Previous month">&lsaquo;</button>
-        <button class="play-btn" id="btnPlay">&#9654; Play</button>
-        <button class="step-btn" id="btnNext"   title="Next month">&rsaquo;</button>
-        <button class="step-btn" id="btnLast"   title="Last month">&raquo;</button>
-        <span id="monthLabel">Jan {yr0}</span>
-        <span id="ensoLabel"></span>
-        <input type="range" id="yearSlider" min="0" value="0" step="1" title="Drag to jump to a month">
-      </div>
-    </div>
-
-    <div id="mapDiv" style="height:520px;width:100%"></div>
+    <div id="mapDiv" style="height:540px;width:100%"></div>
   </div>
 
-  <!-- State selector -->
   <div class="card">
     <h2>Select State</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.6rem">
@@ -168,7 +142,6 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     </div>
   </div>
 
-  <!-- Time series -->
   <div class="card">
     <h2 id="lineTitle">Monthly Precipitation &mdash; All SW ({yr0}&ndash;{yr1})</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
@@ -181,7 +154,6 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     <div id="lineDiv"></div>
   </div>
 
-  <!-- Climatology by ENSO phase -->
   <div class="card">
     <h2 id="climTitle">Monthly Climatology &mdash; All SW by ENSO Phase</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
@@ -202,7 +174,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
 </footer>
 
 <script>
-const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTH_NAMES  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const YR0 = "{yr0}", YR1 = "{yr1}";
 const DARK = {{
   paper:"#0d1117", plot:"#0d1117", text:"#c9d1d9",
@@ -213,22 +185,22 @@ const PRCP_SCALE = [
   [0.30,"#b91c00"],[0.48,"#e85d00"],[0.65,"#f5a623"],
   [0.80,"#fcd53a"],[0.92,"#fff176"],[1.00,"#fffde7"]
 ];
-const ENSO_PHASES  = ["El Niño","Neutral","La Niña"];
-const ENSO_COLORS  = ["#ef5350","#8b949e","#1e88e5"];
-const ENSO_FILL    = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
-const ENSO_BG      = {{"El Niño":"rgba(239,83,80,0.22)","La Niña":"rgba(30,136,229,0.22)","Neutral":"rgba(139,148,158,0.15)"}};
+const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
+const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
+const ENSO_FILL   = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
 
 // Populated in init()
-let composites  = {{}};   // phase → {{lats,lons,vals}}
-let monthlyData = {{}};   // "YYYY-MM" → {{lats,lons,vals,enso,year,month}}
-let sortedKeys  = [];    // ordered list of "YYYY-MM" keys for tracker
-let stateRows   = {{}};   // state → [rows]
+let fixedLats   = [];   // fixed lat array (same for every frame)
+let fixedLons   = [];   // fixed lon array
+let cellList    = [];   // sorted "lat,lon" keys
+let monthlyData = {{}};  // "YYYY-MM" → {{orderedVals, enso, year, month}}
+let sortedKeys  = [];
+let composites  = {{}};  // phase → orderedVals array
+let stateRows   = {{}};
 let cmapMax     = 100;
-let mapMode     = "composite";   // "composite" | "tracker"
-let trackerIdx  = 0;
-let playTimer   = null;
+let currentMode = "tracker";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── CSV parser ────────────────────────────────────────────────────────────────
 function parseCSV(text) {{
   const lines = text.trim().split(/\\r?\\n/);
   const keys  = lines[0].split(",").map(k => k.trim());
@@ -238,33 +210,35 @@ function parseCSV(text) {{
   }});
 }}
 
-function cellAvg(rows) {{
-  const S={{}}, N={{}};
-  for (const r of rows) {{
-    const k = r.lat+","+r.lon;
-    S[k]=(S[k]||0)+ +r.prcp_mm;
-    N[k]=(N[k]||0)+1;
-  }}
-  const lats=[],lons=[],vals=[];
-  for (const k of Object.keys(S)) {{
-    const [la,lo]=k.split(",").map(Number);
-    lats.push(la); lons.push(lo);
-    vals.push(+(S[k]/N[k]).toFixed(1));
-  }}
-  return {{lats,lons,vals}};
+// ── Map annotation helpers ────────────────────────────────────────────────────
+function trackerAnnotations(fd) {{
+  const label = MONTH_NAMES[fd.month-1]+" "+fd.year;
+  const ecol  = ENSO_COLORS[ENSO_PHASES.indexOf(fd.enso)] || DARK.muted;
+  return [
+    {{text:label, x:0.01,y:0.97,xref:"paper",yref:"paper",
+      xanchor:"left",yanchor:"top",showarrow:false,
+      font:{{size:22,color:"#e6edf3",family:"monospace",weight:700}},
+      bgcolor:"rgba(13,17,23,0.7)",borderpad:4}},
+    {{text:fd.enso, x:0.01,y:0.86,xref:"paper",yref:"paper",
+      xanchor:"left",yanchor:"top",showarrow:false,
+      font:{{size:13,color:ecol,family:"monospace"}},
+      bgcolor:"rgba(13,17,23,0.6)",borderpad:3}},
+  ];
 }}
 
-const MAP_LAYOUT = {{
-  autosize:true,
-  paper_bgcolor:DARK.paper,
-  mapbox:{{style:"carto-darkmatter",center:{{lat:35.5,lon:-109}},zoom:3.4}},
-  margin:{{l:0,r:65,t:0,b:20}},
-}};
+function compositeAnnotation(phase) {{
+  const label = phase==="all" ? "All Years" : phase;
+  return [{{text:label, x:0.01,y:0.97,xref:"paper",yref:"paper",
+    xanchor:"left",yanchor:"top",showarrow:false,
+    font:{{size:16,color:"#e6edf3",family:"monospace",weight:700}},
+    bgcolor:"rgba(13,17,23,0.75)",borderpad:4}}];
+}}
 
-function makeTrace(lats,lons,vals) {{
+// ── Shared map trace builder ──────────────────────────────────────────────────
+function makeTrace(vals) {{
   return {{
     type:"scattermapbox", mode:"markers",
-    lat:lats, lon:lons,
+    lat:fixedLats, lon:fixedLons,
     marker:{{
       size:18, opacity:0.9,
       color:vals, colorscale:PRCP_SCALE, cmin:0, cmax:cmapMax,
@@ -280,77 +254,77 @@ function makeTrace(lats,lons,vals) {{
   }};
 }}
 
-// ── Composite map ─────────────────────────────────────────────────────────────
-function renderComposite(phase) {{
-  const {{lats,lons,vals}} = composites[phase]||composites["all"];
-  const label = phase==="all" ? "All Years" : phase;
-  const layout = {{...MAP_LAYOUT, annotations:[{{
-    text:label, x:0.01,y:0.97,xref:"paper",yref:"paper",
-    xanchor:"left",yanchor:"top",showarrow:false,
-    font:{{size:16,color:"#e6edf3",family:"monospace",weight:700}},
-    bgcolor:"rgba(13,17,23,0.75)",borderpad:4
-  }}]}};
-  Plotly.react("mapDiv",[makeTrace(lats,lons,vals)],layout,{{responsive:true}});
+const BASE_LAYOUT = {{
+  autosize:true,
+  paper_bgcolor:DARK.paper,
+  uirevision:"map",
+  mapbox:{{style:"carto-darkmatter",center:{{lat:35.5,lon:-109}},zoom:3.4}},
+}};
+
+// ── Tracker layout (with Plotly slider + play/pause at the bottom) ────────────
+function makeTrackerLayout(fd, sliderSteps) {{
+  return {{
+    ...BASE_LAYOUT,
+    margin:{{l:0,r:65,t:0,b:130}},
+    annotations: trackerAnnotations(fd),
+    updatemenus:[{{
+      type:"buttons", showactive:false,
+      x:0.01, y:0.08, xanchor:"left", yanchor:"top",
+      buttons:[
+        {{label:"▶  Play",  method:"animate",
+          args:[null,{{frame:{{duration:250,redraw:true}},fromcurrent:true,
+                       mode:"immediate",transition:{{duration:80}}}}]}},
+        {{label:"⏸  Pause",method:"animate",
+          args:[[null],{{frame:{{duration:0,redraw:false}},
+                         mode:"immediate",transition:{{duration:0}}}}]}},
+      ],
+      bgcolor:"#1c2128",bordercolor:"#30363d",
+      font:{{color:DARK.text,size:12}},
+    }}],
+    sliders:[{{
+      active:0, steps:sliderSteps,
+      x:0, y:0, xanchor:"left", yanchor:"top", len:1.0,
+      currentvalue:{{visible:false}},
+      transition:{{duration:80}},
+      bgcolor:"#21262d", bordercolor:"#30363d",
+      tickcolor:"#8b949e", font:{{color:DARK.muted,size:9}},
+      pad:{{b:10,t:70}}, minorticklen:0,
+    }}],
+  }};
 }}
 
-// ── Monthly tracker map ───────────────────────────────────────────────────────
-function renderTrackerFrame(idx) {{
-  trackerIdx = Math.max(0,Math.min(idx,sortedKeys.length-1));
-  const key = sortedKeys[trackerIdx];
-  const fd  = monthlyData[key];
-  const label = MONTH_NAMES[fd.month-1]+" "+fd.year;
-  const ecol  = ENSO_COLORS[ENSO_PHASES.indexOf(fd.enso)] || DARK.muted;
-  const ebg   = ENSO_BG[fd.enso]||"rgba(139,148,158,0.15)";
-
-  document.getElementById("monthLabel").textContent = label;
-  const el = document.getElementById("ensoLabel");
-  el.textContent = fd.enso; el.style.background = ebg; el.style.color = ecol;
-  document.getElementById("yearSlider").value = trackerIdx;
-
-  const layout = {{...MAP_LAYOUT, annotations:[
-    {{text:label,x:0.01,y:0.97,xref:"paper",yref:"paper",
-      xanchor:"left",yanchor:"top",showarrow:false,
-      font:{{size:20,color:"#e6edf3",family:"monospace",weight:700}},
-      bgcolor:"rgba(13,17,23,0.7)",borderpad:4}},
-    {{text:fd.enso,x:0.01,y:0.85,xref:"paper",yref:"paper",
-      xanchor:"left",yanchor:"top",showarrow:false,
-      font:{{size:13,color:ecol,family:"monospace"}},
-      bgcolor:"rgba(13,17,23,0.6)",borderpad:3}},
-  ]}};
-  Plotly.react("mapDiv",[makeTrace(fd.lats,fd.lons,fd.vals)],layout,{{responsive:true}});
+// ── Composite layout (no slider/play) ────────────────────────────────────────
+function makeCompositeLayout(phase) {{
+  return {{
+    ...BASE_LAYOUT,
+    margin:{{l:0,r:65,t:0,b:20}},
+    annotations:compositeAnnotation(phase),
+    updatemenus:[], sliders:[],
+  }};
 }}
 
-function startPlay() {{
-  if (playTimer) return;
-  document.getElementById("btnPlay").textContent = "⏸ Pause";
-  playTimer = setInterval(() => {{
-    if (trackerIdx >= sortedKeys.length-1) {{ stopPlay(); return; }}
-    renderTrackerFrame(trackerIdx+1);
-  }}, 200);
-}}
-
-function stopPlay() {{
-  clearInterval(playTimer); playTimer = null;
-  document.getElementById("btnPlay").textContent = "▶ Play";
-}}
-
-// ── Map mode switching ────────────────────────────────────────────────────────
+// ── Tab switching ─────────────────────────────────────────────────────────────
 document.getElementById("mapTabs").addEventListener("click", e => {{
   const btn = e.target.closest("[data-tab]");
-  if (!btn) return;
-  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+  if (!btn || btn.dataset.tab === currentMode) return;
+  document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  mapMode = btn.dataset.tab;
-  if (mapMode==="composite") {{
-    stopPlay();
-    document.getElementById("compositeControls").style.display="";
-    document.getElementById("trackerControls").style.display="none";
-    const activeEnso = document.querySelector("#ensoToggle .btn.active");
-    renderComposite(activeEnso ? activeEnso.dataset.enso : "all");
+  currentMode = btn.dataset.tab;
+
+  if (currentMode === "tracker") {{
+    document.getElementById("trackerDesc").style.display = "";
+    document.getElementById("compositeControls").style.display = "none";
+    // Restore tracker layout (frames are still registered)
+    const fd = monthlyData[sortedKeys[0]];
+    Plotly.react("mapDiv",[makeTrace(fd.orderedVals)],
+      makeTrackerLayout(fd, cachedSliderSteps),{{responsive:true}});
   }} else {{
-    document.getElementById("compositeControls").style.display="none";
-    document.getElementById("trackerControls").style.display="";
-    renderTrackerFrame(trackerIdx);
+    document.getElementById("trackerDesc").style.display = "none";
+    document.getElementById("compositeControls").style.display = "";
+    const activeBtn = document.querySelector("#ensoToggle .btn.active");
+    const phase = activeBtn ? activeBtn.dataset.enso : "all";
+    Plotly.react("mapDiv",[makeTrace(composites[phase])],
+      makeCompositeLayout(phase),{{responsive:true}});
   }}
 }});
 
@@ -358,35 +332,28 @@ document.getElementById("mapTabs").addEventListener("click", e => {{
 document.getElementById("ensoToggle").addEventListener("click", e => {{
   const btn = e.target.closest("[data-enso]");
   if (!btn) return;
-  document.querySelectorAll("#ensoToggle .btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll("#ensoToggle .btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  renderComposite(btn.dataset.enso);
+  const phase = btn.dataset.enso;
+  Plotly.react("mapDiv",[makeTrace(composites[phase])],
+    makeCompositeLayout(phase),{{responsive:true}});
 }});
-
-// Tracker playback buttons
-document.getElementById("btnFirst").addEventListener("click", ()=>{{ stopPlay(); renderTrackerFrame(0); }});
-document.getElementById("btnPrev" ).addEventListener("click", ()=>{{ stopPlay(); renderTrackerFrame(trackerIdx-1); }});
-document.getElementById("btnNext" ).addEventListener("click", ()=>{{ stopPlay(); renderTrackerFrame(trackerIdx+1); }});
-document.getElementById("btnLast" ).addEventListener("click", ()=>{{ stopPlay(); renderTrackerFrame(sortedKeys.length-1); }});
-document.getElementById("btnPlay" ).addEventListener("click", ()=>{{ playTimer ? stopPlay() : startPlay(); }});
-document.getElementById("yearSlider").addEventListener("input", e=>{{ stopPlay(); renderTrackerFrame(+e.target.value); }});
 
 // ── State selector ────────────────────────────────────────────────────────────
 document.getElementById("stateSelector").addEventListener("click", e => {{
   const btn = e.target.closest("[data-state]");
   if (!btn) return;
-  document.querySelectorAll("#stateSelector .btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll("#stateSelector .btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  const s = btn.dataset.state;
-  renderTimeSeries(s);
-  renderClimatology(s);
+  renderTimeSeries(btn.dataset.state);
+  renderClimatology(btn.dataset.state);
 }});
 
 // ── Time series ───────────────────────────────────────────────────────────────
 function renderTimeSeries(stateKey) {{
   const rows = stateRows[stateKey]||[];
   const mdata={{}};
-  for (const r of rows) {{
+  for(const r of rows){{
     const k=r.year+"-"+r.month.padStart(2,"0");
     if(!mdata[k]) mdata[k]={{sum:0,cnt:0,enso:r.enso,year:+r.year,month:+r.month}};
     mdata[k].sum+=+r.prcp_mm; mdata[k].cnt++;
@@ -408,16 +375,13 @@ function renderTimeSeries(stateKey) {{
     }}
     si=ei+1;
   }}
-
-  const label = stateKey==="all"?"All SW":stateKey;
+  const label=stateKey==="all"?"All SW":stateKey;
   document.getElementById("lineTitle").textContent =
     "Monthly Precipitation — "+label+" ("+YR0+"–"+YR1+")";
-
   Plotly.react("lineDiv",[
     {{type:"scatter",mode:"lines",x:msX,y:msY,
-      line:{{color:"#f5a623",width:1.5}},
-      fill:"tozeroy",fillcolor:"rgba(245,166,35,0.07)",
-      customdata:msENSO,
+      line:{{color:"#f5a623",width:1.5}},fill:"tozeroy",
+      fillcolor:"rgba(245,166,35,0.07)",customdata:msENSO,
       hovertemplate:"<b>%{{x|%b %Y}}</b><br>%{{y:.1f}} mm<br>%{{customdata}}<extra></extra>",
       showlegend:false}},
     {{type:"scatter",x:[null],y:[null],mode:"markers",name:"El Niño",
@@ -436,16 +400,14 @@ function renderTimeSeries(stateKey) {{
   }},{{responsive:true}});
 }}
 
-// ── Climatology by ENSO phase ─────────────────────────────────────────────────
+// ── Climatology ───────────────────────────────────────────────────────────────
 function renderClimatology(stateKey) {{
   const rows=stateRows[stateKey]||[];
   const byPhase={{}};
   for(const ph of ENSO_PHASES) byPhase[ph]=Array.from({{length:12}},()=>({{s:0,n:0}}));
   for(const r of rows){{
-    const ph=r.enso;
-    if(!byPhase[ph]) continue;
-    byPhase[ph][+r.month-1].s+=+r.prcp_mm;
-    byPhase[ph][+r.month-1].n++;
+    const ph=r.enso; if(!byPhase[ph]) continue;
+    byPhase[ph][+r.month-1].s+=+r.prcp_mm; byPhase[ph][+r.month-1].n++;
   }}
   const label=stateKey==="all"?"All SW":stateKey;
   document.getElementById("climTitle").textContent =
@@ -468,44 +430,94 @@ function renderClimatology(stateKey) {{
 }}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+let cachedSliderSteps = [];
+
 async function init() {{
   const text = await fetch("data/sw_monthly_grid.csv").then(r=>r.text());
   const rows = parseCSV(text);
 
-  // Pre-group by state
+  // ── 1. Fixed ordered cell list (sorted by "lat,lon" string) ──────────────
+  const cellSet = new Set();
+  for(const r of rows) cellSet.add(r.lat+","+r.lon);
+  cellList  = [...cellSet].sort();
+  fixedLats = cellList.map(k=>+k.split(",")[0]);
+  fixedLons = cellList.map(k=>+k.split(",")[1]);
+  const cellIdx = Object.fromEntries(cellList.map((k,i)=>[k,i]));
+  const nCells  = cellList.length;
+
+  // ── 2. Group rows by state (for charts) and by month (for tracker) ───────
   stateRows["all"]=rows;
   for(const r of rows){{
     if(!stateRows[r.state]) stateRows[r.state]=[];
     stateRows[r.state].push(r);
   }}
 
-  // Pre-group by (year,month) for tracker
+  // ── 3. Build per-month ordered value arrays ───────────────────────────────
+  // orderedVals[i] matches fixedLats[i]/fixedLons[i]; null = no data that month
+  const rawMonthly={{}};
   for(const r of rows){{
     const k=r.year+"-"+r.month.padStart(2,"0");
-    if(!monthlyData[k]) monthlyData[k]={{lats:[],lons:[],vals:[],enso:r.enso,year:+r.year,month:+r.month}};
-    monthlyData[k].lats.push(+r.lat);
-    monthlyData[k].lons.push(+r.lon);
-    monthlyData[k].vals.push(+r.prcp_mm);
+    if(!rawMonthly[k]) rawMonthly[k]={{vals:new Array(nCells).fill(null),enso:r.enso,year:+r.year,month:+r.month}};
+    const ci=cellIdx[r.lat+","+r.lon];
+    if(ci!==undefined) rawMonthly[k].vals[ci]=+r.prcp_mm;
   }}
-  sortedKeys=Object.keys(monthlyData).sort();
-  trackerIdx=sortedKeys.length-1;  // start at latest month
-  document.getElementById("yearSlider").max=sortedKeys.length-1;
-  document.getElementById("yearSlider").value=trackerIdx;
+  sortedKeys=Object.keys(rawMonthly).sort();
+  for(const k of sortedKeys) monthlyData[k]=rawMonthly[k];
 
-  // Pre-compute ENSO composites for the composite map
-  for(const ph of ["all",...ENSO_PHASES]){{
-    const sub=ph==="all"?rows:rows.filter(r=>r.enso===ph);
-    composites[ph]=cellAvg(sub);
+  // ── 4. Colorscale cap: 95th percentile across all cells × all months ─────
+  const allVals=[];
+  for(const k of sortedKeys) for(const v of monthlyData[k].vals) if(v!==null) allVals.push(v);
+  allVals.sort((a,b)=>a-b);
+  cmapMax=Math.round(allVals[Math.floor(allVals.length*0.95)]/10)*10||100;
+
+  // ── 5. ENSO composite maps ────────────────────────────────────────────────
+  function buildComposite(phase){{
+    const S=new Array(nCells).fill(0), N=new Array(nCells).fill(0);
+    const ks=phase==="all"?sortedKeys:sortedKeys.filter(k=>monthlyData[k].enso===phase);
+    for(const k of ks){{
+      const vals=monthlyData[k].vals;
+      for(let i=0;i<nCells;i++){{ if(vals[i]!==null){{S[i]+=vals[i];N[i]++;}} }}
+    }}
+    return S.map((s,i)=>N[i]>0?+(s/N[i]).toFixed(1):null);
   }}
+  for(const ph of ["all",...ENSO_PHASES]) composites[ph]=buildComposite(ph);
 
-  // 95th-pct colorscale cap (fixed across all frames so colors stay consistent)
-  const sorted=[...composites["all"].vals].sort((a,b)=>a-b);
-  cmapMax=Math.round(sorted[Math.floor(sorted.length*0.95)]/10)*10||100;
+  // ── 6. Slider steps (year label only for January) ────────────────────────
+  cachedSliderSteps = sortedKeys.map(k=>{{
+    const fd=monthlyData[k];
+    return {{
+      args:[[k],{{frame:{{duration:250,redraw:true}},mode:"immediate",transition:{{duration:80}}}}],
+      label: fd.month===1 ? String(fd.year) : "",
+      method:"animate",
+    }};
+  }});
+
+  // ── 7. Initial render: Monthly Tracker at 1970-01 ────────────────────────
+  const fd0 = monthlyData[sortedKeys[0]];
 
   document.getElementById("loading").style.display="none";
   document.getElementById("content").style.display="block";
 
-  renderComposite("all");
+  await Plotly.newPlot(
+    "mapDiv",
+    [makeTrace(fd0.orderedVals)],
+    makeTrackerLayout(fd0, cachedSliderSteps),
+    {{responsive:true}}
+  );
+
+  // ── 8. Build and register animation frames (only marker.color changes) ───
+  const frames = sortedKeys.map(k=>{{
+    const fd=monthlyData[k];
+    return {{
+      name:k,
+      data:[{{marker:{{color:fd.orderedVals}}}}],
+      traces:[0],
+      layout:{{annotations:trackerAnnotations(fd)}},
+    }};
+  }});
+  await Plotly.addFrames("mapDiv", frames);
+
+  // ── 9. Charts ─────────────────────────────────────────────────────────────
   renderTimeSeries("all");
   renderClimatology("all");
 }}
