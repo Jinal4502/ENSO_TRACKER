@@ -12,15 +12,15 @@ from pathlib import Path
 # Embedded in the page as a JS constant so the browser knows where to fetch
 # each region's CSV and how to render the map for it.
 REGION_CONFIG = {
-    "sw_usa": {
-        "name": "SW United States",
-        "csv": "data/sw_monthly_grid.csv",
-        "center_lat": 35.5, "center_lon": -111.0, "zoom": 3.4,
-        "marker_size": 18,
-        "all_label": "All SW",
+    "usa": {
+        "name": "United States",
+        "csv": "data/usa_monthly_grid.csv",
+        "center_lat": 39.5, "center_lon": -96.0, "zoom": 2.5,
+        "marker_size": 20,
+        "all_label": "All USA",
         "subregion_label": "State",
         "source_html": (
-            "NClimGrid monthly · 0.5° Gaussian-smoothed grid · "
+            "NClimGrid monthly · 1.0° Gaussian-smoothed grid · "
             "<a href='https://www.ncei.noaa.gov/products/land-based-station/nclimgrid-monthly'"
             " target='_blank'>NOAA/NCEI</a>"
         ),
@@ -163,7 +163,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     <div class="region-bar">
       <span class="region-label">Region:</span>
       <div class="btn-row" id="regionSelector" style="margin:0">
-        <button class="btn active" data-region="sw_usa">SW United States</button>
+        <button class="btn active" data-region="usa">United States</button>
         <button class="btn" data-region="india">India</button>
         <button class="btn" data-region="australia">Australia</button>
         <button class="btn" data-region="brazil">Brazil</button>

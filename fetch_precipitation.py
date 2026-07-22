@@ -10,7 +10,7 @@ To regenerate the CSVs from a new NClimGrid file, run convert_precipitation.py l
 import json
 from pathlib import Path
 
-META_FILE = Path("docs/data/sw_meta.json")
+META_FILE = Path("docs/data/usa_meta.json")
 
 
 def fetch_precipitation_data() -> dict:
