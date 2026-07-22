@@ -1,13 +1,13 @@
 """
 convert_global_precipitation.py  —  LOCAL USE ONLY
-Downloads GPCC Full Data Monthly (2.5°) from NOAA PSL and writes per-region
-CSV + JSON files used by the global precipitation page.
+Reads GPCC Full Data Monthly (0.5°) and writes per-region CSV + JSON files
+used by the global precipitation page.
 
+Place the downloaded file as precip.mon.total.v7.nc in this directory, then:
   python convert_global_precipitation.py
 
-If auto-download fails, manually download:
-  https://downloads.psl.noaa.gov/Datasets/gpcc/full_v7/precip.mon.total.2.5x2.5.nc
-and place it as gpcc_precip_2.5.nc in this directory, then re-run.
+Download from:
+  https://downloads.psl.noaa.gov/Datasets/gpcc/full_v7/precip.mon.total.v7.nc
 
 Outputs docs/data/{region}_monthly_grid.csv and docs/data/{region}_meta.json
 for each region defined in REGIONS below.  Commit those files to GitHub;
@@ -16,17 +16,20 @@ CI does not regenerate them (no NetCDF on CI).
 
 import csv
 import json
-import urllib.request
 from pathlib import Path
 from typing import Optional, List, Tuple
 import numpy as np
 
-GPCC_FILE  = Path("gpcc_precip_2.5.nc")
-GPCC_URL   = ("https://downloads.psl.noaa.gov/Datasets/gpcc/full_v7/"
-               "precip.mon.total.2.5x2.5.nc")
+# Accepted filenames in priority order
+GPCC_CANDIDATES = [
+    Path("precip.mon.total.v7.nc"),
+    Path("gpcc_precip_2.5.nc"),
+    Path("gpcc_precip.nc"),
+]
 DATA_DIR   = Path("docs/data")
 YEAR_START = 1970
-GRID_DEG   = 2.5
+GAUSS_SIGMA = 1.0   # smoothing applied at native 0.5° resolution
+OUT_GRID    = 1.0   # aggregate 0.5° → 1.0° to keep CSV files ≤ 15 MB
 
 # ── Region definitions ────────────────────────────────────────────────────────
 # subregions: list of (label, lat_min, lat_max, lon_min, lon_max)
@@ -90,44 +93,41 @@ def assign_subregion(lat: float, lon: float,
     return None
 
 
-def download_gpcc() -> None:
-    print(f"Downloading GPCC 2.5° from NOAA PSL (~16 MB) ...")
-    urllib.request.urlretrieve(GPCC_URL, GPCC_FILE,
-        reporthook=lambda b, bs, tot: print(
-            f"  {min(b*bs, tot)/1e6:.1f}/{tot/1e6:.1f} MB", end="\r", flush=True))
-    print()
-
-
 def convert_all_regions() -> None:
     try:
         import netCDF4 as nc
         from netCDF4 import num2date
-    except ImportError:
-        raise RuntimeError("pip install netCDF4")
+        from scipy.ndimage import gaussian_filter
+    except ImportError as e:
+        raise RuntimeError(f"pip install netCDF4 scipy  ({e})")
 
-    if not GPCC_FILE.exists():
-        download_gpcc()
+    gpcc_file = next((p for p in GPCC_CANDIDATES if p.exists()), None)
+    if gpcc_file is None:
+        raise FileNotFoundError(
+            "GPCC file not found. Download from:\n"
+            "  https://downloads.psl.noaa.gov/Datasets/gpcc/full_v7/precip.mon.total.v7.nc\n"
+            f"and place it as {GPCC_CANDIDATES[0]} in this directory.")
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    print("Opening GPCC NetCDF ...")
-    ds = nc.Dataset(GPCC_FILE)
+    print(f"Opening {gpcc_file} ...")
+    ds = nc.Dataset(gpcc_file)
 
     # Detect precipitation variable name
-    prcp_var = None
-    for candidate in ("precip", "prcp", "precipitation", "pre", "p"):
-        if candidate in ds.variables:
-            prcp_var = candidate
-            break
+    prcp_var = next((v for v in ("precip", "prcp", "precipitation", "pre", "p")
+                     if v in ds.variables), None)
     if prcp_var is None:
-        raise RuntimeError(
-            f"Cannot find precip variable. Available: {list(ds.variables.keys())}")
-    print(f"  Using variable '{prcp_var}'")
+        raise RuntimeError(f"Cannot find precip variable. Got: {list(ds.variables.keys())}")
 
-    # Lat / lon — GPCC from PSL uses 0–360 longitude convention
+    # Lat / lon — GPCC from PSL uses 0–360 longitude
     lat_raw = np.array(ds.variables["lat"][:])
     lon_raw = np.array(ds.variables["lon"][:])
     lon     = np.where(lon_raw > 180, lon_raw - 360, lon_raw)
+
+    # Detect native grid resolution from lat spacing
+    grid_deg = round(abs(float(lat_raw[1] - lat_raw[0])), 3)
+    print(f"  Variable '{prcp_var}' · {grid_deg}° grid · "
+          f"{len(lat_raw)} lat × {len(lon_raw)} lon")
 
     times  = ds.variables["time"][:]
     dates  = num2date(times, ds.variables["time"].units,
@@ -139,12 +139,12 @@ def convert_all_regions() -> None:
     T         = len(time_idx)
     years_arr  = np.array([d.year  for d in dates_sub])
     months_arr = np.array([d.month for d in dates_sub])
-    print(f"  {T} months from {YEAR_START} ({dates_sub[0].year}-{dates_sub[0].month:02d}"
-          f" → {dates_sub[-1].year}-{dates_sub[-1].month:02d})")
+    print(f"  {T} months: {dates_sub[0].year}-{dates_sub[0].month:02d}"
+          f" → {dates_sub[-1].year}-{dates_sub[-1].month:02d}")
 
     fill = float(getattr(ds.variables[prcp_var], "_FillValue", -9.96921e+36))
 
-    # ENSO classification
+    # ENSO classification per (year, month)
     try:
         from fetch_hurricanes import fetch_oni_classifications
         _, month_class = fetch_oni_classifications()
@@ -152,44 +152,81 @@ def convert_all_regions() -> None:
         month_class = {}
 
     for region_key, rcfg in REGIONS.items():
-        print(f"\n── {rcfg['name']} ({'–'.join([str(YEAR_START), str(dates_sub[-1].year)])}) ──")
+        print(f"\n── {rcfg['name']} ──")
 
         lat_min, lat_max = rcfg["lat_min"], rcfg["lat_max"]
         lon_min, lon_max = rcfg["lon_min"], rcfg["lon_max"]
 
-        lat_idx = np.where((lat_raw >= lat_min) & (lat_raw <= lat_max))[0]
-        # Use original 0-360 lon indices but track converted lon values
+        lat_idx  = np.where((lat_raw >= lat_min) & (lat_raw <= lat_max))[0]
         lon_mask = (lon >= lon_min) & (lon <= lon_max)
         lon_idx  = np.where(lon_mask)[0]
 
         sub_lat = lat_raw[lat_idx]
-        sub_lon = lon[lon_idx]           # converted to -180/180
+        sub_lon = lon[lon_idx]    # -180 to 180
 
-        print(f"  Grid: {len(lat_idx)} lat × {len(lon_idx)} lon")
+        print(f"  Slice: {len(lat_idx)} lat × {len(lon_idx)} lon")
 
-        # Read just this region's slice across all time steps
+        # Read this region's data slice for all time steps
         t0, t1 = time_idx[0], time_idx[-1] + 1
         raw = np.array(
-            ds.variables[prcp_var][t0:t1, lat_idx[0]:lat_idx[-1]+1,
-                                          lon_idx[0]:lon_idx[-1]+1],
+            ds.variables[prcp_var][t0:t1,
+                                   lat_idx[0]:lat_idx[-1]+1,
+                                   lon_idx[0]:lon_idx[-1]+1],
             dtype=float,
         )
-        raw[np.abs(raw - fill) < 1e30] = np.nan
+        raw[np.abs(raw - fill) < 1e25] = np.nan
         raw[raw < 0] = np.nan
 
-        # Build output 2.5° cell centres (same as input, since GPCC is already 2.5°)
-        # Assign subregion for each cell; keep only land cells (at least one non-NaN month)
-        cell_info = {}   # (li, lj) → (centre_lat, centre_lon, subregion)
-        for li, clat in enumerate(sub_lat):
-            for lj, clon in enumerate(sub_lon):
-                col = raw[:, li, lj]
-                if np.all(np.isnan(col)):
+        # NaN-aware Gaussian smoothing (same approach as NClimGrid SW USA)
+        print(f"  Applying Gaussian smoothing (σ={GAUSS_SIGMA} cell = {GAUSS_SIGMA*grid_deg:.2f}°) ...")
+        prcp_smooth = np.full_like(raw, np.nan)
+        for t in range(T):
+            field    = raw[t]
+            nan_mask = np.isnan(field)
+            filled   = np.where(nan_mask, 0.0, field)
+            weight   = (~nan_mask).astype(float)
+            sm_num   = gaussian_filter(filled, sigma=GAUSS_SIGMA)
+            sm_den   = gaussian_filter(weight, sigma=GAUSS_SIGMA)
+            with np.errstate(invalid="ignore", divide="ignore"):
+                prcp_smooth[t] = np.where(sm_den > 0.1, sm_num / sm_den, np.nan)
+
+        # ── Aggregate 0.5° → 1.0° output grid ──────────────────────────────
+        out_lats = np.arange(lat_min, lat_max, OUT_GRID)
+        out_lons = np.arange(lon_min, lon_max, OUT_GRID)
+        cen_lat  = out_lats + OUT_GRID / 2
+        cen_lon  = out_lons + OUT_GRID / 2
+        n_lat, n_lon = len(out_lats), len(out_lons)
+
+        lat_bins = np.floor((sub_lat - lat_min) / OUT_GRID).astype(int)
+        lon_bins = np.floor((sub_lon - lon_min) / OUT_GRID).astype(int)
+
+        prcp_coarse = np.full((T, n_lat, n_lon), np.nan)
+        for bi in range(n_lat):
+            li_mask = lat_bins == bi
+            if not li_mask.any():
+                continue
+            for bj in range(n_lon):
+                lj_mask = lon_bins == bj
+                if not lj_mask.any():
+                    continue
+                cell = prcp_smooth[:, li_mask, :][:, :, lj_mask].reshape(T, -1)
+                valid = ~np.isnan(cell)
+                cnt  = valid.sum(axis=1)
+                sums = np.where(valid, cell, 0.0).sum(axis=1)
+                with np.errstate(invalid="ignore", divide="ignore"):
+                    prcp_coarse[:, bi, bj] = np.where(cnt > 0, sums / cnt, np.nan)
+
+        # Assign subregion for each 1.0° output cell centre
+        cell_info = {}   # (bi, bj) → (clat, clon, subregion)
+        for bi, clat in enumerate(cen_lat):
+            for bj, clon in enumerate(cen_lon):
+                if np.all(np.isnan(prcp_coarse[:, bi, bj])):
                     continue   # ocean / no data
                 sr = assign_subregion(float(clat), float(clon), rcfg["subregions"])
                 if sr is not None:
-                    cell_info[(li, lj)] = (float(clat), float(clon), sr)
+                    cell_info[(bi, bj)] = (float(clat), float(clon), sr)
 
-        print(f"  Land cells with subregion: {len(cell_info)}")
+        print(f"  Output cells at {OUT_GRID}°: {len(cell_info)}")
 
         csv_path  = DATA_DIR / f"{region_key}_monthly_grid.csv"
         meta_path = DATA_DIR / f"{region_key}_meta.json"
@@ -201,8 +238,8 @@ def convert_all_regions() -> None:
                 year  = int(years_arr[t])
                 month = int(months_arr[t])
                 enso  = month_class.get((year, month), "Neutral")
-                for (li, lj), (clat, clon, sr) in sorted(cell_info.items()):
-                    v = raw[t, li, lj]
+                for (bi, bj), (clat, clon, sr) in sorted(cell_info.items()):
+                    v = prcp_coarse[t, bi, bj]
                     if not np.isnan(v):
                         w.writerow([year, month,
                                     round(clat, 2), round(clon, 2),
@@ -218,7 +255,8 @@ def convert_all_regions() -> None:
             "last_month":  last,
             "n_months":    T,
             "n_cells":     len(cell_info),
-            "grid_deg":    GRID_DEG,
+            "grid_deg":    OUT_GRID,
+            "smoothing":   f"gaussian_sigma{GAUSS_SIGMA}_then_aggregated_to_{OUT_GRID}deg",
             "states":      subregion_names,
         }
         with open(meta_path, "w") as f:

@@ -28,12 +28,12 @@ REGION_CONFIG = {
     "india": {
         "name": "India",
         "csv": "data/india_monthly_grid.csv",
-        "center_lat": 22.0, "center_lon": 82.0, "zoom": 3.8,
+        "center_lat": 22.0, "center_lon": 82.0, "zoom": 3.6,
         "marker_size": 22,
         "all_label": "All India",
         "subregion_label": "Region",
         "source_html": (
-            "GPCC Full Data Monthly · 2.5° grid · "
+            "GPCC Full Data Monthly · 1.0° grid · "
             "<a href='https://psl.noaa.gov/data/gridded/data.gpcc.html'"
             " target='_blank'>NOAA/PSL GPCC</a>"
         ),
@@ -41,12 +41,12 @@ REGION_CONFIG = {
     "australia": {
         "name": "Australia",
         "csv": "data/australia_monthly_grid.csv",
-        "center_lat": -26.0, "center_lon": 133.0, "zoom": 3.0,
-        "marker_size": 22,
+        "center_lat": -26.0, "center_lon": 133.0, "zoom": 2.8,
+        "marker_size": 24,
         "all_label": "All Australia",
         "subregion_label": "Region",
         "source_html": (
-            "GPCC Full Data Monthly · 2.5° grid · "
+            "GPCC Full Data Monthly · 1.0° grid · "
             "<a href='https://psl.noaa.gov/data/gridded/data.gpcc.html'"
             " target='_blank'>NOAA/PSL GPCC</a>"
         ),
@@ -54,12 +54,12 @@ REGION_CONFIG = {
     "brazil": {
         "name": "Brazil",
         "csv": "data/brazil_monthly_grid.csv",
-        "center_lat": -10.0, "center_lon": -53.0, "zoom": 3.0,
-        "marker_size": 22,
+        "center_lat": -10.0, "center_lon": -53.0, "zoom": 2.8,
+        "marker_size": 24,
         "all_label": "All Brazil",
         "subregion_label": "Region",
         "source_html": (
-            "GPCC Full Data Monthly · 2.5° grid · "
+            "GPCC Full Data Monthly · 1.0° grid · "
             "<a href='https://psl.noaa.gov/data/gridded/data.gpcc.html'"
             " target='_blank'>NOAA/PSL GPCC</a>"
         ),
@@ -67,12 +67,12 @@ REGION_CONFIG = {
     "east_africa": {
         "name": "East Africa",
         "csv": "data/east_africa_monthly_grid.csv",
-        "center_lat": 3.0, "center_lon": 38.0, "zoom": 3.4,
+        "center_lat": 3.0, "center_lon": 38.0, "zoom": 3.2,
         "marker_size": 22,
         "all_label": "All East Africa",
         "subregion_label": "Region",
         "source_html": (
-            "GPCC Full Data Monthly · 2.5° grid · "
+            "GPCC Full Data Monthly · 1.0° grid · "
             "<a href='https://psl.noaa.gov/data/gridded/data.gpcc.html'"
             " target='_blank'>NOAA/PSL GPCC</a>"
         ),
