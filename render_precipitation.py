@@ -249,9 +249,14 @@ const DARK = {{
   muted:"#8b949e", grid:"#21262d", card:"#1c2128", border:"#30363d"
 }};
 const PRCP_SCALE = [
-  [0.00,"#0d1117"],[0.05,"#1a0500"],[0.15,"#6b0000"],
-  [0.30,"#b91c00"],[0.48,"#e85d00"],[0.65,"#f5a623"],
-  [0.80,"#fcd53a"],[0.92,"#fff176"],[1.00,"#fffde7"]
+  [0.00,"#f0f9ff"],   // near-white  — dry
+  [0.08,"#bae6fd"],   // pale sky
+  [0.20,"#7dd3fc"],   // light blue
+  [0.36,"#22d3ee"],   // neon cyan   — noticeable rain
+  [0.54,"#06b6d4"],   // vivid teal
+  [0.70,"#0284c7"],   // strong blue
+  [0.85,"#0369a1"],   // deep blue
+  [1.00,"#0c4a6e"],   // ocean deep  — very wet
 ];
 const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
 const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
@@ -312,12 +317,12 @@ function makeTrace(vals) {{
     type:"scattermapbox", mode:"markers",
     lat:fixedLats, lon:fixedLons,
     marker:{{
-      size:ms, opacity:0.9,
+      size:ms, opacity:0.88,
       color:vals, colorscale:PRCP_SCALE, cmin:0, cmax:cmapMax,
       colorbar:{{
-        title:{{text:"mm/month",font:{{color:DARK.text,size:10}}}},
-        tickfont:{{color:DARK.text,size:10}},
-        bgcolor:"rgba(22,27,34,0.85)",bordercolor:DARK.border,borderwidth:1,
+        title:{{text:"mm/mo",font:{{color:"#7dd3fc",size:10}}}},
+        tickfont:{{color:"#bae6fd",size:10}},
+        bgcolor:"rgba(12,17,23,0.80)",bordercolor:"#164e63",borderwidth:1,
         len:0.55,thickness:14,x:1.01,xpad:8
       }}
     }},
