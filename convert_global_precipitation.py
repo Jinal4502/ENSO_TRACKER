@@ -58,11 +58,12 @@ REGIONS = {
         "lat_min": -45.0, "lat_max": -9.0,
         "lon_min": 112.0, "lon_max": 155.0,
         "subregions": [
-            ("Northern",  -22.0,  -9.0, 112.0, 155.0),
-            ("Queensland",-28.0, -15.0, 138.0, 155.0),
-            ("NSW-Vic",   -39.0, -28.0, 140.0, 155.0),
-            ("Western",   -39.0, -22.0, 112.0, 125.0),
-            ("South",     -39.0, -28.0, 125.0, 140.0),
+            ("Northern",  -22.0,  -9.0, 112.0, 155.0),  # NT + WA north + QLD north
+            ("Queensland",-28.0, -15.0, 138.0, 155.0),  # Queensland east
+            ("NSW-Vic",   -39.0, -28.0, 140.0, 155.0),  # NSW, Victoria, Tasmania
+            ("Western",   -39.0, -22.0, 112.0, 125.0),  # WA south
+            ("Central",   -28.0, -22.0, 125.0, 140.0),  # NT south + SA north (gap fix)
+            ("South",     -39.0, -28.0, 125.0, 140.0),  # SA south
         ],
     },
     "brazil": {
