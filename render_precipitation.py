@@ -262,12 +262,32 @@ const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
 const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
 const ENSO_FILL   = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
 
+const STATE_NAMES = {{
+  "AL":"Alabama","AK":"Alaska","AZ":"Arizona","AR":"Arkansas","CA":"California",
+  "CO":"Colorado","CT":"Connecticut","DE":"Delaware","FL":"Florida","GA":"Georgia",
+  "HI":"Hawaii","ID":"Idaho","IL":"Illinois","IN":"Indiana","IA":"Iowa",
+  "KS":"Kansas","KY":"Kentucky","LA":"Louisiana","ME":"Maine","MD":"Maryland",
+  "MA":"Massachusetts","MI":"Michigan","MN":"Minnesota","MS":"Mississippi",
+  "MO":"Missouri","MT":"Montana","NE":"Nebraska","NV":"Nevada","NH":"New Hampshire",
+  "NJ":"New Jersey","NM":"New Mexico","NY":"New York","NC":"North Carolina",
+  "ND":"North Dakota","OH":"Ohio","OK":"Oklahoma","OR":"Oregon","PA":"Pennsylvania",
+  "RI":"Rhode Island","SC":"South Carolina","SD":"South Dakota","TN":"Tennessee",
+  "TX":"Texas","UT":"Utah","VT":"Vermont","VA":"Virginia","WA":"Washington",
+  "WV":"West Virginia","WI":"Wisconsin","WY":"Wyoming"
+}};
+
+function displayName(stateKey) {{
+  if (stateKey === "all") return REGION_CONFIG[currentRegion].all_label;
+  return STATE_NAMES[stateKey] || stateKey;
+}}
+
 // ── Mutable state (reset on every region load) ────────────────────────────────
 let currentRegion  = "usa";
 let currentMode    = "tracker";
 let csvCache       = {{}};         // regionKey → raw CSV text
 let fixedLats      = [];
 let fixedLons      = [];
+let fixedStates    = [];
 let cellList       = [];
 let monthlyData    = {{}};
 let sortedKeys     = [];
@@ -316,6 +336,7 @@ function makeTrace(vals) {{
   return {{
     type:"scattermapbox", mode:"markers",
     lat:fixedLats, lon:fixedLons,
+    customdata:fixedStates.map(s=>STATE_NAMES[s]||s),
     marker:{{
       size:ms, opacity:0.88,
       color:vals, colorscale:PRCP_SCALE, cmin:0, cmax:cmapMax,
@@ -326,7 +347,7 @@ function makeTrace(vals) {{
         len:0.55,thickness:14,x:1.01,xpad:8
       }}
     }},
-    hovertemplate:"<b>%{{lat:.1f}}°, %{{lon:.1f}}°</b><br>%{{marker.color:.1f}} mm/mo<extra></extra>",
+    hovertemplate:"<b>%{{customdata}}</b><br>%{{lat:.1f}}°, %{{lon:.1f}}°<br>%{{marker.color:.1f}} mm/mo<extra></extra>",
     showlegend:false
   }};
 }}
@@ -484,9 +505,7 @@ function renderTimeSeries(stateKey) {{
       bgcolor:"rgba(13,17,23,0.7)",borderpad:2}});
   }}
 
-  const rc = REGION_CONFIG[currentRegion];
-  const allLabel = rc.all_label;
-  const label = stateKey==="all" ? allLabel : stateKey;
+  const label = displayName(stateKey);
   document.getElementById("lineTitle").textContent =
     "Monthly Precipitation — "+label+" ("+YR0+"–"+YR1+")";
   Plotly.react("lineDiv",[
@@ -520,9 +539,7 @@ function renderClimatology(stateKey) {{
     const ph=r.enso; if(!byPhase[ph]) continue;
     byPhase[ph][+r.month-1].s+=+r.prcp_mm; byPhase[ph][+r.month-1].n++;
   }}
-  const rc = REGION_CONFIG[currentRegion];
-  const allLabel = rc.all_label;
-  const label = stateKey==="all" ? allLabel : stateKey;
+  const label = displayName(stateKey);
   document.getElementById("climTitle").textContent =
     "Monthly Climatology — "+label+" by ENSO Phase";
   Plotly.react("climDiv",
@@ -582,17 +599,19 @@ async function loadRegion(key) {{
   const rows = parseCSV(csvCache[key]);
 
   // ── Reset mutable state ───────────────────────────────────────────────────
-  fixedLats=[]; fixedLons=[]; cellList=[];
+  fixedLats=[]; fixedLons=[]; fixedStates=[]; cellList=[];
   monthlyData={{}}; sortedKeys=[]; composites={{}};
   stateRows={{}}; cachedSliderSteps=[]; cmapMax=100;
   currentMode="tracker";
 
   // ── 1. Fixed ordered cell list ────────────────────────────────────────────
   const cellSet=new Set();
-  for(const r of rows) cellSet.add(r.lat+","+r.lon);
+  const cellStateMap={{}};
+  for(const r of rows){{cellSet.add(r.lat+","+r.lon); cellStateMap[r.lat+","+r.lon]=r.state;}}
   cellList=[...cellSet].sort();
   fixedLats=cellList.map(k=>+k.split(",")[0]);
   fixedLons=cellList.map(k=>+k.split(",")[1]);
+  fixedStates=cellList.map(k=>cellStateMap[k]||"");
   const cellIdx=Object.fromEntries(cellList.map((k,i)=>[k,i]));
   const nCells=cellList.length;
 
