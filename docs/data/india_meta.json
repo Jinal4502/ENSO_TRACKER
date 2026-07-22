@@ -2,10 +2,11 @@
   "region_key": "india",
   "region_name": "India",
   "first_month": "1970-01",
-  "last_month": "2013-12",
-  "n_months": 528,
+  "last_month": "2026-07",
+  "n_months": 679,
   "n_cells": 505,
   "grid_deg": 1.0,
+  "sources": "GPCC v7 (1970-2013) + CPC Unified (2014-present)",
   "smoothing": "gaussian_sigma1.0_then_aggregated_to_1.0deg",
   "states": [
     "Central",
