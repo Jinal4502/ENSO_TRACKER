@@ -81,7 +81,7 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
         🌀 Cyclone Tracker →
       </a>
       <a href="{pages_url}precipitation.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
-        🌧 Arizona Precipitation →
+        🌧 Global Precipitation →
       </a>
     </div>
   </div>
