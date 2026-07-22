@@ -671,7 +671,7 @@ async function loadRegion(key) {{
   const subregions=[...new Set(rows.map(r=>r.state))].sort();
   const sel=document.getElementById("stateSelector");
   let pillsHtml=`<button class="btn active" data-state="all">${{rc.all_label}}</button>`;
-  for(const s of subregions) pillsHtml+=`<button class="btn" data-state="${{s}}">${{s}}</button>`;
+  for(const s of subregions){{const full=STATE_NAMES[s]||s; pillsHtml+=`<button class="btn" data-state="${{s}}" title="${{full}}">${{s}}</button>`;}}
   sel.innerHTML=pillsHtml;
 
   // Reset tabs and ENSO toggle to defaults
