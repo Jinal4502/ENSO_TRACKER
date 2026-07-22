@@ -45,11 +45,12 @@ REGIONS = {
         "lat_min": 5.0, "lat_max": 38.0,
         "lon_min": 67.0, "lon_max": 98.0,
         "subregions": [
-            ("Northeast",   22.0, 30.0, 85.0, 98.0),
-            ("North",       28.0, 38.0, 67.0, 85.0),
-            ("West Coast",   8.0, 22.0, 67.0, 77.0),
-            ("Central",     17.0, 28.0, 77.0, 86.0),
-            ("South",        5.0, 17.0, 74.0, 85.0),
+            ("Northeast",   22.0, 38.0, 85.0, 98.0),  # Assam, WB, NE states
+            ("North",       28.0, 38.0, 67.0, 85.0),  # Punjab, UP, Bihar, Delhi
+            ("West",        20.0, 28.0, 67.0, 77.0),  # Gujarat, Rajasthan
+            ("Central",     17.0, 28.0, 77.0, 86.0),  # MP, Maharashtra, Odisha
+            ("West Coast",   5.0, 20.0, 67.0, 77.0),  # Kerala, Goa, Karnataka coast
+            ("South",        5.0, 17.0, 74.0, 86.0),  # Tamil Nadu, Andhra, Telangana
         ],
     },
     "australia": {
@@ -263,7 +264,7 @@ def load_cpc_monthly(year_start: int, year_end: int, lat_ref, lon_ref_180):
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-def convert_all_regions() -> None:
+def convert_all_regions(only: Optional[str] = None) -> None:
     try:
         from scipy.ndimage import gaussian_filter
     except ImportError:
@@ -308,6 +309,8 @@ def convert_all_regions() -> None:
 
     # ── Process each region ───────────────────────────────────────────────
     for region_key, rcfg in REGIONS.items():
+        if only and region_key != only:
+            continue
         print(f"── {rcfg['name']} ──")
 
         lat_min, lat_max = rcfg["lat_min"], rcfg["lat_max"]
@@ -418,4 +421,9 @@ def convert_all_regions() -> None:
 
 
 if __name__ == "__main__":
-    convert_all_regions()
+    import sys
+    only = sys.argv[1] if len(sys.argv) > 1 else None
+    if only and only not in REGIONS:
+        print(f"Unknown region '{only}'. Choose from: {', '.join(REGIONS)}")
+        sys.exit(1)
+    convert_all_regions(only=only)
