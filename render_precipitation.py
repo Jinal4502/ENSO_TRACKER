@@ -263,7 +263,7 @@ const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
 const ENSO_FILL   = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
 
 // ── Mutable state (reset on every region load) ────────────────────────────────
-let currentRegion  = "sw_usa";
+let currentRegion  = "usa";
 let currentMode    = "tracker";
 let csvCache       = {{}};         // regionKey → raw CSV text
 let fixedLats      = [];
@@ -698,7 +698,7 @@ async function loadRegion(key) {{
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 async function init() {{
-  await loadRegion("sw_usa");
+  await loadRegion("usa");
 }}
 
 init().catch(err=>{{

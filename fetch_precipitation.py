@@ -20,7 +20,7 @@ def fetch_precipitation_data() -> dict:
     with open(META_FILE) as f:
         meta = json.load(f)
     states = ", ".join(meta.get("states", []))
-    print(f"  SW precipitation: {meta['first_month']} → {meta['last_month']}, "
+    print(f"  USA precipitation: {meta['first_month']} → {meta['last_month']}, "
           f"{meta['n_cells']} cells at {meta['grid_deg']}°  [{states}]")
     return meta
 
