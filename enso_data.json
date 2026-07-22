@@ -1,5 +1,5 @@
 {
-  "fetched_utc": "2026-07-20T15:53:51.763454+00:00",
+  "fetched_utc": "2026-07-22T21:19:41.952236+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o continues and will strengthen through the end of the year, with a 97% chance it will persist through early spring 2027.",
@@ -1039,1306 +1039,1266 @@
     }
   ],
   "iri_images": {
-    "cpc_probs": "https://cpc.ncep.noaa.gov/archives/enso/roni/images/2026/enso-probs-062026.png",
-    "iri_sst_history": "https://iri.columbia.edu/wp-content/uploads/2026/06/figure2.png",
-    "iri_probs": "https://iri.columbia.edu/wp-content/uploads/2026/06/figure3.png",
-    "sst_plume": "https://ensoforecast.iri.columbia.edu/cgi-bin/sst_table_img?month=5&year=2026"
+    "cpc_probs": "https://cpc.ncep.noaa.gov/archives/enso/roni/images/2026/enso-probs-072026.png",
+    "iri_sst_history": "https://iri.columbia.edu/wp-content/uploads/2026/07/figure2.png",
+    "iri_probs": "https://iri.columbia.edu/wp-content/uploads/2026/07/figure3.png",
+    "sst_plume": "https://ensoforecast.iri.columbia.edu/cgi-bin/sst_table_img?month=6&year=2026"
   },
   "iri_model_predictions": [
     {
-      "model": "Observed",
-      "season": "MAM-OBS",
-      "nino34_anomaly": 0.48
-    },
-    {
-      "model": "Observed",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
       "model": "OBS-0",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-0",
-      "season": "JJA",
-      "nino34_anomaly": 2.4333333333333336
+      "season": "JAS",
+      "nino34_anomaly": 3.033333333333333
     },
     {
       "model": "OBS-1",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-1",
-      "season": "JJA",
-      "nino34_anomaly": 2.033333333333333
+      "season": "JAS",
+      "nino34_anomaly": 2.533333333333333
     },
     {
       "model": "OBS-2",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-2",
-      "season": "JJA",
-      "nino34_anomaly": 1.47
+      "season": "JAS",
+      "nino34_anomaly": 2.67
     },
     {
       "model": "OBS-3",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-3",
-      "season": "JJA",
-      "nino34_anomaly": 1.27
-    },
-    {
-      "model": "OBS-4",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-4",
-      "season": "JJA",
-      "nino34_anomaly": 1.87
-    },
-    {
-      "model": "OBS-5",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-5",
-      "season": "JJA",
-      "nino34_anomaly": 1.22
-    },
-    {
-      "model": "OBS-6",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-6",
-      "season": "JJA",
-      "nino34_anomaly": 1.86
-    },
-    {
-      "model": "OBS-7",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-7",
-      "season": "JJA",
-      "nino34_anomaly": 2.094
-    },
-    {
-      "model": "OBS-8",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-8",
-      "season": "JJA",
-      "nino34_anomaly": 1.0
-    },
-    {
-      "model": "OBS-9",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-9",
-      "season": "JJA",
-      "nino34_anomaly": 1.37
-    },
-    {
-      "model": "OBS-10",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-10",
-      "season": "JJA",
-      "nino34_anomaly": 1.2
-    },
-    {
-      "model": "OBS-11",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-11",
-      "season": "JJA",
-      "nino34_anomaly": 1.07
-    },
-    {
-      "model": "OBS-12",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-12",
-      "season": "JJA",
-      "nino34_anomaly": 1.47
-    },
-    {
-      "model": "OBS-13",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-13",
-      "season": "JJA",
-      "nino34_anomaly": 1.6866666666666668
-    },
-    {
-      "model": "OBS-14",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-14",
-      "season": "JJA",
-      "nino34_anomaly": 1.978
-    },
-    {
-      "model": "OBS-15",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-15",
-      "season": "JJA",
-      "nino34_anomaly": 1.0156666666666665
-    },
-    {
-      "model": "OBS-16",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-16",
-      "season": "JJA",
-      "nino34_anomaly": 1.7680749999999998
-    },
-    {
-      "model": "OBS-17",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-17",
-      "season": "JJA",
-      "nino34_anomaly": 1.499
-    },
-    {
-      "model": "OBS-18",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-18",
-      "season": "JJA",
-      "nino34_anomaly": 2.16
-    },
-    {
-      "model": "OBS-19",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-19",
-      "season": "JJA",
-      "nino34_anomaly": 1.67255
-    },
-    {
-      "model": "OBS-20",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-20",
-      "season": "JJA",
-      "nino34_anomaly": 0.8396736666666668
-    },
-    {
-      "model": "OBS-21",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-21",
-      "season": "JJA",
-      "nino34_anomaly": 1.45
-    },
-    {
-      "model": "OBS-22",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-22",
-      "season": "JJA",
-      "nino34_anomaly": 1.75
-    },
-    {
-      "model": "OBS-23",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-23",
-      "season": "JJA",
-      "nino34_anomaly": 1.51
-    },
-    {
-      "model": "OBS-24",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-24",
-      "season": "JJA",
-      "nino34_anomaly": 1.47
-    },
-    {
-      "model": "OBS-25",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-25",
-      "season": "JJA",
-      "nino34_anomaly": 1.6436666666666666
-    },
-    {
-      "model": "OBS-26",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-26",
-      "season": "JJA",
-      "nino34_anomaly": 1.7398194444444448
-    },
-    {
-      "model": "OBS-27",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-27",
-      "season": "JJA",
-      "nino34_anomaly": 1.2725933703703705
-    },
-    {
-      "model": "OBS-28",
-      "season": "May-OBS",
-      "nino34_anomaly": 0.94
-    },
-    {
-      "model": "OBS-28",
-      "season": "JJA",
-      "nino34_anomaly": 1.6266666666666665
-    },
-    {
-      "model": "AUS-ACCESS",
-      "season": "JJA",
-      "nino34_anomaly": 2.4333333333333336
-    },
-    {
-      "model": "AUS-ACCESS",
       "season": "JAS",
-      "nino34_anomaly": 2.966666666666667
-    },
-    {
-      "model": "AUS-ACCESS",
-      "season": "ASO",
-      "nino34_anomaly": 3.3666666666666667
-    },
-    {
-      "model": "AUS-ACCESS",
-      "season": "SON",
-      "nino34_anomaly": 3.5666666666666664
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "JJA",
-      "nino34_anomaly": 1.47
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "JAS",
-      "nino34_anomaly": 1.86
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "ASO",
-      "nino34_anomaly": 2.08
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "SON",
-      "nino34_anomaly": 2.13
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "OND",
-      "nino34_anomaly": 2.12
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "NDJ",
-      "nino34_anomaly": 2.04
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "DJF",
-      "nino34_anomaly": 1.85
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "JFM",
-      "nino34_anomaly": 1.52
-    },
-    {
-      "model": "BCC DIAP",
-      "season": "FMA",
-      "nino34_anomaly": 1.19
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "JJA",
-      "nino34_anomaly": 1.87
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "JAS",
-      "nino34_anomaly": 2.1
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "ASO",
-      "nino34_anomaly": 2.19
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "SON",
-      "nino34_anomaly": 2.3
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "OND",
-      "nino34_anomaly": 2.47
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "NDJ",
-      "nino34_anomaly": 2.58
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "DJF",
-      "nino34_anomaly": 2.56
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "JFM",
-      "nino34_anomaly": 2.38
-    },
-    {
-      "model": "CMC CANSIP",
-      "season": "FMA",
-      "nino34_anomaly": 2.15
-    },
-    {
-      "model": "CMCC SPS4",
-      "season": "JJA",
-      "nino34_anomaly": 1.86
-    },
-    {
-      "model": "CMCC SPS4",
-      "season": "JAS",
-      "nino34_anomaly": 2.32
-    },
-    {
-      "model": "CMCC SPS4",
-      "season": "ASO",
-      "nino34_anomaly": 2.87
-    },
-    {
-      "model": "CMCC SPS4",
-      "season": "SON",
-      "nino34_anomaly": 3.47
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "JJA",
-      "nino34_anomaly": 2.094
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "JAS",
-      "nino34_anomaly": 2.625
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "ASO",
-      "nino34_anomaly": 3.024
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "SON",
-      "nino34_anomaly": 3.271
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "OND",
-      "nino34_anomaly": 3.264
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "NDJ",
-      "nino34_anomaly": 3.087
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "DJF",
-      "nino34_anomaly": 2.746
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "JFM",
-      "nino34_anomaly": 2.396
-    },
-    {
-      "model": "COLA CCSM4",
-      "season": "FMA",
-      "nino34_anomaly": 2.134
-    },
-    {
-      "model": "CS-IRI-MM",
-      "season": "JJA",
-      "nino34_anomaly": 1.37
-    },
-    {
-      "model": "CS-IRI-MM",
-      "season": "JAS",
-      "nino34_anomaly": 1.7
-    },
-    {
-      "model": "CS-IRI-MM",
-      "season": "ASO",
-      "nino34_anomaly": 2.14
-    },
-    {
-      "model": "CS-IRI-MM",
-      "season": "SON",
-      "nino34_anomaly": 2.56
-    },
-    {
-      "model": "CS-IRI-MM",
-      "season": "OND",
-      "nino34_anomaly": 2.86
-    },
-    {
-      "model": "CS-IRI-MM",
-      "season": "NDJ",
-      "nino34_anomaly": 2.92
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "JJA",
-      "nino34_anomaly": 1.47
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "JAS",
-      "nino34_anomaly": 1.53
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "ASO",
-      "nino34_anomaly": 1.63
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "SON",
-      "nino34_anomaly": 1.75
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "OND",
-      "nino34_anomaly": 1.89
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "NDJ",
-      "nino34_anomaly": 2.02
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "DJF",
-      "nino34_anomaly": 2.04
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "JFM",
-      "nino34_anomaly": 1.86
-    },
-    {
-      "model": "IOCAS ICM",
-      "season": "FMA",
-      "nino34_anomaly": 1.5
-    },
-    {
-      "model": "JMA",
-      "season": "JJA",
-      "nino34_anomaly": 1.6866666666666668
-    },
-    {
-      "model": "JMA",
-      "season": "JAS",
-      "nino34_anomaly": 2.0766666666666667
-    },
-    {
-      "model": "JMA",
-      "season": "ASO",
-      "nino34_anomaly": 2.5233333333333334
-    },
-    {
-      "model": "JMA",
-      "season": "SON",
-      "nino34_anomaly": 2.986666666666667
-    },
-    {
-      "model": "JMA",
-      "season": "OND",
-      "nino34_anomaly": 3.3866666666666667
-    },
-    {
-      "model": "KMA",
-      "season": "JJA",
-      "nino34_anomaly": 1.978
-    },
-    {
-      "model": "KMA",
-      "season": "JAS",
-      "nino34_anomaly": 2.408
-    },
-    {
-      "model": "KMA",
-      "season": "ASO",
-      "nino34_anomaly": 2.725
-    },
-    {
-      "model": "KMA",
-      "season": "SON",
-      "nino34_anomaly": 2.887
-    },
-    {
-      "model": "LDEO",
-      "season": "JJA",
-      "nino34_anomaly": 1.0156666666666665
-    },
-    {
-      "model": "LDEO",
-      "season": "JAS",
-      "nino34_anomaly": 1.075
-    },
-    {
-      "model": "LDEO",
-      "season": "ASO",
-      "nino34_anomaly": 1.212
-    },
-    {
-      "model": "LDEO",
-      "season": "SON",
-      "nino34_anomaly": 1.4093333333333333
-    },
-    {
-      "model": "LDEO",
-      "season": "OND",
-      "nino34_anomaly": 1.554
-    },
-    {
-      "model": "LDEO",
-      "season": "NDJ",
-      "nino34_anomaly": 1.5656666666666668
-    },
-    {
-      "model": "LDEO",
-      "season": "DJF",
-      "nino34_anomaly": 1.3823333333333334
-    },
-    {
-      "model": "LDEO",
-      "season": "JFM",
-      "nino34_anomaly": 1.0976666666666668
-    },
-    {
-      "model": "LDEO",
-      "season": "FMA",
-      "nino34_anomaly": 0.7759999999999999
-    },
-    {
-      "model": "MetFRANCE",
-      "season": "JJA",
-      "nino34_anomaly": 1.7680749999999998
-    },
-    {
-      "model": "MetFRANCE",
-      "season": "JAS",
-      "nino34_anomaly": 2.1070876666666667
-    },
-    {
-      "model": "MetFRANCE",
-      "season": "ASO",
-      "nino34_anomaly": 2.4140083333333333
-    },
-    {
-      "model": "MetFRANCE",
-      "season": "SON",
-      "nino34_anomaly": 2.6241916666666665
-    },
-    {
-      "model": "MetFRANCE",
-      "season": "OND",
-      "nino34_anomaly": 2.7038689999999996
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "JJA",
-      "nino34_anomaly": 1.499
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "JAS",
-      "nino34_anomaly": 1.748
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "ASO",
-      "nino34_anomaly": 1.956
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "SON",
-      "nino34_anomaly": 2.176
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "OND",
-      "nino34_anomaly": 2.409
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "NDJ",
-      "nino34_anomaly": 2.661
-    },
-    {
-      "model": "NASA GMAOv3",
-      "season": "DJF",
-      "nino34_anomaly": 2.881
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "JJA",
-      "nino34_anomaly": 2.16
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "JAS",
-      "nino34_anomaly": 2.74
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "ASO",
-      "nino34_anomaly": 3.18
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "SON",
-      "nino34_anomaly": 3.49
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "OND",
-      "nino34_anomaly": 3.63
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "NDJ",
-      "nino34_anomaly": 3.43
-    },
-    {
-      "model": "NCEP CFSv2",
-      "season": "DJF",
-      "nino34_anomaly": 2.97
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "JJA",
-      "nino34_anomaly": 1.67255
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "JAS",
-      "nino34_anomaly": 1.96014
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "ASO",
-      "nino34_anomaly": 2.10439
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "SON",
-      "nino34_anomaly": 2.19358
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "OND",
-      "nino34_anomaly": 2.29262
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "NDJ",
-      "nino34_anomaly": 2.32873
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "DJF",
-      "nino34_anomaly": 2.21682
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "JFM",
-      "nino34_anomaly": 2.04316
-    },
-    {
-      "model": "SINTEX-F",
-      "season": "FMA",
-      "nino34_anomaly": 1.84757
-    },
-    {
-      "model": "UKMO",
-      "season": "JJA",
-      "nino34_anomaly": 1.75
-    },
-    {
-      "model": "UKMO",
-      "season": "JAS",
-      "nino34_anomaly": 2.13
-    },
-    {
-      "model": "UKMO",
-      "season": "ASO",
-      "nino34_anomaly": 2.4
-    },
-    {
-      "model": "UKMO",
-      "season": "SON",
-      "nino34_anomaly": 2.5
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "JJA",
-      "nino34_anomaly": 1.74
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "JAS",
-      "nino34_anomaly": 2.09
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "ASO",
-      "nino34_anomaly": 2.39
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "SON",
-      "nino34_anomaly": 2.62
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "OND",
-      "nino34_anomaly": 2.6
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "NDJ",
-      "nino34_anomaly": 2.51
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "DJF",
-      "nino34_anomaly": 2.33
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "JFM",
-      "nino34_anomaly": 1.88
-    },
-    {
-      "model": "DYN AVG ",
-      "season": "FMA",
-      "nino34_anomaly": 1.6
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "JJA",
-      "nino34_anomaly": 1.27
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "JAS",
-      "nino34_anomaly": 1.27
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "ASO",
-      "nino34_anomaly": 1.41
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "SON",
-      "nino34_anomaly": 1.6
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "OND",
-      "nino34_anomaly": 1.78
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "NDJ",
-      "nino34_anomaly": 1.81
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "DJF",
-      "nino34_anomaly": 1.67
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "JFM",
-      "nino34_anomaly": 1.45
-    },
-    {
-      "model": "BCC_RZDM",
-      "season": "FMA",
-      "nino34_anomaly": 1.17
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "JJA",
-      "nino34_anomaly": 1.0
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "JAS",
-      "nino34_anomaly": 1.09
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "ASO",
-      "nino34_anomaly": 1.24
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "SON",
-      "nino34_anomaly": 1.41
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "OND",
-      "nino34_anomaly": 1.56
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "NDJ",
-      "nino34_anomaly": 1.66
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "DJF",
-      "nino34_anomaly": 1.66
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "JFM",
-      "nino34_anomaly": 1.53
-    },
-    {
-      "model": "CPC MRKOV",
-      "season": "FMA",
-      "nino34_anomaly": 1.31
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "JJA",
-      "nino34_anomaly": 1.2
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "JAS",
-      "nino34_anomaly": 1.4633333333333334
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "ASO",
-      "nino34_anomaly": 1.7266666666666666
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "SON",
-      "nino34_anomaly": 1.99
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "OND",
-      "nino34_anomaly": 1.9933333333333332
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "NDJ",
-      "nino34_anomaly": 1.9966666666666666
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "DJF",
-      "nino34_anomaly": 2.0
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "JFM",
-      "nino34_anomaly": 1.5566666666666666
-    },
-    {
-      "model": "CSU CLIPR",
-      "season": "FMA",
-      "nino34_anomaly": 1.1133333333333333
-    },
-    {
-      "model": "IAP-NN",
-      "season": "JJA",
-      "nino34_anomaly": 1.07
-    },
-    {
-      "model": "IAP-NN",
-      "season": "JAS",
-      "nino34_anomaly": 1.193
-    },
-    {
-      "model": "IAP-NN",
-      "season": "ASO",
-      "nino34_anomaly": 1.27
-    },
-    {
-      "model": "IAP-NN",
-      "season": "SON",
-      "nino34_anomaly": 1.291
-    },
-    {
-      "model": "IAP-NN",
-      "season": "OND",
-      "nino34_anomaly": 1.259
-    },
-    {
-      "model": "IAP-NN",
-      "season": "NDJ",
-      "nino34_anomaly": 1.179
-    },
-    {
-      "model": "IAP-NN",
-      "season": "DJF",
-      "nino34_anomaly": 1.056
-    },
-    {
-      "model": "IAP-NN",
-      "season": "JFM",
-      "nino34_anomaly": 0.882
-    },
-    {
-      "model": "IAP-NN",
-      "season": "FMA",
-      "nino34_anomaly": 0.675
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "JJA",
-      "nino34_anomaly": 0.8396736666666668
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "JAS",
-      "nino34_anomaly": 1.2316553333333333
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "ASO",
-      "nino34_anomaly": 1.4547573333333332
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "SON",
-      "nino34_anomaly": 1.4289986666666668
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "OND",
-      "nino34_anomaly": 1.4598786666666665
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "NDJ",
-      "nino34_anomaly": 1.5054999999999998
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "DJF",
-      "nino34_anomaly": 1.647715
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "JFM",
-      "nino34_anomaly": 1.7625609999999998
-    },
-    {
-      "model": "TONGJI-ML",
-      "season": "FMA",
-      "nino34_anomaly": 1.772722
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "JJA",
-      "nino34_anomaly": 1.45
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "JAS",
-      "nino34_anomaly": 1.58
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "ASO",
-      "nino34_anomaly": 1.72
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "SON",
-      "nino34_anomaly": 1.86
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "OND",
-      "nino34_anomaly": 1.96
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "NDJ",
-      "nino34_anomaly": 1.97
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "DJF",
-      "nino34_anomaly": 1.84
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "JFM",
-      "nino34_anomaly": 1.6
-    },
-    {
-      "model": "UCLA-TCD",
-      "season": "FMA",
-      "nino34_anomaly": 1.3
-    },
-    {
-      "model": "UW PSL-CSLIM",
-      "season": "JJA",
-      "nino34_anomaly": 1.51
-    },
-    {
-      "model": "UW PSL-CSLIM",
-      "season": "JAS",
-      "nino34_anomaly": 1.78
-    },
-    {
-      "model": "UW PSL-CSLIM",
-      "season": "ASO",
       "nino34_anomaly": 2.03
     },
     {
-      "model": "UW PSL-CSLIM",
-      "season": "SON",
-      "nino34_anomaly": 2.28
+      "model": "OBS-4",
+      "season": "JAS",
+      "nino34_anomaly": 2.57
     },
     {
-      "model": "UW PSL-CSLIM",
-      "season": "OND",
-      "nino34_anomaly": 2.47
+      "model": "OBS-5",
+      "season": "JAS",
+      "nino34_anomaly": 2.11
     },
     {
-      "model": "UW PSL-CSLIM",
-      "season": "NDJ",
-      "nino34_anomaly": 2.51
+      "model": "OBS-6",
+      "season": "JAS",
+      "nino34_anomaly": 2.78
     },
     {
-      "model": "UW PSL-CSLIM",
-      "season": "DJF",
-      "nino34_anomaly": 2.35
+      "model": "OBS-7",
+      "season": "JAS",
+      "nino34_anomaly": 2.663
     },
     {
-      "model": "UW PSL-CSLIM",
-      "season": "JFM",
-      "nino34_anomaly": 2.0
-    },
-    {
-      "model": "UW PSL-CSLIM",
-      "season": "FMA",
-      "nino34_anomaly": 1.56
-    },
-    {
-      "model": "UW PSL-LIM",
-      "season": "JJA",
-      "nino34_anomaly": 1.47
-    },
-    {
-      "model": "UW PSL-LIM",
+      "model": "OBS-8",
       "season": "JAS",
       "nino34_anomaly": 1.71
     },
     {
-      "model": "UW PSL-LIM",
+      "model": "OBS-9",
+      "season": "JAS",
+      "nino34_anomaly": 1.71
+    },
+    {
+      "model": "OBS-10",
+      "season": "JAS",
+      "nino34_anomaly": 1.48
+    },
+    {
+      "model": "OBS-11",
+      "season": "JAS",
+      "nino34_anomaly": 2.8103539481887108
+    },
+    {
+      "model": "OBS-12",
+      "season": "JAS",
+      "nino34_anomaly": 1.694
+    },
+    {
+      "model": "OBS-13",
+      "season": "JAS",
+      "nino34_anomaly": 1.83
+    },
+    {
+      "model": "OBS-14",
+      "season": "JAS",
+      "nino34_anomaly": 1.573232639
+    },
+    {
+      "model": "OBS-15",
+      "season": "JAS",
+      "nino34_anomaly": 2.4466666666666668
+    },
+    {
+      "model": "OBS-16",
+      "season": "JAS",
+      "nino34_anomaly": 2.665
+    },
+    {
+      "model": "OBS-17",
+      "season": "JAS",
+      "nino34_anomaly": 1.2096666666666667
+    },
+    {
+      "model": "OBS-18",
+      "season": "JAS",
+      "nino34_anomaly": 2.531003666666667
+    },
+    {
+      "model": "OBS-19",
+      "season": "JAS",
+      "nino34_anomaly": 1.928
+    },
+    {
+      "model": "OBS-20",
+      "season": "JAS",
+      "nino34_anomaly": 1.82
+    },
+    {
+      "model": "OBS-21",
+      "season": "JAS",
+      "nino34_anomaly": 2.24754
+    },
+    {
+      "model": "OBS-22",
+      "season": "JAS",
+      "nino34_anomaly": 1.1460163333333335
+    },
+    {
+      "model": "OBS-23",
+      "season": "JAS",
+      "nino34_anomaly": 2.32
+    },
+    {
+      "model": "OBS-24",
+      "season": "JAS",
+      "nino34_anomaly": 2.38
+    },
+    {
+      "model": "OBS-25",
+      "season": "JAS",
+      "nino34_anomaly": 1.98
+    },
+    {
+      "model": "OBS-26",
+      "season": "JAS",
+      "nino34_anomaly": 1.94
+    },
+    {
+      "model": "OBS-27",
+      "season": "JAS",
+      "nino34_anomaly": 2.470333333333333
+    },
+    {
+      "model": "OBS-28",
+      "season": "JAS",
+      "nino34_anomaly": 1.414
+    },
+    {
+      "model": "OBS-29",
+      "season": "JAS",
+      "nino34_anomaly": 2.3649709521014697
+    },
+    {
+      "model": "OBS-30",
+      "season": "JAS",
+      "nino34_anomaly": 1.833052936878788
+    },
+    {
+      "model": "OBS-31",
+      "season": "JAS",
+      "nino34_anomaly": 2.0191111111111106
+    },
+    {
+      "model": "AUS-ACCESS",
+      "season": "JAS",
+      "nino34_anomaly": 3.033333333333333
+    },
+    {
+      "model": "AUS-ACCESS",
       "season": "ASO",
+      "nino34_anomaly": 3.466666666666667
+    },
+    {
+      "model": "AUS-ACCESS",
+      "season": "SON",
+      "nino34_anomaly": 3.6666666666666665
+    },
+    {
+      "model": "AUS-ACCESS",
+      "season": "OND",
+      "nino34_anomaly": 3.733333333333333
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "JAS",
+      "nino34_anomaly": 2.67
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "ASO",
+      "nino34_anomaly": 3.07
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "SON",
+      "nino34_anomaly": 3.15
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "OND",
+      "nino34_anomaly": 3.05
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "NDJ",
+      "nino34_anomaly": 2.81
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "DJF",
+      "nino34_anomaly": 2.36
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "JFM",
+      "nino34_anomaly": 1.68
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "FMA",
+      "nino34_anomaly": 1.02
+    },
+    {
+      "model": "BCC DIAP",
+      "season": "MAM",
+      "nino34_anomaly": 0.57
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "JAS",
+      "nino34_anomaly": 2.57
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "ASO",
+      "nino34_anomaly": 2.83
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "SON",
+      "nino34_anomaly": 2.96
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "OND",
+      "nino34_anomaly": 3.12
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "NDJ",
+      "nino34_anomaly": 3.19
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "DJF",
+      "nino34_anomaly": 3.06
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "JFM",
+      "nino34_anomaly": 2.71
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "FMA",
+      "nino34_anomaly": 2.3
+    },
+    {
+      "model": "CMC CANSIP",
+      "season": "MAM",
       "nino34_anomaly": 1.86
     },
     {
-      "model": "UW PSL-LIM",
-      "season": "SON",
-      "nino34_anomaly": 1.92
+      "model": "CMCC SPS4",
+      "season": "JAS",
+      "nino34_anomaly": 2.78
     },
     {
-      "model": "UW PSL-LIM",
+      "model": "CMCC SPS4",
+      "season": "ASO",
+      "nino34_anomaly": 3.4
+    },
+    {
+      "model": "CMCC SPS4",
+      "season": "SON",
+      "nino34_anomaly": 4.08
+    },
+    {
+      "model": "CMCC SPS4",
       "season": "OND",
+      "nino34_anomaly": 4.73
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "JAS",
+      "nino34_anomaly": 2.663
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "ASO",
+      "nino34_anomaly": 3.049
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "SON",
+      "nino34_anomaly": 3.216
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "OND",
+      "nino34_anomaly": 3.177
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "NDJ",
+      "nino34_anomaly": 2.969
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "DJF",
+      "nino34_anomaly": 2.647
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "JFM",
+      "nino34_anomaly": 2.363
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "FMA",
+      "nino34_anomaly": 2.161
+    },
+    {
+      "model": "COLA CCSM4",
+      "season": "MAM",
+      "nino34_anomaly": 2.042
+    },
+    {
+      "model": "CS-IRI-MM",
+      "season": "JAS",
+      "nino34_anomaly": 1.71
+    },
+    {
+      "model": "CS-IRI-MM",
+      "season": "ASO",
+      "nino34_anomaly": 2.05
+    },
+    {
+      "model": "CS-IRI-MM",
+      "season": "SON",
+      "nino34_anomaly": 2.41
+    },
+    {
+      "model": "CS-IRI-MM",
+      "season": "OND",
+      "nino34_anomaly": 2.66
+    },
+    {
+      "model": "CS-IRI-MM",
+      "season": "NDJ",
+      "nino34_anomaly": 2.75
+    },
+    {
+      "model": "CS-IRI-MM",
+      "season": "DJF",
+      "nino34_anomaly": 2.58
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "JAS",
+      "nino34_anomaly": 2.8103539481887108
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "ASO",
+      "nino34_anomaly": 3.4987540610486483
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "SON",
+      "nino34_anomaly": 3.9977181900356427
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "OND",
+      "nino34_anomaly": 4.2743425392129675
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "NDJ",
+      "nino34_anomaly": 4.28850270049413
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "DJF",
+      "nino34_anomaly": 3.9595899533861645
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "JFM",
+      "nino34_anomaly": 3.284465417780346
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "FMA",
+      "nino34_anomaly": 2.474540012445803
+    },
+    {
+      "model": "GFDL SPEAR",
+      "season": "MAM",
+      "nino34_anomaly": 1.9035369390512393
+    },
+    {
+      "model": "IOCAS ICM",
+      "season": "JAS",
+      "nino34_anomaly": 1.83
+    },
+    {
+      "model": "IOCAS ICM",
+      "season": "ASO",
+      "nino34_anomaly": 1.84
+    },
+    {
+      "model": "IOCAS ICM",
+      "season": "SON",
       "nino34_anomaly": 1.91
     },
     {
-      "model": "UW PSL-LIM",
-      "season": "NDJ",
-      "nino34_anomaly": 1.85
-    },
-    {
-      "model": "UW PSL-LIM",
-      "season": "DJF",
-      "nino34_anomaly": 1.73
-    },
-    {
-      "model": "UW PSL-LIM",
-      "season": "JFM",
-      "nino34_anomaly": 1.54
-    },
-    {
-      "model": "UW PSL-LIM",
-      "season": "FMA",
-      "nino34_anomaly": 1.28
-    },
-    {
-      "model": "XRO",
-      "season": "JJA",
-      "nino34_anomaly": 1.6436666666666666
-    },
-    {
-      "model": "XRO",
-      "season": "JAS",
-      "nino34_anomaly": 2.0946666666666665
-    },
-    {
-      "model": "XRO",
-      "season": "ASO",
-      "nino34_anomaly": 2.550666666666667
-    },
-    {
-      "model": "XRO",
-      "season": "SON",
-      "nino34_anomaly": 2.9280000000000004
-    },
-    {
-      "model": "XRO",
+      "model": "IOCAS ICM",
       "season": "OND",
-      "nino34_anomaly": 3.1666666666666665
+      "nino34_anomaly": 2.05
     },
     {
-      "model": "XRO",
+      "model": "IOCAS ICM",
       "season": "NDJ",
-      "nino34_anomaly": 3.2409999999999997
+      "nino34_anomaly": 2.19
     },
     {
-      "model": "XRO",
+      "model": "IOCAS ICM",
       "season": "DJF",
-      "nino34_anomaly": 3.147
+      "nino34_anomaly": 2.21
     },
     {
-      "model": "XRO",
+      "model": "IOCAS ICM",
       "season": "JFM",
-      "nino34_anomaly": 2.8593333333333337
+      "nino34_anomaly": 2.02
     },
     {
-      "model": "XRO",
+      "model": "IOCAS ICM",
       "season": "FMA",
-      "nino34_anomaly": 2.3836666666666666
+      "nino34_anomaly": 1.63
     },
     {
-      "model": "STAT AVG ",
-      "season": "JJA",
-      "nino34_anomaly": 1.27
+      "model": "IOCAS ICM",
+      "season": "MAM",
+      "nino34_anomaly": 1.15
     },
     {
-      "model": "STAT AVG ",
+      "model": "JMA",
       "season": "JAS",
+      "nino34_anomaly": 2.4466666666666668
+    },
+    {
+      "model": "JMA",
+      "season": "ASO",
+      "nino34_anomaly": 2.94
+    },
+    {
+      "model": "JMA",
+      "season": "SON",
+      "nino34_anomaly": 3.393333333333333
+    },
+    {
+      "model": "JMA",
+      "season": "OND",
+      "nino34_anomaly": 3.7466666666666666
+    },
+    {
+      "model": "JMA",
+      "season": "NDJ",
+      "nino34_anomaly": 3.8433333333333337
+    },
+    {
+      "model": "KMA",
+      "season": "JAS",
+      "nino34_anomaly": 2.665
+    },
+    {
+      "model": "KMA",
+      "season": "ASO",
+      "nino34_anomaly": 2.998
+    },
+    {
+      "model": "KMA",
+      "season": "SON",
+      "nino34_anomaly": 3.136
+    },
+    {
+      "model": "KMA",
+      "season": "OND",
+      "nino34_anomaly": 3.162
+    },
+    {
+      "model": "LDEO",
+      "season": "JAS",
+      "nino34_anomaly": 1.2096666666666667
+    },
+    {
+      "model": "LDEO",
+      "season": "ASO",
+      "nino34_anomaly": 1.337
+    },
+    {
+      "model": "LDEO",
+      "season": "SON",
+      "nino34_anomaly": 1.562
+    },
+    {
+      "model": "LDEO",
+      "season": "OND",
+      "nino34_anomaly": 1.7203333333333333
+    },
+    {
+      "model": "LDEO",
+      "season": "NDJ",
+      "nino34_anomaly": 1.72
+    },
+    {
+      "model": "LDEO",
+      "season": "DJF",
+      "nino34_anomaly": 1.540333333333333
+    },
+    {
+      "model": "LDEO",
+      "season": "JFM",
+      "nino34_anomaly": 1.2723333333333333
+    },
+    {
+      "model": "LDEO",
+      "season": "FMA",
+      "nino34_anomaly": 1.0403333333333333
+    },
+    {
+      "model": "LDEO",
+      "season": "MAM",
+      "nino34_anomaly": 0.8833333333333333
+    },
+    {
+      "model": "MetFRANCE",
+      "season": "JAS",
+      "nino34_anomaly": 2.531003666666667
+    },
+    {
+      "model": "MetFRANCE",
+      "season": "ASO",
+      "nino34_anomaly": 2.8979196666666667
+    },
+    {
+      "model": "MetFRANCE",
+      "season": "SON",
+      "nino34_anomaly": 3.0744116666666668
+    },
+    {
+      "model": "MetFRANCE",
+      "season": "OND",
+      "nino34_anomaly": 3.0837660000000002
+    },
+    {
+      "model": "MetFRANCE",
+      "season": "NDJ",
+      "nino34_anomaly": 2.9153143333333333
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "JAS",
+      "nino34_anomaly": 1.928
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "ASO",
+      "nino34_anomaly": 2.027
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "SON",
+      "nino34_anomaly": 2.166
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "OND",
+      "nino34_anomaly": 2.305
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "NDJ",
+      "nino34_anomaly": 2.393
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "DJF",
+      "nino34_anomaly": 2.432
+    },
+    {
+      "model": "NASA GMAOv3",
+      "season": "JFM",
+      "nino34_anomaly": 2.334
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "JAS",
+      "nino34_anomaly": 2.24754
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "ASO",
+      "nino34_anomaly": 2.44448
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "SON",
+      "nino34_anomaly": 2.57077
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "OND",
+      "nino34_anomaly": 2.70048
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "NDJ",
+      "nino34_anomaly": 2.74044
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "DJF",
+      "nino34_anomaly": 2.61435
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "JFM",
+      "nino34_anomaly": 2.35046
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "FMA",
+      "nino34_anomaly": 1.98628
+    },
+    {
+      "model": "SINTEX-F",
+      "season": "MAM",
+      "nino34_anomaly": 1.675
+    },
+    {
+      "model": "UKMO",
+      "season": "JAS",
+      "nino34_anomaly": 2.38
+    },
+    {
+      "model": "UKMO",
+      "season": "ASO",
+      "nino34_anomaly": 2.65
+    },
+    {
+      "model": "UKMO",
+      "season": "SON",
+      "nino34_anomaly": 2.78
+    },
+    {
+      "model": "UKMO",
+      "season": "OND",
+      "nino34_anomaly": 2.77
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "JAS",
+      "nino34_anomaly": 2.36
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "ASO",
+      "nino34_anomaly": 2.7
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "SON",
+      "nino34_anomaly": 2.94
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "OND",
+      "nino34_anomaly": 3.09
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "NDJ",
+      "nino34_anomaly": 2.89
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "DJF",
+      "nino34_anomaly": 2.6
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "JFM",
+      "nino34_anomaly": 2.25
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "FMA",
+      "nino34_anomaly": 1.8
+    },
+    {
+      "model": "DYN AVG ",
+      "season": "MAM",
+      "nino34_anomaly": 1.44
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "JAS",
+      "nino34_anomaly": 2.03
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "ASO",
+      "nino34_anomaly": 2.3
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "SON",
+      "nino34_anomaly": 2.59
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "OND",
+      "nino34_anomaly": 2.83
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "NDJ",
+      "nino34_anomaly": 2.89
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "DJF",
+      "nino34_anomaly": 2.66
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "JFM",
+      "nino34_anomaly": 2.24
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "FMA",
+      "nino34_anomaly": 1.67
+    },
+    {
+      "model": "BCC_RZDM",
+      "season": "MAM",
+      "nino34_anomaly": 1.11
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "JAS",
+      "nino34_anomaly": 1.71
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "ASO",
+      "nino34_anomaly": 1.91
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "SON",
+      "nino34_anomaly": 2.14
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "OND",
+      "nino34_anomaly": 2.31
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "NDJ",
+      "nino34_anomaly": 2.41
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "DJF",
+      "nino34_anomaly": 2.36
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "JFM",
+      "nino34_anomaly": 2.13
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "FMA",
+      "nino34_anomaly": 1.81
+    },
+    {
+      "model": "CPC MRKOV",
+      "season": "MAM",
       "nino34_anomaly": 1.49
     },
     {
+      "model": "CSU CLIPR",
+      "season": "JAS",
+      "nino34_anomaly": 1.48
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "ASO",
+      "nino34_anomaly": 1.9566666666666668
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "SON",
+      "nino34_anomaly": 2.4333333333333336
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "OND",
+      "nino34_anomaly": 2.91
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "NDJ",
+      "nino34_anomaly": 2.566666666666667
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "DJF",
+      "nino34_anomaly": 2.223333333333333
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "JFM",
+      "nino34_anomaly": 1.88
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "FMA",
+      "nino34_anomaly": 1.4166666666666665
+    },
+    {
+      "model": "CSU CLIPR",
+      "season": "MAM",
+      "nino34_anomaly": 0.9533333333333333
+    },
+    {
+      "model": "IAP-NN",
+      "season": "JAS",
+      "nino34_anomaly": 1.694
+    },
+    {
+      "model": "IAP-NN",
+      "season": "ASO",
+      "nino34_anomaly": 1.813
+    },
+    {
+      "model": "IAP-NN",
+      "season": "SON",
+      "nino34_anomaly": 1.875
+    },
+    {
+      "model": "IAP-NN",
+      "season": "OND",
+      "nino34_anomaly": 1.866
+    },
+    {
+      "model": "IAP-NN",
+      "season": "NDJ",
+      "nino34_anomaly": 1.775
+    },
+    {
+      "model": "IAP-NN",
+      "season": "DJF",
+      "nino34_anomaly": 1.587
+    },
+    {
+      "model": "IAP-NN",
+      "season": "JFM",
+      "nino34_anomaly": 1.301
+    },
+    {
+      "model": "IAP-NN",
+      "season": "FMA",
+      "nino34_anomaly": 0.971
+    },
+    {
+      "model": "IAP-NN",
+      "season": "MAM",
+      "nino34_anomaly": 0.631
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "JAS",
+      "nino34_anomaly": 1.573232639
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "ASO",
+      "nino34_anomaly": 1.699071112
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "SON",
+      "nino34_anomaly": 1.840648618
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "OND",
+      "nino34_anomaly": 2.164403222
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "NDJ",
+      "nino34_anomaly": 1.926945716
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "DJF",
+      "nino34_anomaly": 2.03761467
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "JFM",
+      "nino34_anomaly": 1.710709732
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "FMA",
+      "nino34_anomaly": 0.7726403561
+    },
+    {
+      "model": "JAMSTEC CNN",
+      "season": "MAM",
+      "nino34_anomaly": 0.4303868106
+    },
+    {
+      "model": "NTU CODA",
+      "season": "JAS",
+      "nino34_anomaly": 1.82
+    },
+    {
+      "model": "NTU CODA",
+      "season": "ASO",
+      "nino34_anomaly": 2.05
+    },
+    {
+      "model": "NTU CODA",
+      "season": "SON",
+      "nino34_anomaly": 2.31
+    },
+    {
+      "model": "NTU CODA",
+      "season": "OND",
+      "nino34_anomaly": 2.44
+    },
+    {
+      "model": "NTU CODA",
+      "season": "NDJ",
+      "nino34_anomaly": 2.43
+    },
+    {
+      "model": "NTU CODA",
+      "season": "DJF",
+      "nino34_anomaly": 2.22
+    },
+    {
+      "model": "NTU CODA",
+      "season": "JFM",
+      "nino34_anomaly": 1.97
+    },
+    {
+      "model": "NTU CODA",
+      "season": "FMA",
+      "nino34_anomaly": 1.58
+    },
+    {
+      "model": "NTU CODA",
+      "season": "MAM",
+      "nino34_anomaly": 1.14
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "JAS",
+      "nino34_anomaly": 1.1460163333333335
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "ASO",
+      "nino34_anomaly": 1.2086463333333333
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "SON",
+      "nino34_anomaly": 1.327988333333333
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "OND",
+      "nino34_anomaly": 1.4624446666666666
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "NDJ",
+      "nino34_anomaly": 1.8344546666666666
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "DJF",
+      "nino34_anomaly": 1.9557883333333332
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "JFM",
+      "nino34_anomaly": 1.9768056666666665
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "FMA",
+      "nino34_anomaly": 1.8066213333333332
+    },
+    {
+      "model": "TONGJI-ML",
+      "season": "MAM",
+      "nino34_anomaly": 1.6973476666666665
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "JAS",
+      "nino34_anomaly": 2.32
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "ASO",
+      "nino34_anomaly": 2.65
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "SON",
+      "nino34_anomaly": 2.85
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "OND",
+      "nino34_anomaly": 2.83
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "NDJ",
+      "nino34_anomaly": 2.54
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "DJF",
+      "nino34_anomaly": 2.01
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "JFM",
+      "nino34_anomaly": 1.37
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "FMA",
+      "nino34_anomaly": 0.77
+    },
+    {
+      "model": "UCLA-TCD",
+      "season": "MAM",
+      "nino34_anomaly": 0.31
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "JAS",
+      "nino34_anomaly": 1.98
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "ASO",
+      "nino34_anomaly": 2.27
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "SON",
+      "nino34_anomaly": 2.56
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "OND",
+      "nino34_anomaly": 2.76
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "NDJ",
+      "nino34_anomaly": 2.8
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "DJF",
+      "nino34_anomaly": 2.6
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "JFM",
+      "nino34_anomaly": 2.21
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "FMA",
+      "nino34_anomaly": 1.72
+    },
+    {
+      "model": "UW PSL-CSLIM",
+      "season": "MAM",
+      "nino34_anomaly": 1.25
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "JAS",
+      "nino34_anomaly": 1.94
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "ASO",
+      "nino34_anomaly": 2.08
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "SON",
+      "nino34_anomaly": 2.12
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "OND",
+      "nino34_anomaly": 2.08
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "NDJ",
+      "nino34_anomaly": 1.99
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "DJF",
+      "nino34_anomaly": 1.84
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "JFM",
+      "nino34_anomaly": 1.62
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "FMA",
+      "nino34_anomaly": 1.32
+    },
+    {
+      "model": "UW PSL-LIM",
+      "season": "MAM",
+      "nino34_anomaly": 1.02
+    },
+    {
+      "model": "XRO",
+      "season": "JAS",
+      "nino34_anomaly": 2.470333333333333
+    },
+    {
+      "model": "XRO",
+      "season": "ASO",
+      "nino34_anomaly": 3.0530000000000004
+    },
+    {
+      "model": "XRO",
+      "season": "SON",
+      "nino34_anomaly": 3.4963333333333337
+    },
+    {
+      "model": "XRO",
+      "season": "OND",
+      "nino34_anomaly": 3.721
+    },
+    {
+      "model": "XRO",
+      "season": "NDJ",
+      "nino34_anomaly": 3.732333333333333
+    },
+    {
+      "model": "XRO",
+      "season": "DJF",
+      "nino34_anomaly": 3.5666666666666664
+    },
+    {
+      "model": "XRO",
+      "season": "JFM",
+      "nino34_anomaly": 3.2159999999999997
+    },
+    {
+      "model": "XRO",
+      "season": "FMA",
+      "nino34_anomaly": 2.6606666666666667
+    },
+    {
+      "model": "XRO",
+      "season": "MAM",
+      "nino34_anomaly": 1.9480000000000002
+    },
+    {
+      "model": "STAT AVG ",
+      "season": "JAS",
+      "nino34_anomaly": 1.83
+    },
+    {
       "model": "STAT AVG ",
       "season": "ASO",
-      "nino34_anomaly": 1.7
+      "nino34_anomaly": 2.09
     },
     {
       "model": "STAT AVG ",
       "season": "SON",
-      "nino34_anomaly": 1.86
+      "nino34_anomaly": 2.32
     },
     {
       "model": "STAT AVG ",
       "season": "OND",
-      "nino34_anomaly": 1.95
+      "nino34_anomaly": 2.49
     },
     {
       "model": "STAT AVG ",
       "season": "NDJ",
+      "nino34_anomaly": 2.45
+    },
+    {
+      "model": "STAT AVG ",
+      "season": "DJF",
+      "nino34_anomaly": 2.28
+    },
+    {
+      "model": "STAT AVG ",
+      "season": "JFM",
       "nino34_anomaly": 1.97
     },
     {
       "model": "STAT AVG ",
-      "season": "DJF",
-      "nino34_anomaly": 1.9
-    },
-    {
-      "model": "STAT AVG ",
-      "season": "JFM",
-      "nino34_anomaly": 1.69
-    },
-    {
-      "model": "STAT AVG ",
       "season": "FMA",
-      "nino34_anomaly": 1.4
+      "nino34_anomaly": 1.5
+    },
+    {
+      "model": "STAT AVG ",
+      "season": "MAM",
+      "nino34_anomaly": 1.09
     }
   ],
   "iri_strength": {
@@ -2351,7 +2311,7 @@
       "DJF",
       "JFM",
       "FMA",
-      "JJA"
+      "MAM"
     ],
     "traces": [
       {
@@ -2425,7 +2385,7 @@
           0,
           0,
           0,
-          0
+          11
         ],
         "color": "#66bb6a"
       },
@@ -2438,68 +2398,68 @@
           0,
           0,
           0,
-          7,
-          13,
-          4
+          0,
+          17,
+          22
         ],
         "color": "#ffee58"
       },
       {
         "name": "Moderate El Ni\u00f1o",
         "y": [
-          25,
-          21,
-          17,
-          10,
-          6,
           12,
-          13,
-          40,
-          46
+          8,
+          4,
+          4,
+          0,
+          0,
+          16,
+          22,
+          33
         ],
         "color": "#ffa726"
       },
       {
         "name": "Strong El Ni\u00f1o",
         "y": [
-          33,
-          21,
-          21,
           35,
+          19,
+          15,
+          8,
+          23,
+          20,
+          32,
           39,
-          35,
-          47,
-          27,
-          38
+          28
         ],
         "color": "#ef5350"
       },
       {
         "name": "Very Strong El Ni\u00f1o",
         "y": [
-          42,
-          58,
-          62,
-          55,
-          56,
+          54,
+          73,
+          81,
+          88,
+          77,
+          80,
           53,
-          33,
-          20,
-          12
+          22,
+          6
         ],
         "color": "#b71c1c"
       }
     ],
     "model_counts": [
-      24,
-      24,
-      24,
+      26,
+      26,
+      26,
+      26,
+      22,
       20,
+      19,
       18,
-      17,
-      15,
-      15,
-      24
+      18
     ],
     "title": "ENSO Strength Categories"
   }
