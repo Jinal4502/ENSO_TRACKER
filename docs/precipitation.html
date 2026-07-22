@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Southwest US Precipitation Tracker</title>
+<title>Global Precipitation Tracker</title>
 <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
 <style>
   :root {
@@ -48,6 +48,8 @@
   .tab.active { background:#1f6feb; color:#fff; font-weight:600; }
   footer { font-size:.75rem; color:var(--muted); margin-top:1.5rem; text-align:center; }
   footer a { color:var(--muted); }
+  .region-bar { display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; }
+  .region-label { font-size:.78rem; color:var(--muted); font-weight:600; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -57,16 +59,12 @@
   <div class="nav-links">
     <a href="index.html">ENSO Dashboard</a>
     <a href="hurricanes.html">Cyclone Tracker</a>
-    <a href="precipitation.html" class="nav-active">SW Precipitation</a>
+    <a href="precipitation.html" class="nav-active">Precipitation</a>
   </div>
 </nav>
 
-<h1>Southwest US Precipitation</h1>
-<p class="subtitle">
-  NClimGrid monthly total &middot; 1970&ndash;2026 &middot; 0.5&deg; Gaussian-smoothed grid &middot;
-  Source: <a href="https://www.ncei.noaa.gov/products/land-based-station/nclimgrid-monthly"
-             target="_blank">NOAA/NCEI NClimGrid</a>
-</p>
+<h1 id="pageTitle">Precipitation</h1>
+<p id="pageSubtitle" class="subtitle">Loading&hellip;</p>
 
 <div id="loading" style="text-align:center;padding:3rem;color:var(--muted)">
   Loading precipitation data&hellip;
@@ -74,31 +72,43 @@
 
 <div id="content">
 
+  <!-- Region selector -->
+  <div class="card" style="padding:.75rem 1rem;margin-bottom:1rem">
+    <div class="region-bar">
+      <span class="region-label">Region:</span>
+      <div class="btn-row" id="regionSelector" style="margin:0">
+        <button class="btn active" data-region="sw_usa">SW United States</button>
+        <button class="btn" data-region="india">India</button>
+        <button class="btn" data-region="australia">Australia</button>
+        <button class="btn" data-region="brazil">Brazil</button>
+        <button class="btn" data-region="east_africa">East Africa</button>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
-    <h2>Precipitation Map &mdash; Southwest US</h2>
+    <h2>Precipitation Map</h2>
 
     <div class="tab-row" id="mapTabs">
       <button class="tab active" data-tab="tracker">Monthly Tracker</button>
       <button class="tab"        data-tab="composite">ENSO Composite</button>
     </div>
 
-    <!-- Monthly Tracker description -->
     <div id="trackerDesc">
       <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
-        Use &nbsp;&#9654;&nbsp; Play or drag the year slider to step through every month from 1970 to 2026.
+        Use &nbsp;&#9654;&nbsp; Play or drag the year slider to step through every month.
         ENSO phase shown on the map.
       </p>
     </div>
 
-    <!-- ENSO Composite controls -->
     <div id="compositeControls" style="display:none">
       <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
         Average precipitation per cell for each ENSO phase. Toggle to compare spatial patterns.
       </p>
       <div class="btn-row" id="ensoToggle">
         <button class="btn active" data-enso="all">All Years</button>
-        <button class="btn" data-enso="El Niño">El Ni&ntilde;o</button>
-        <button class="btn" data-enso="La Niña">La Ni&ntilde;a</button>
+        <button class="btn" data-enso="El Ni&ntilde;o">El Ni&ntilde;o</button>
+        <button class="btn" data-enso="La Ni&ntilde;a">La Ni&ntilde;a</button>
         <button class="btn" data-enso="Neutral">Neutral</button>
       </div>
     </div>
@@ -107,24 +117,15 @@
   </div>
 
   <div class="card">
-    <h2>Select State</h2>
+    <h2 id="subregionHeader">Select Sub-region</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.6rem">
-      Click a state to update the time series and climatology charts below.
+      Click to filter the time series and climatology charts below.
     </p>
-    <div class="btn-row" id="stateSelector">
-      <button class="btn active" data-state="all">All SW</button>
-      <button class="btn" data-state="AZ">AZ</button>
-      <button class="btn" data-state="CA">CA</button>
-      <button class="btn" data-state="CO">CO</button>
-      <button class="btn" data-state="NM">NM</button>
-      <button class="btn" data-state="NV">NV</button>
-      <button class="btn" data-state="TX">TX</button>
-      <button class="btn" data-state="UT">UT</button>
-    </div>
+    <div class="btn-row" id="stateSelector"></div>
   </div>
 
   <div class="card">
-    <h2 id="lineTitle">Monthly Precipitation &mdash; All SW (1970&ndash;2026)</h2>
+    <h2 id="lineTitle">Monthly Precipitation</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
       Area-average monthly precipitation.
       <span style="background:rgba(239,83,80,.22);padding:1px 5px;border-radius:3px">El Ni&ntilde;o</span>
@@ -136,7 +137,7 @@
   </div>
 
   <div class="card">
-    <h2 id="climTitle">Monthly Climatology &mdash; All SW by ENSO Phase</h2>
+    <h2 id="climTitle">Monthly Climatology by ENSO Phase</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
       Long-term average for each calendar month, split by ENSO phase.
     </p>
@@ -146,8 +147,6 @@
 </div>
 
 <footer>
-  Data: <a href="https://www.ncei.noaa.gov/products/land-based-station/nclimgrid-monthly"
-           target="_blank">NOAA/NCEI NClimGrid</a> &middot;
   ENSO: <a href="https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
            target="_blank">NOAA/CPC ONI</a>
   &nbsp;&middot;&nbsp;
@@ -155,8 +154,10 @@
 </footer>
 
 <script>
+const REGION_CONFIG = {"sw_usa": {"name": "SW United States", "csv": "data/sw_monthly_grid.csv", "center_lat": 35.5, "center_lon": -111.0, "zoom": 3.4, "marker_size": 18, "all_label": "All SW", "subregion_label": "State", "source_html": "NClimGrid monthly \u00b7 0.5\u00b0 Gaussian-smoothed grid \u00b7 <a href='https://www.ncei.noaa.gov/products/land-based-station/nclimgrid-monthly' target='_blank'>NOAA/NCEI</a>"}, "india": {"name": "India", "csv": "data/india_monthly_grid.csv", "center_lat": 22.0, "center_lon": 82.0, "zoom": 3.8, "marker_size": 22, "all_label": "All India", "subregion_label": "Region", "source_html": "GPCC Full Data Monthly \u00b7 2.5\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.gpcc.html' target='_blank'>NOAA/PSL GPCC</a>"}, "australia": {"name": "Australia", "csv": "data/australia_monthly_grid.csv", "center_lat": -26.0, "center_lon": 133.0, "zoom": 3.0, "marker_size": 22, "all_label": "All Australia", "subregion_label": "Region", "source_html": "GPCC Full Data Monthly \u00b7 2.5\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.gpcc.html' target='_blank'>NOAA/PSL GPCC</a>"}, "brazil": {"name": "Brazil", "csv": "data/brazil_monthly_grid.csv", "center_lat": -10.0, "center_lon": -53.0, "zoom": 3.0, "marker_size": 22, "all_label": "All Brazil", "subregion_label": "Region", "source_html": "GPCC Full Data Monthly \u00b7 2.5\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.gpcc.html' target='_blank'>NOAA/PSL GPCC</a>"}, "east_africa": {"name": "East Africa", "csv": "data/east_africa_monthly_grid.csv", "center_lat": 3.0, "center_lon": 38.0, "zoom": 3.4, "marker_size": 22, "all_label": "All East Africa", "subregion_label": "Region", "source_html": "GPCC Full Data Monthly \u00b7 2.5\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.gpcc.html' target='_blank'>NOAA/PSL GPCC</a>"}};
+
 const MONTH_NAMES  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const YR0 = "1970", YR1 = "2026";
+let YR0 = "1970", YR1 = "2026";
 const DARK = {
   paper:"#0d1117", plot:"#0d1117", text:"#c9d1d9",
   muted:"#8b949e", grid:"#21262d", card:"#1c2128", border:"#30363d"
@@ -170,16 +171,19 @@ const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
 const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
 const ENSO_FILL   = {"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"};
 
-// Populated in init()
-let fixedLats   = [];   // fixed lat array (same for every frame)
-let fixedLons   = [];   // fixed lon array
-let cellList    = [];   // sorted "lat,lon" keys
-let monthlyData = {};  // "YYYY-MM" → {orderedVals, enso, year, month}
-let sortedKeys  = [];
-let composites  = {};  // phase → orderedVals array
-let stateRows   = {};
-let cmapMax     = 100;
-let currentMode = "tracker";
+// ── Mutable state (reset on every region load) ────────────────────────────────
+let currentRegion  = "sw_usa";
+let currentMode    = "tracker";
+let csvCache       = {};         // regionKey → raw CSV text
+let fixedLats      = [];
+let fixedLons      = [];
+let cellList       = [];
+let monthlyData    = {};
+let sortedKeys     = [];
+let composites     = {};
+let stateRows      = {};
+let cmapMax        = 100;
+let cachedSliderSteps = [];
 
 // ── CSV parser ────────────────────────────────────────────────────────────────
 function parseCSV(text) {
@@ -217,11 +221,12 @@ function compositeAnnotation(phase) {
 
 // ── Shared map trace builder ──────────────────────────────────────────────────
 function makeTrace(vals) {
+  const ms = REGION_CONFIG[currentRegion].marker_size;
   return {
     type:"scattermapbox", mode:"markers",
     lat:fixedLats, lon:fixedLons,
     marker:{
-      size:18, opacity:0.9,
+      size:ms, opacity:0.9,
       color:vals, colorscale:PRCP_SCALE, cmin:0, cmax:cmapMax,
       colorbar:{
         title:{text:"mm/month",font:{color:DARK.text,size:10}},
@@ -230,22 +235,26 @@ function makeTrace(vals) {
         len:0.55,thickness:14,x:1.01,xpad:8
       }
     },
-    hovertemplate:"<b>%{lat:.2f}°N, %{lon:.2f}°E</b><br>%{marker.color:.1f} mm/mo<extra></extra>",
+    hovertemplate:"<b>%{lat:.1f}°, %{lon:.1f}°</b><br>%{marker.color:.1f} mm/mo<extra></extra>",
     showlegend:false
   };
 }
 
-const BASE_LAYOUT = {
-  autosize:true,
-  paper_bgcolor:DARK.paper,
-  uirevision:"map",
-  mapbox:{style:"carto-darkmatter",center:{lat:35.5,lon:-109},zoom:3.4},
-};
+// ── Base mapbox layout (region-aware) ─────────────────────────────────────────
+function makeBaseLayout(regionKey) {
+  const rc = REGION_CONFIG[regionKey];
+  return {
+    autosize:true,
+    paper_bgcolor:DARK.paper,
+    uirevision:"map-"+regionKey,
+    mapbox:{style:"carto-darkmatter",center:{lat:rc.center_lat,lon:rc.center_lon},zoom:rc.zoom},
+  };
+}
 
-// ── Tracker layout (with Plotly slider + play/pause at the bottom) ────────────
+// ── Tracker layout (Plotly slider + play/pause) ───────────────────────────────
 function makeTrackerLayout(fd, sliderSteps) {
   return {
-    ...BASE_LAYOUT,
+    ...makeBaseLayout(currentRegion),
     margin:{l:0,r:65,t:0,b:130},
     annotations: trackerAnnotations(fd),
     updatemenus:[{
@@ -274,10 +283,10 @@ function makeTrackerLayout(fd, sliderSteps) {
   };
 }
 
-// ── Composite layout (no slider/play) ────────────────────────────────────────
+// ── Composite layout (no animation) ──────────────────────────────────────────
 function makeCompositeLayout(phase) {
   return {
-    ...BASE_LAYOUT,
+    ...makeBaseLayout(currentRegion),
     margin:{l:0,r:65,t:0,b:20},
     annotations:compositeAnnotation(phase),
     updatemenus:[], sliders:[],
@@ -295,7 +304,6 @@ document.getElementById("mapTabs").addEventListener("click", e => {
   if (currentMode === "tracker") {
     document.getElementById("trackerDesc").style.display = "";
     document.getElementById("compositeControls").style.display = "none";
-    // Restore tracker layout (frames are still registered)
     const fd = monthlyData[sortedKeys[0]];
     Plotly.react("mapDiv",[makeTrace(fd.vals)],
       makeTrackerLayout(fd, cachedSliderSteps),{responsive:true});
@@ -309,7 +317,7 @@ document.getElementById("mapTabs").addEventListener("click", e => {
   }
 });
 
-// ENSO composite toggle
+// ── ENSO composite toggle ─────────────────────────────────────────────────────
 document.getElementById("ensoToggle").addEventListener("click", e => {
   const btn = e.target.closest("[data-enso]");
   if (!btn) return;
@@ -320,7 +328,7 @@ document.getElementById("ensoToggle").addEventListener("click", e => {
     makeCompositeLayout(phase),{responsive:true});
 });
 
-// ── State selector ────────────────────────────────────────────────────────────
+// ── Sub-region selector (dynamically populated) ───────────────────────────────
 document.getElementById("stateSelector").addEventListener("click", e => {
   const btn = e.target.closest("[data-state]");
   if (!btn) return;
@@ -328,6 +336,15 @@ document.getElementById("stateSelector").addEventListener("click", e => {
   btn.classList.add("active");
   renderTimeSeries(btn.dataset.state);
   renderClimatology(btn.dataset.state);
+});
+
+// ── Region selector ───────────────────────────────────────────────────────────
+document.getElementById("regionSelector").addEventListener("click", e => {
+  const btn = e.target.closest("[data-region]");
+  if (!btn || btn.dataset.region === currentRegion) return;
+  document.querySelectorAll("#regionSelector .btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  loadRegion(btn.dataset.region);
 });
 
 // ── Time series ───────────────────────────────────────────────────────────────
@@ -375,7 +392,10 @@ function renderTimeSeries(stateKey) {
       font:{color,size:9},xanchor:"left",yanchor:"middle",
       bgcolor:"rgba(13,17,23,0.7)",borderpad:2});
   }
-  const label=stateKey==="all"?"All SW":stateKey;
+
+  const rc = REGION_CONFIG[currentRegion];
+  const allLabel = rc.all_label;
+  const label = stateKey==="all" ? allLabel : stateKey;
   document.getElementById("lineTitle").textContent =
     "Monthly Precipitation — "+label+" ("+YR0+"–"+YR1+")";
   Plotly.react("lineDiv",[
@@ -409,7 +429,9 @@ function renderClimatology(stateKey) {
     const ph=r.enso; if(!byPhase[ph]) continue;
     byPhase[ph][+r.month-1].s+=+r.prcp_mm; byPhase[ph][+r.month-1].n++;
   }
-  const label=stateKey==="all"?"All SW":stateKey;
+  const rc = REGION_CONFIG[currentRegion];
+  const allLabel = rc.all_label;
+  const label = stateKey==="all" ? allLabel : stateKey;
   document.getElementById("climTitle").textContent =
     "Monthly Climatology — "+label+" by ENSO Phase";
   Plotly.react("climDiv",
@@ -429,31 +451,68 @@ function renderClimatology(stateKey) {
   },{responsive:true});
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-let cachedSliderSteps = [];
+// ── Load region ───────────────────────────────────────────────────────────────
+async function loadRegion(key) {
+  const rc = REGION_CONFIG[key];
+  currentRegion = key;
+  const initialLoad = document.getElementById("content").style.display !== "block";
 
-async function init() {
-  const text = await fetch("data/sw_monthly_grid.csv").then(r=>r.text());
-  const rows = parseCSV(text);
+  // Show loading state
+  if (initialLoad) {
+    document.getElementById("loading").textContent = "Loading "+rc.name+" data…";
+    document.getElementById("loading").style.display = "block";
+  } else {
+    Plotly.purge("mapDiv");
+    document.getElementById("mapDiv").innerHTML =
+      "<div style='height:440px;display:flex;align-items:center;justify-content:center;color:var(--muted)'>Loading "+rc.name+"…</div>";
+  }
 
-  // ── 1. Fixed ordered cell list (sorted by "lat,lon" string) ──────────────
-  const cellSet = new Set();
+  // Fetch CSV (cached after first load)
+  if (!csvCache[key]) {
+    try {
+      const resp = await fetch(rc.csv);
+      if (!resp.ok) throw new Error(
+        rc.name+" data not yet available — run convert_global_precipitation.py locally and commit the CSV files.");
+      csvCache[key] = await resp.text();
+    } catch(e) {
+      const msg = e.message;
+      if (initialLoad) {
+        document.getElementById("loading").innerHTML =
+          "<p style='color:var(--muted);max-width:480px;margin:auto'>"+msg+"</p>";
+      } else {
+        document.getElementById("mapDiv").innerHTML =
+          "<div style='height:440px;display:flex;align-items:center;justify-content:center;padding:2rem;text-align:center'>"
+          +"<p style='color:var(--muted);font-size:.85rem'>"+msg+"</p></div>";
+      }
+      return;
+    }
+  }
+
+  const rows = parseCSV(csvCache[key]);
+
+  // ── Reset mutable state ───────────────────────────────────────────────────
+  fixedLats=[]; fixedLons=[]; cellList=[];
+  monthlyData={}; sortedKeys=[]; composites={};
+  stateRows={}; cachedSliderSteps=[]; cmapMax=100;
+  currentMode="tracker";
+
+  // ── 1. Fixed ordered cell list ────────────────────────────────────────────
+  const cellSet=new Set();
   for(const r of rows) cellSet.add(r.lat+","+r.lon);
-  cellList  = [...cellSet].sort();
-  fixedLats = cellList.map(k=>+k.split(",")[0]);
-  fixedLons = cellList.map(k=>+k.split(",")[1]);
-  const cellIdx = Object.fromEntries(cellList.map((k,i)=>[k,i]));
-  const nCells  = cellList.length;
+  cellList=[...cellSet].sort();
+  fixedLats=cellList.map(k=>+k.split(",")[0]);
+  fixedLons=cellList.map(k=>+k.split(",")[1]);
+  const cellIdx=Object.fromEntries(cellList.map((k,i)=>[k,i]));
+  const nCells=cellList.length;
 
-  // ── 2. Group rows by state (for charts) and by month (for tracker) ───────
+  // ── 2. Group rows by sub-region and by month ──────────────────────────────
   stateRows["all"]=rows;
   for(const r of rows){
     if(!stateRows[r.state]) stateRows[r.state]=[];
     stateRows[r.state].push(r);
   }
 
-  // ── 3. Build per-month ordered value arrays ───────────────────────────────
-  // orderedVals[i] matches fixedLats[i]/fixedLons[i]; null = no data that month
+  // ── 3. Per-month ordered value arrays ─────────────────────────────────────
   const rawMonthly={};
   for(const r of rows){
     const k=r.year+"-"+r.month.padStart(2,"0");
@@ -464,15 +523,15 @@ async function init() {
   sortedKeys=Object.keys(rawMonthly).sort();
   for(const k of sortedKeys) monthlyData[k]=rawMonthly[k];
 
-  // ── 4. Colorscale cap: 95th percentile across all cells × all months ─────
+  // ── 4. Colorscale cap: 95th percentile ───────────────────────────────────
   const allVals=[];
   for(const k of sortedKeys) for(const v of monthlyData[k].vals) if(v!==null) allVals.push(v);
   allVals.sort((a,b)=>a-b);
   cmapMax=Math.round(allVals[Math.floor(allVals.length*0.95)]/10)*10||100;
 
-  // ── 5. ENSO composite maps ────────────────────────────────────────────────
+  // ── 5. ENSO composites ────────────────────────────────────────────────────
   function buildComposite(phase){
-    const S=new Array(nCells).fill(0), N=new Array(nCells).fill(0);
+    const S=new Array(nCells).fill(0),N=new Array(nCells).fill(0);
     const ks=phase==="all"?sortedKeys:sortedKeys.filter(k=>monthlyData[k].enso===phase);
     for(const k of ks){
       const vals=monthlyData[k].vals;
@@ -482,31 +541,55 @@ async function init() {
   }
   for(const ph of ["all",...ENSO_PHASES]) composites[ph]=buildComposite(ph);
 
-  // ── 6. Slider steps (year label only for January) ────────────────────────
-  cachedSliderSteps = sortedKeys.map(k=>{
+  // ── 6. Slider steps ───────────────────────────────────────────────────────
+  cachedSliderSteps=sortedKeys.map(k=>{
     const fd=monthlyData[k];
     return {
       args:[[k],{frame:{duration:250,redraw:true},mode:"immediate",transition:{duration:80}}],
-      label: fd.month===1 ? String(fd.year) : "",
+      label:fd.month===1?String(fd.year):"",
       method:"animate",
     };
   });
 
-  // ── 7. Initial render: Monthly Tracker at 1970-01 ────────────────────────
-  const fd0 = monthlyData[sortedKeys[0]];
+  // ── 7. Update UI labels and sub-region pills ──────────────────────────────
+  YR0=sortedKeys[0].split("-")[0];
+  YR1=sortedKeys[sortedKeys.length-1].split("-")[0];
+  document.getElementById("pageTitle").textContent=rc.name+" Precipitation";
+  document.getElementById("pageSubtitle").innerHTML=rc.source_html+" · "+YR0+"–"+YR1;
+  document.getElementById("subregionHeader").textContent="Select "+rc.subregion_label;
 
-  document.getElementById("loading").style.display="none";
-  document.getElementById("content").style.display="block";
+  const subregions=[...new Set(rows.map(r=>r.state))].sort();
+  const sel=document.getElementById("stateSelector");
+  let pillsHtml=`<button class="btn active" data-state="all">${rc.all_label}</button>`;
+  for(const s of subregions) pillsHtml+=`<button class="btn" data-state="${s}">${s}</button>`;
+  sel.innerHTML=pillsHtml;
 
+  // Reset tabs and ENSO toggle to defaults
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+  document.querySelector("[data-tab='tracker']").classList.add("active");
+  document.querySelectorAll("#ensoToggle .btn").forEach(b=>b.classList.remove("active"));
+  document.querySelector("[data-enso='all']").classList.add("active");
+  document.getElementById("trackerDesc").style.display="";
+  document.getElementById("compositeControls").style.display="none";
+
+  // ── 8. Show content and render map ───────────────────────────────────────
+  if(initialLoad){
+    document.getElementById("loading").style.display="none";
+    document.getElementById("content").style.display="block";
+  } else {
+    document.getElementById("mapDiv").innerHTML="";
+  }
+
+  const fd0=monthlyData[sortedKeys[0]];
   await Plotly.newPlot(
     "mapDiv",
     [makeTrace(fd0.vals)],
-    makeTrackerLayout(fd0, cachedSliderSteps),
+    makeTrackerLayout(fd0,cachedSliderSteps),
     {responsive:true}
   );
 
-  // ── 8. Build and register animation frames (only marker.color changes) ───
-  const frames = sortedKeys.map(k=>{
+  // ── 9. Animation frames (only marker.color changes per frame) ─────────────
+  const frames=sortedKeys.map(k=>{
     const fd=monthlyData[k];
     return {
       name:k,
@@ -515,15 +598,21 @@ async function init() {
       layout:{annotations:trackerAnnotations(fd)},
     };
   });
-  await Plotly.addFrames("mapDiv", frames);
+  await Plotly.addFrames("mapDiv",frames);
 
-  // ── 9. Charts ─────────────────────────────────────────────────────────────
+  // ── 10. Charts ────────────────────────────────────────────────────────────
   renderTimeSeries("all");
   renderClimatology("all");
 }
 
+// ── Init ──────────────────────────────────────────────────────────────────────
+async function init() {
+  await loadRegion("sw_usa");
+}
+
 init().catch(err=>{
-  document.getElementById("loading").textContent="Error loading data: "+err.message;
+  document.getElementById("loading").innerHTML=
+    "<p style='color:var(--muted)'>Error loading data: "+err.message+"</p>";
 });
 </script>
 </body>
