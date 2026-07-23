@@ -146,15 +146,18 @@ def load_ghcncams(year_start: int):
     years_arr  = np.array([dates[i].year  for i in idx])
     months_arr = np.array([dates[i].month for i in idx])
 
-    fill = float(getattr(ds.variables[temp_var], "_FillValue", -9.96921e+36))
     t0, t1 = idx[0], idx[-1] + 1
     data = np.array(ds.variables[temp_var][t0:t1], dtype=float)
     ds.close()
 
-    data[np.abs(data - fill) < 1e25] = np.nan
+    # Mask all physically impossible values (fill values vary slightly across grid)
+    data[np.abs(data) > 1e6] = np.nan
 
-    # Convert Kelvin → Celsius if needed (values > 200 K are in Kelvin)
-    if np.nanmean(data[~np.isnan(data)][:1000]) > 200:
+    # Convert Kelvin → Celsius if needed — check after masking so fill values
+    # don't pull the mean negative and fool the > 200 check
+    sample = data[~np.isnan(data)].flat
+    sample_vals = [next(sample) for _ in range(min(1000, data[~np.isnan(data)].size))]
+    if np.mean(sample_vals) > 200:
         print("  Converting Kelvin → Celsius ...")
         data -= 273.15
 
