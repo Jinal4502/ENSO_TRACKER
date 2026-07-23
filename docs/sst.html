@@ -253,7 +253,7 @@ function makeTrace(vals, cmin, cmax, colorbar_title) {
   };
 }
 
-const GEO_LAYOUT = {
+const GEO_BASE = {
   geo:{
     showland:true, landcolor:"#1c2128",
     showocean:true, oceancolor:"#0d1117",
@@ -264,18 +264,18 @@ const GEO_LAYOUT = {
     lataxis:{range:[-80,85]},
   },
   paper_bgcolor:DARK.paper,
-  margin:{l:0,r:60,t:0,b:0},
 };
 
 function makeTrackerLayout(fd, sliderSteps) {
   return {
-    ...GEO_LAYOUT,
+    ...GEO_BASE,
+    margin:{l:0,r:60,t:0,b:130},
     uirevision:"sst-global",
     height:520,
     annotations: trackerAnnotations(fd),
     updatemenus:[{
       type:"buttons", showactive:false,
-      x:0.02, y:-0.04, xanchor:"left", yanchor:"top",
+      x:0.01, y:0.07, xanchor:"left", yanchor:"top",
       buttons:[
         {label:"▶  Play",  method:"animate",
           args:[null,{frame:{duration:200,redraw:true},fromcurrent:true,
@@ -289,19 +289,20 @@ function makeTrackerLayout(fd, sliderSteps) {
     }],
     sliders:[{
       active:0, steps:sliderSteps,
-      x:0.12, y:-0.02, xanchor:"left", yanchor:"top", len:0.85,
+      x:0, y:0, xanchor:"left", yanchor:"top", len:1.0,
       currentvalue:{visible:false},
       transition:{duration:60},
       bgcolor:"#21262d", bordercolor:"#30363d",
       tickcolor:"#8b949e", font:{color:DARK.muted,size:9},
-      pad:{b:10,t:55}, minorticklen:0,
+      pad:{b:10,t:65}, minorticklen:0,
     }],
   };
 }
 
 function makeStaticLayout(label) {
   return {
-    ...GEO_LAYOUT,
+    ...GEO_BASE,
+    margin:{l:0,r:60,t:0,b:20},
     uirevision:"sst-static",
     height:480,
     annotations: phaseAnnotation(label),
