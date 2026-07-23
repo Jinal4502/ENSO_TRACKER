@@ -142,9 +142,10 @@ def convert_sst() -> dict:
     lat_bins = np.clip(lat_bins, 0, n_lat - 1)
     lon_bins = np.clip(lon_bins, 0, n_lon - 1)
 
-    # Aggregate 2° → 5°
-    print("  Aggregating 2° → 5° ...")
+    # Aggregate 2° → 8°
+    print("  Aggregating 2° → 8° ...")
     anom_coarse = np.full((T, n_lat, n_lon), np.nan)
+    raw_coarse  = np.full((T, n_lat, n_lon), np.nan)
     for bi in range(n_lat):
         li = lat_bins == bi
         if not li.any():
@@ -153,9 +154,11 @@ def convert_sst() -> dict:
             lj = lon_bins == bj
             if not lj.any():
                 continue
-            cell = anom[:, li, :][:, :, lj].reshape(T, -1)
+            cell_anom = anom[:, li, :][:, :, lj].reshape(T, -1)
+            cell_raw  = data[:, li, :][:, :, lj].reshape(T, -1)
             with np.errstate(invalid="ignore"):
-                anom_coarse[:, bi, bj] = np.nanmean(cell, axis=1)
+                anom_coarse[:, bi, bj] = np.nanmean(cell_anom, axis=1)
+                raw_coarse[:, bi, bj]  = np.nanmean(cell_raw,  axis=1)
 
     # ── Assign basin to each 5° ocean cell ───────────────────────────────────
     cell_info = {}
@@ -180,17 +183,20 @@ def convert_sst() -> dict:
     print(f"  Writing {CSV_OUT} ...")
     with open(CSV_OUT, "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["year", "month", "lat", "lon", "sst_anom", "enso", "basin"])
+        w.writerow(["year", "month", "lat", "lon", "sst_anom", "sst_raw", "enso", "basin"])
         for t in range(T):
             year  = int(years_arr[t])
             month = int(months_arr[t])
             enso  = month_class.get((year, month), "Neutral")
             for (bi, bj), (clat, clon, basin) in sorted(cell_info.items()):
                 v = anom_coarse[t, bi, bj]
+                r = raw_coarse[t, bi, bj]
                 if not np.isnan(v):
                     w.writerow([year, month,
                                 round(clat, 2), round(clon, 2),
-                                round(float(v), 2), enso, basin])
+                                round(float(v), 2),
+                                round(float(r), 2) if not np.isnan(r) else "",
+                                enso, basin])
 
     first = f"{int(years_arr[0])}-{int(months_arr[0]):02d}"
     last  = f"{int(years_arr[-1])}-{int(months_arr[-1]):02d}"
