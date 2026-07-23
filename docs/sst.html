@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sea Surface Temperature Tracker</title>
+<script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
+<style>
+  :root {
+    --bg:     #0d1117;
+    --card:   #161b22;
+    --border: #30363d;
+    --text:   #c9d1d9;
+    --muted:  #8b949e;
+    --accent: #0ea5e9;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text);
+          font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+          padding:1.5rem; }
+  h1  { font-size:1.4rem; font-weight:700; margin-bottom:.2rem; }
+  h2  { font-size:.78rem; text-transform:uppercase; letter-spacing:.05em;
+         color:var(--muted); margin-bottom:.6rem; }
+  .subtitle { color:var(--muted); font-size:.85rem; margin-bottom:1.5rem; }
+  .subtitle a { color:#58a6ff; text-decoration:none; }
+  .card { background:var(--card); border:1px solid var(--border);
+           border-radius:8px; padding:1rem; margin-bottom:1.5rem; }
+  #content { display:none; }
+  .topnav { display:flex; align-items:center; justify-content:space-between;
+             padding:.5rem 0; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }
+  .nav-brand { font-weight:700; font-size:.95rem; color:var(--text); text-decoration:none; }
+  .nav-links { display:flex; gap:.4rem; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:.82rem;
+                 padding:.3rem .7rem; border-radius:5px; }
+  .nav-links a:hover { color:var(--text); background:var(--card); }
+  .nav-links a.nav-active { color:#fff; background:#0ea5e9; font-weight:600; }
+  .btn-row { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.8rem; }
+  .btn { background:var(--card); border:1px solid var(--border); color:var(--muted);
+          padding:.3rem .8rem; border-radius:16px; font-size:.78rem; cursor:pointer;
+          transition:border-color .15s, color .15s; }
+  .btn:hover { color:var(--text); border-color:#8b949e; }
+  .btn.active { background:#1f6feb; border-color:#388bfd; color:#fff; font-weight:600; }
+  .tab-row { display:flex; gap:0; margin-bottom:.8rem;
+              border:1px solid var(--border); border-radius:6px; overflow:hidden;
+              width:fit-content; }
+  .tab { background:transparent; border:none; color:var(--muted);
+          padding:.35rem 1rem; font-size:.8rem; cursor:pointer; }
+  .tab:hover { color:var(--text); background:rgba(255,255,255,.04); }
+  .tab.active { background:#1f6feb; color:#fff; font-weight:600; }
+  footer { font-size:.75rem; color:var(--muted); margin-top:1.5rem; text-align:center; }
+  footer a { color:var(--muted); }
+  .diff-row { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;
+               margin-bottom:.8rem; }
+  .diff-row label { font-size:.8rem; color:var(--muted); }
+  .diff-row select { background:#1c2128; border:1px solid var(--border); color:var(--text);
+                      padding:.3rem .6rem; border-radius:5px; font-size:.8rem; cursor:pointer; }
+  .diff-row select:focus { outline:none; border-color:#388bfd; }
+  #diffBtn { background:#0ea5e9; border:none; color:#fff; padding:.35rem 1rem;
+              border-radius:6px; font-size:.8rem; cursor:pointer; font-weight:600; }
+  #diffBtn:hover { background:#0284c7; }
+  .legend-row { display:flex; align-items:center; gap:.5rem; font-size:.75rem;
+                 color:var(--muted); margin-bottom:.4rem; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-brand" href="index.html">ENSO Tracker</a>
+  <div class="nav-links">
+    <a href="index.html">ENSO Dashboard</a>
+    <a href="hurricanes.html">Cyclone Tracker</a>
+    <a href="precipitation.html">Precipitation</a>
+    <a href="temperature.html">Land Temp</a>
+    <a href="sst.html" class="nav-active">Sea Surface Temp</a>
+  </div>
+</nav>
+
+<h1>Sea Surface Temperature Anomaly</h1>
+<p id="pageSubtitle" class="subtitle">
+  NOAA ERSST v5 · 8° grid · Anomaly vs 1991–2020 climatology ·
+  <a href="https://psl.noaa.gov/data/gridded/data.noaa.ersst.v5.html" target="_blank">NOAA/PSL</a>
+  · 1970–2026
+</p>
+
+<div id="loading" style="text-align:center;padding:3rem;color:var(--muted)">
+  Loading SST data&hellip;
+</div>
+
+<div id="content">
+
+  <div class="card">
+    <h2>SST Anomaly Map</h2>
+
+    <div class="tab-row" id="mapTabs">
+      <button class="tab active" data-tab="tracker">Monthly Tracker</button>
+      <button class="tab"        data-tab="composite">ENSO Composite</button>
+      <button class="tab"        data-tab="diff">Difference Map</button>
+    </div>
+
+    <div id="trackerDesc">
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
+        Monthly SST anomaly (°C) relative to the 1991–2020 baseline.
+        Red&nbsp;=&nbsp;warmer than normal · Blue&nbsp;=&nbsp;cooler than normal.
+        Use &#9654; Play or drag the slider to animate.
+      </p>
+    </div>
+
+    <div id="compositeControls" style="display:none">
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
+        Average SST anomaly for each ENSO phase. Toggle to compare spatial patterns.
+      </p>
+      <div class="btn-row" id="ensoToggle">
+        <button class="btn active" data-enso="all">All Years</button>
+        <button class="btn" data-enso="El Ni&ntilde;o">El Ni&ntilde;o</button>
+        <button class="btn" data-enso="La Ni&ntilde;a">La Ni&ntilde;a</button>
+        <button class="btn" data-enso="Neutral">Neutral</button>
+      </div>
+    </div>
+
+    <div id="diffControls" style="display:none">
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.6rem">
+        Difference = SST[Date 2] &minus; SST[Date 1]. Positive (red) = warmer in Date 2.
+      </p>
+      <div class="diff-row">
+        <label>Date 1:</label>
+        <select id="diffDate1"></select>
+        <label>Date 2:</label>
+        <select id="diffDate2"></select>
+        <button id="diffBtn">Plot Difference</button>
+      </div>
+    </div>
+
+    <div id="mapDiv" style="height:520px;width:100%"></div>
+  </div>
+
+  <div class="card" style="padding:.75rem 1rem;margin-bottom:1rem">
+    <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap">
+      <span style="font-size:.78rem;color:var(--muted);font-weight:600;white-space:nowrap">Ocean Basin:</span>
+      <div class="btn-row" id="basinSelector" style="margin:0"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 id="lineTitle">Monthly SST Anomaly Time Series</h2>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
+      Area-average SST anomaly (°C) for selected basin.
+      <span style="background:rgba(239,83,80,.22);padding:1px 5px;border-radius:3px">El Ni&ntilde;o</span>
+      and
+      <span style="background:rgba(30,136,229,.22);padding:1px 5px;border-radius:3px">La Ni&ntilde;a</span>
+      periods shaded per NOAA 5-season rule.
+    </p>
+    <div id="lineDiv"></div>
+  </div>
+
+  <div class="card">
+    <h2 id="climTitle">Monthly SST Anomaly Climatology by ENSO Phase</h2>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
+      Average SST anomaly by calendar month and ENSO phase (1970–present).
+    </p>
+    <div id="climDiv"></div>
+  </div>
+
+</div>
+
+<footer>
+  ENSO: <a href="https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt" target="_blank">NOAA/CPC ONI</a>
+  &nbsp;&middot;&nbsp; SST: <a href="https://psl.noaa.gov/data/gridded/data.noaa.ersst.v5.html" target="_blank">NOAA ERSST v5</a>
+  &nbsp;&middot;&nbsp; <a href="precipitation.html">🌧 Precipitation →</a>
+  &nbsp;&middot;&nbsp; <a href="temperature.html">🌡 Land Temp →</a>
+</footer>
+
+<script>
+const SST_SCALE   = [[0.0, "#053061"], [0.12, "#2166ac"], [0.25, "#4393c3"], [0.38, "#92c5de"], [0.47, "#d1e5f0"], [0.5, "#f7f7f7"], [0.53, "#fddbc7"], [0.62, "#f4a582"], [0.75, "#d6604d"], [0.88, "#b2182b"], [1.0, "#67001f"]];
+const ALL_BASINS  = ["Global", "Indian Ocean", "Ni\u00f1o 3.4", "North Atlantic", "North Pacific", "Southern Ocean", "Tropical Atlantic", "Tropical Pacific"];
+const DATE_LIST   = ["1970-01", "1970-02", "1970-03", "1970-04", "1970-05", "1970-06", "1970-07", "1970-08", "1970-09", "1970-10", "1970-11", "1970-12", "1971-01", "1971-02", "1971-03", "1971-04", "1971-05", "1971-06", "1971-07", "1971-08", "1971-09", "1971-10", "1971-11", "1971-12", "1972-01", "1972-02", "1972-03", "1972-04", "1972-05", "1972-06", "1972-07", "1972-08", "1972-09", "1972-10", "1972-11", "1972-12", "1973-01", "1973-02", "1973-03", "1973-04", "1973-05", "1973-06", "1973-07", "1973-08", "1973-09", "1973-10", "1973-11", "1973-12", "1974-01", "1974-02", "1974-03", "1974-04", "1974-05", "1974-06", "1974-07", "1974-08", "1974-09", "1974-10", "1974-11", "1974-12", "1975-01", "1975-02", "1975-03", "1975-04", "1975-05", "1975-06", "1975-07", "1975-08", "1975-09", "1975-10", "1975-11", "1975-12", "1976-01", "1976-02", "1976-03", "1976-04", "1976-05", "1976-06", "1976-07", "1976-08", "1976-09", "1976-10", "1976-11", "1976-12", "1977-01", "1977-02", "1977-03", "1977-04", "1977-05", "1977-06", "1977-07", "1977-08", "1977-09", "1977-10", "1977-11", "1977-12", "1978-01", "1978-02", "1978-03", "1978-04", "1978-05", "1978-06", "1978-07", "1978-08", "1978-09", "1978-10", "1978-11", "1978-12", "1979-01", "1979-02", "1979-03", "1979-04", "1979-05", "1979-06", "1979-07", "1979-08", "1979-09", "1979-10", "1979-11", "1979-12", "1980-01", "1980-02", "1980-03", "1980-04", "1980-05", "1980-06", "1980-07", "1980-08", "1980-09", "1980-10", "1980-11", "1980-12", "1981-01", "1981-02", "1981-03", "1981-04", "1981-05", "1981-06", "1981-07", "1981-08", "1981-09", "1981-10", "1981-11", "1981-12", "1982-01", "1982-02", "1982-03", "1982-04", "1982-05", "1982-06", "1982-07", "1982-08", "1982-09", "1982-10", "1982-11", "1982-12", "1983-01", "1983-02", "1983-03", "1983-04", "1983-05", "1983-06", "1983-07", "1983-08", "1983-09", "1983-10", "1983-11", "1983-12", "1984-01", "1984-02", "1984-03", "1984-04", "1984-05", "1984-06", "1984-07", "1984-08", "1984-09", "1984-10", "1984-11", "1984-12", "1985-01", "1985-02", "1985-03", "1985-04", "1985-05", "1985-06", "1985-07", "1985-08", "1985-09", "1985-10", "1985-11", "1985-12", "1986-01", "1986-02", "1986-03", "1986-04", "1986-05", "1986-06", "1986-07", "1986-08", "1986-09", "1986-10", "1986-11", "1986-12", "1987-01", "1987-02", "1987-03", "1987-04", "1987-05", "1987-06", "1987-07", "1987-08", "1987-09", "1987-10", "1987-11", "1987-12", "1988-01", "1988-02", "1988-03", "1988-04", "1988-05", "1988-06", "1988-07", "1988-08", "1988-09", "1988-10", "1988-11", "1988-12", "1989-01", "1989-02", "1989-03", "1989-04", "1989-05", "1989-06", "1989-07", "1989-08", "1989-09", "1989-10", "1989-11", "1989-12", "1990-01", "1990-02", "1990-03", "1990-04", "1990-05", "1990-06", "1990-07", "1990-08", "1990-09", "1990-10", "1990-11", "1990-12", "1991-01", "1991-02", "1991-03", "1991-04", "1991-05", "1991-06", "1991-07", "1991-08", "1991-09", "1991-10", "1991-11", "1991-12", "1992-01", "1992-02", "1992-03", "1992-04", "1992-05", "1992-06", "1992-07", "1992-08", "1992-09", "1992-10", "1992-11", "1992-12", "1993-01", "1993-02", "1993-03", "1993-04", "1993-05", "1993-06", "1993-07", "1993-08", "1993-09", "1993-10", "1993-11", "1993-12", "1994-01", "1994-02", "1994-03", "1994-04", "1994-05", "1994-06", "1994-07", "1994-08", "1994-09", "1994-10", "1994-11", "1994-12", "1995-01", "1995-02", "1995-03", "1995-04", "1995-05", "1995-06", "1995-07", "1995-08", "1995-09", "1995-10", "1995-11", "1995-12", "1996-01", "1996-02", "1996-03", "1996-04", "1996-05", "1996-06", "1996-07", "1996-08", "1996-09", "1996-10", "1996-11", "1996-12", "1997-01", "1997-02", "1997-03", "1997-04", "1997-05", "1997-06", "1997-07", "1997-08", "1997-09", "1997-10", "1997-11", "1997-12", "1998-01", "1998-02", "1998-03", "1998-04", "1998-05", "1998-06", "1998-07", "1998-08", "1998-09", "1998-10", "1998-11", "1998-12", "1999-01", "1999-02", "1999-03", "1999-04", "1999-05", "1999-06", "1999-07", "1999-08", "1999-09", "1999-10", "1999-11", "1999-12", "2000-01", "2000-02", "2000-03", "2000-04", "2000-05", "2000-06", "2000-07", "2000-08", "2000-09", "2000-10", "2000-11", "2000-12", "2001-01", "2001-02", "2001-03", "2001-04", "2001-05", "2001-06", "2001-07", "2001-08", "2001-09", "2001-10", "2001-11", "2001-12", "2002-01", "2002-02", "2002-03", "2002-04", "2002-05", "2002-06", "2002-07", "2002-08", "2002-09", "2002-10", "2002-11", "2002-12", "2003-01", "2003-02", "2003-03", "2003-04", "2003-05", "2003-06", "2003-07", "2003-08", "2003-09", "2003-10", "2003-11", "2003-12", "2004-01", "2004-02", "2004-03", "2004-04", "2004-05", "2004-06", "2004-07", "2004-08", "2004-09", "2004-10", "2004-11", "2004-12", "2005-01", "2005-02", "2005-03", "2005-04", "2005-05", "2005-06", "2005-07", "2005-08", "2005-09", "2005-10", "2005-11", "2005-12", "2006-01", "2006-02", "2006-03", "2006-04", "2006-05", "2006-06", "2006-07", "2006-08", "2006-09", "2006-10", "2006-11", "2006-12", "2007-01", "2007-02", "2007-03", "2007-04", "2007-05", "2007-06", "2007-07", "2007-08", "2007-09", "2007-10", "2007-11", "2007-12", "2008-01", "2008-02", "2008-03", "2008-04", "2008-05", "2008-06", "2008-07", "2008-08", "2008-09", "2008-10", "2008-11", "2008-12", "2009-01", "2009-02", "2009-03", "2009-04", "2009-05", "2009-06", "2009-07", "2009-08", "2009-09", "2009-10", "2009-11", "2009-12", "2010-01", "2010-02", "2010-03", "2010-04", "2010-05", "2010-06", "2010-07", "2010-08", "2010-09", "2010-10", "2010-11", "2010-12", "2011-01", "2011-02", "2011-03", "2011-04", "2011-05", "2011-06", "2011-07", "2011-08", "2011-09", "2011-10", "2011-11", "2011-12", "2012-01", "2012-02", "2012-03", "2012-04", "2012-05", "2012-06", "2012-07", "2012-08", "2012-09", "2012-10", "2012-11", "2012-12", "2013-01", "2013-02", "2013-03", "2013-04", "2013-05", "2013-06", "2013-07", "2013-08", "2013-09", "2013-10", "2013-11", "2013-12", "2014-01", "2014-02", "2014-03", "2014-04", "2014-05", "2014-06", "2014-07", "2014-08", "2014-09", "2014-10", "2014-11", "2014-12", "2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12", "2016-01", "2016-02", "2016-03", "2016-04", "2016-05", "2016-06", "2016-07", "2016-08", "2016-09", "2016-10", "2016-11", "2016-12", "2017-01", "2017-02", "2017-03", "2017-04", "2017-05", "2017-06", "2017-07", "2017-08", "2017-09", "2017-10", "2017-11", "2017-12", "2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"];
+const DEFAULT_D1  = "2025-06";
+const DEFAULT_D2  = "2026-06";
+const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DARK = {
+  paper:"#0d1117", plot:"#0d1117", text:"#c9d1d9",
+  muted:"#8b949e", grid:"#21262d", card:"#1c2128", border:"#30363d"
+};
+const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
+const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
+const ENSO_FILL   = {"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"};
+const ANOM_MIN = -3, ANOM_MAX = 3;
+
+let currentMode   = "tracker";
+let currentBasin  = "Global";
+let fixedLats     = [];
+let fixedLons     = [];
+let fixedBasins   = [];
+let cellList      = [];
+let monthlyData   = {};
+let sortedKeys    = [];
+let composites    = {};
+let basinRows     = {};
+let cachedSliderSteps = [];
+
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  const keys  = lines[0].split(",").map(k => k.trim());
+  return lines.slice(1).filter(l => l.trim()).map(l => {
+    const v = l.split(",");
+    return Object.fromEntries(keys.map((k,i) => [k,(v[i]||"").trim()]));
+  });
+}
+
+function trackerAnnotations(fd) {
+  const label = MONTH_NAMES[fd.month-1]+" "+fd.year;
+  const ecol  = ENSO_COLORS[ENSO_PHASES.indexOf(fd.enso)] || DARK.muted;
+  return [
+    {text:label, x:0.01,y:0.97,xref:"paper",yref:"paper",
+      xanchor:"left",yanchor:"top",showarrow:false,
+      font:{size:22,color:"#e6edf3",family:"monospace",weight:700},
+      bgcolor:"rgba(13,17,23,0.7)",borderpad:4},
+    {text:fd.enso, x:0.01,y:0.86,xref:"paper",yref:"paper",
+      xanchor:"left",yanchor:"top",showarrow:false,
+      font:{size:13,color:ecol,family:"monospace"},
+      bgcolor:"rgba(13,17,23,0.6)",borderpad:3},
+  ];
+}
+
+function phaseAnnotation(label) {
+  return [{text:label, x:0.01,y:0.97,xref:"paper",yref:"paper",
+    xanchor:"left",yanchor:"top",showarrow:false,
+    font:{size:16,color:"#e6edf3",family:"monospace",weight:700},
+    bgcolor:"rgba(13,17,23,0.75)",borderpad:4}];
+}
+
+function makeTrace(vals, cmin, cmax, colorbar_title) {
+  return {
+    type:"scattergeo", mode:"markers",
+    lat:fixedLats, lon:fixedLons,
+    customdata:fixedBasins,
+    marker:{
+      size:14, opacity:0.90,
+      color:vals,
+      colorscale:SST_SCALE,
+      cmin: cmin ?? ANOM_MIN,
+      cmax: cmax ?? ANOM_MAX,
+      colorbar:{
+        title:{text: colorbar_title ?? "°C anom",font:{color:DARK.muted,size:11}},
+        tickfont:{color:DARK.muted,size:10},
+        bgcolor:"rgba(12,17,23,0.80)",bordercolor:DARK.border,borderwidth:1,
+        len:0.7,thickness:14,x:1.01,xpad:8,
+        tickvals:[-3,-2,-1,0,1,2,3],
+        ticktext:["-3","-2","-1","0","+1","+2","+3"],
+      }
+    },
+    hovertemplate:"<b>%{customdata}</b><br>%{lat:.1f}°, %{lon:.1f}°<br>%{marker.color:+.2f} °C<extra></extra>",
+    showlegend:false
+  };
+}
+
+const GEO_LAYOUT = {
+  geo:{
+    showland:true, landcolor:"#1c2128",
+    showocean:true, oceancolor:"#0d1117",
+    showcoastlines:true, coastlinecolor:"#30363d",
+    showframe:false,
+    projection:{type:"natural earth"},
+    bgcolor:"#0d1117",
+    lataxis:{range:[-80,85]},
+  },
+  paper_bgcolor:DARK.paper,
+  margin:{l:0,r:60,t:0,b:0},
+};
+
+function makeTrackerLayout(fd, sliderSteps) {
+  return {
+    ...GEO_LAYOUT,
+    uirevision:"sst-global",
+    height:520,
+    annotations: trackerAnnotations(fd),
+    updatemenus:[{
+      type:"buttons", showactive:false,
+      x:0.02, y:-0.04, xanchor:"left", yanchor:"top",
+      buttons:[
+        {label:"▶  Play",  method:"animate",
+          args:[null,{frame:{duration:200,redraw:true},fromcurrent:true,
+                       mode:"immediate",transition:{duration:60}}]},
+        {label:"⏸  Pause",method:"animate",
+          args:[[null],{frame:{duration:0,redraw:false},
+                         mode:"immediate",transition:{duration:0}}]},
+      ],
+      bgcolor:"#1c2128",bordercolor:"#30363d",
+      font:{color:DARK.text,size:12},
+    }],
+    sliders:[{
+      active:0, steps:sliderSteps,
+      x:0.12, y:-0.02, xanchor:"left", yanchor:"top", len:0.85,
+      currentvalue:{visible:false},
+      transition:{duration:60},
+      bgcolor:"#21262d", bordercolor:"#30363d",
+      tickcolor:"#8b949e", font:{color:DARK.muted,size:9},
+      pad:{b:10,t:55}, minorticklen:0,
+    }],
+  };
+}
+
+function makeStaticLayout(label) {
+  return {
+    ...GEO_LAYOUT,
+    uirevision:"sst-static",
+    height:480,
+    annotations: phaseAnnotation(label),
+    updatemenus:[], sliders:[],
+  };
+}
+
+// ── Basin selector ─────────────────────────────────────────────────────────────
+function buildBasinSelector() {
+  const sel = document.getElementById("basinSelector");
+  sel.innerHTML = ALL_BASINS.map(b =>
+    `<button class="btn${b===currentBasin?" active":""}" data-basin="${b}">${b}</button>`
+  ).join("");
+}
+
+document.getElementById("basinSelector").addEventListener("click", e => {
+  const btn = e.target.closest("[data-basin]");
+  if (!btn) return;
+  document.querySelectorAll("#basinSelector .btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentBasin = btn.dataset.basin;
+  renderTimeSeries(currentBasin);
+  renderClimatology(currentBasin);
+});
+
+// ── Map tab switching ──────────────────────────────────────────────────────────
+document.getElementById("mapTabs").addEventListener("click", e => {
+  const btn = e.target.closest("[data-tab]");
+  if (!btn || btn.dataset.tab === currentMode) return;
+  document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentMode = btn.dataset.tab;
+  document.getElementById("trackerDesc").style.display     = currentMode==="tracker"  ? "" : "none";
+  document.getElementById("compositeControls").style.display = currentMode==="composite" ? "" : "none";
+  document.getElementById("diffControls").style.display     = currentMode==="diff"     ? "" : "none";
+
+  if (currentMode === "tracker") {
+    const fd = monthlyData[sortedKeys[0]];
+    Plotly.react("mapDiv",[makeTrace(fd.vals)],
+      makeTrackerLayout(fd, cachedSliderSteps),{responsive:true});
+    Plotly.addFrames("mapDiv", buildFrames());
+  } else if (currentMode === "composite") {
+    const activeBtn = document.querySelector("#ensoToggle .btn.active");
+    const phase = activeBtn ? activeBtn.dataset.enso : "all";
+    const label = phase==="all" ? "All Years" : phase;
+    Plotly.react("mapDiv",[makeTrace(composites[phase])],
+      makeStaticLayout(label),{responsive:true});
+  } else {
+    Plotly.react("mapDiv",[makeTrace(composites["all"])],
+      makeStaticLayout("Select dates above → Plot Difference"),{responsive:true});
+  }
+});
+
+document.getElementById("ensoToggle").addEventListener("click", e => {
+  const btn = e.target.closest("[data-enso]");
+  if (!btn) return;
+  document.querySelectorAll("#ensoToggle .btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const phase = btn.dataset.enso;
+  const label = phase==="all" ? "All Years" : phase;
+  Plotly.react("mapDiv",[makeTrace(composites[phase])],
+    makeStaticLayout(label),{responsive:true});
+});
+
+// ── Difference map ─────────────────────────────────────────────────────────────
+function buildDateDropdowns() {
+  const s1 = document.getElementById("diffDate1");
+  const s2 = document.getElementById("diffDate2");
+  const opts = DATE_LIST.map(d => `<option value="${d}">${d}</option>`).join("");
+  s1.innerHTML = opts;
+  s2.innerHTML = opts;
+  s1.value = DEFAULT_D1;
+  s2.value = DEFAULT_D2;
+}
+
+document.getElementById("diffBtn").addEventListener("click", () => {
+  const d1 = document.getElementById("diffDate1").value;
+  const d2 = document.getElementById("diffDate2").value;
+  if (!monthlyData[d1] || !monthlyData[d2]) {
+    alert("One or both selected months not available in the dataset.");
+    return;
+  }
+  const v1 = monthlyData[d1].vals;
+  const v2 = monthlyData[d2].vals;
+  const diff = v1.map((a,i) => (a===null||v2[i]===null) ? null : +(v2[i]-a).toFixed(2));
+  const maxAbs = Math.max(...diff.filter(x=>x!==null).map(Math.abs));
+  const bound  = Math.min(Math.ceil(maxAbs*10)/10, 5);
+  const label  = `${d2} minus ${d1}`;
+  Plotly.react("mapDiv",
+    [makeTrace(diff, -bound, bound, "°C diff")],
+    makeStaticLayout(label),
+    {responsive:true});
+});
+
+// ── Time series ────────────────────────────────────────────────────────────────
+function renderTimeSeries(basin) {
+  const rows = basinRows[basin] || [];
+  const mdata = {};
+  for (const r of rows) {
+    const k = r.year+"-"+r.month.padStart(2,"0");
+    if (!mdata[k]) mdata[k] = {sum:0,cnt:0,enso:r.enso,year:+r.year,month:+r.month};
+    mdata[k].sum += +r.sst_anom; mdata[k].cnt++;
+  }
+  const keys  = Object.keys(mdata).sort();
+  const msX   = keys.map(k => { const d=mdata[k]; return d.year+"-"+String(d.month).padStart(2,"0")+"-01"; });
+  const msY   = keys.map(k => +(mdata[k].sum/mdata[k].cnt).toFixed(3));
+  const msENSO= keys.map(k => mdata[k].enso);
+
+  const shapes=[], annotations=[];
+  for (let si=0;si<msX.length;) {
+    let ei=si;
+    while(ei+1<msX.length && msENSO[ei+1]===msENSO[si]) ei++;
+    if (ENSO_FILL[msENSO[si]]) {
+      const x1 = ei+1<msX.length ? msX[ei+1]
+        : new Date(new Date(msX[ei]).setMonth(new Date(msX[ei]).getMonth()+1)).toISOString().slice(0,10);
+      shapes.push({type:"rect",layer:"below",xref:"x",yref:"paper",
+        x0:msX[si],x1,y0:0,y1:1,fillcolor:ENSO_FILL[msENSO[si]],line:{width:0}});
+    }
+    si=ei+1;
+  }
+  // zero line
+  shapes.push({type:"line",xref:"paper",yref:"y",x0:0,x1:1,y0:0,y1:0,
+    layer:"above",line:{color:"#8b949e",dash:"dot",width:1}});
+
+  document.getElementById("lineTitle").textContent =
+    "Monthly SST Anomaly — "+basin+" (1970–2026)";
+
+  Plotly.react("lineDiv",[
+    {type:"scatter",mode:"lines",x:msX,y:msY,
+      fill:"tozeroy",fillcolor:"rgba(14,165,233,0.12)",
+      line:{color:"#0ea5e9",width:1.5},
+      customdata:msENSO,
+      hovertemplate:"<b>%{x|%b %Y}</b><br>%{y:+.3f} °C<br>%{customdata}<extra></extra>",
+      showlegend:false},
+    {type:"scatter",x:[null],y:[null],mode:"markers",name:"El Niño",
+      marker:{color:"rgba(239,83,80,0.7)",symbol:"square",size:11},showlegend:true},
+    {type:"scatter",x:[null],y:[null],mode:"markers",name:"La Niña",
+      marker:{color:"rgba(30,136,229,0.7)",symbol:"square",size:11},showlegend:true},
+    {type:"scatter",x:[null],y:[null],mode:"markers",name:"Neutral",
+      marker:{color:"rgba(139,148,158,0.5)",symbol:"square",size:11},showlegend:true},
+  ],{
+    autosize:true,paper_bgcolor:DARK.paper,plot_bgcolor:DARK.paper,height:280,
+    margin:{l:55,r:40,t:15,b:40},shapes,annotations,
+    xaxis:{type:"date",dtick:"M60",tickformat:"%Y",color:DARK.muted,gridcolor:DARK.grid},
+    yaxis:{title:"°C anomaly",color:DARK.muted,gridcolor:DARK.grid,zeroline:false},
+    legend:{x:0.01,y:0.99,font:{color:DARK.text,size:11},
+             bgcolor:DARK.card,bordercolor:DARK.border,borderwidth:1}
+  },{responsive:true});
+}
+
+// ── Climatology ────────────────────────────────────────────────────────────────
+function renderClimatology(basin) {
+  const rows = basinRows[basin] || [];
+  const byPhase = {};
+  for (const ph of ENSO_PHASES) byPhase[ph] = Array.from({length:12},()=>({s:0,n:0}));
+  for (const r of rows) {
+    const ph = r.enso; if (!byPhase[ph]) continue;
+    byPhase[ph][+r.month-1].s += +r.sst_anom; byPhase[ph][+r.month-1].n++;
+  }
+  document.getElementById("climTitle").textContent =
+    "Monthly SST Anomaly Climatology — "+basin+" by ENSO Phase";
+  Plotly.react("climDiv",
+    ENSO_PHASES.map((ph,i) => ({
+      type:"bar",name:ph,x:MONTH_NAMES,
+      y:byPhase[ph].map(d=>d.n?+(d.s/d.n).toFixed(3):null),
+      marker:{color:ENSO_COLORS[i],opacity:0.85},
+      hovertemplate:"<b>%{x} — "+ph+"</b><br>%{y:+.3f} °C anomaly<extra></extra>"
+    })),
+  {
+    autosize:true,barmode:"group",
+    paper_bgcolor:DARK.paper,plot_bgcolor:DARK.paper,height:260,
+    margin:{l:55,r:20,t:10,b:40},
+    xaxis:{color:DARK.muted,gridcolor:DARK.grid},
+    yaxis:{title:"°C anomaly",color:DARK.muted,gridcolor:DARK.grid,zeroline:true,
+            zerolinecolor:DARK.grid},
+    legend:{font:{color:DARK.text,size:11},bgcolor:DARK.card,bordercolor:DARK.border,borderwidth:1}
+  },{responsive:true});
+}
+
+// ── Build animation frames ─────────────────────────────────────────────────────
+function buildFrames() {
+  return sortedKeys.map(k => {
+    const fd = monthlyData[k];
+    return {
+      name:k,
+      data:[{marker:{color:fd.vals}}],
+      traces:[0],
+      layout:{annotations:trackerAnnotations(fd)},
+    };
+  });
+}
+
+// ── Load data ──────────────────────────────────────────────────────────────────
+async function init() {
+  let rows;
+  try {
+    const resp = await fetch("data/sst_grid.csv");
+    if (!resp.ok) throw new Error("SST data not available — run convert_sst.py locally and commit docs/data/sst_grid.csv");
+    const text = await resp.text();
+    rows = parseCSV(text);
+  } catch(e) {
+    document.getElementById("loading").innerHTML =
+      "<p style='color:var(--muted);max-width:480px;margin:auto'>"+e.message+"</p>";
+    return;
+  }
+
+  // Build cell index
+  const cellSet = new Set();
+  const cellBasinMap = {};
+  for (const r of rows) {
+    const k = r.lat+","+r.lon;
+    cellSet.add(k);
+    cellBasinMap[k] = r.basin;
+  }
+  cellList    = [...cellSet].sort();
+  fixedLats   = cellList.map(k => +k.split(",")[0]);
+  fixedLons   = cellList.map(k => +k.split(",")[1]);
+  fixedBasins = cellList.map(k => cellBasinMap[k] || "");
+  const cellIdx = Object.fromEntries(cellList.map((k,i) => [k,i]));
+  const nCells  = cellList.length;
+
+  // Build basin row lookup
+  basinRows["Global"] = rows;
+  for (const r of rows) {
+    if (!basinRows[r.basin]) basinRows[r.basin] = [];
+    basinRows[r.basin].push(r);
+  }
+
+  // Build monthly data
+  const rawMonthly = {};
+  for (const r of rows) {
+    const k = r.year+"-"+r.month.padStart(2,"0");
+    if (!rawMonthly[k]) rawMonthly[k] = {
+      vals:new Array(nCells).fill(null),
+      enso:r.enso, year:+r.year, month:+r.month
+    };
+    const ci = cellIdx[r.lat+","+r.lon];
+    if (ci !== undefined) rawMonthly[k].vals[ci] = +r.sst_anom;
+  }
+  sortedKeys = Object.keys(rawMonthly).sort();
+  for (const k of sortedKeys) monthlyData[k] = rawMonthly[k];
+
+  // Build composites
+  function buildComposite(phase) {
+    const S=new Array(nCells).fill(0), N=new Array(nCells).fill(0);
+    const ks = phase==="all" ? sortedKeys : sortedKeys.filter(k=>monthlyData[k].enso===phase);
+    for (const k of ks) {
+      const vals = monthlyData[k].vals;
+      for (let i=0;i<nCells;i++) { if(vals[i]!==null){ S[i]+=vals[i]; N[i]++; } }
+    }
+    return S.map((s,i) => N[i]>0 ? +(s/N[i]).toFixed(3) : null);
+  }
+  for (const ph of ["all",...ENSO_PHASES]) composites[ph] = buildComposite(ph);
+
+  // Build slider steps
+  cachedSliderSteps = sortedKeys.map(k => {
+    const fd = monthlyData[k];
+    return {
+      args:[[k],{frame:{duration:200,redraw:true},mode:"immediate",transition:{duration:60}}],
+      label: fd.month===1 ? String(fd.year) : "",
+      method:"animate",
+    };
+  });
+
+  // Build UI
+  buildBasinSelector();
+  buildDateDropdowns();
+
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("content").style.display  = "block";
+
+  // Initial tracker render
+  const fd0 = monthlyData[sortedKeys[0]];
+  await Plotly.newPlot(
+    "mapDiv",
+    [makeTrace(fd0.vals)],
+    makeTrackerLayout(fd0, cachedSliderSteps),
+    {responsive:true}
+  );
+  await Plotly.addFrames("mapDiv", buildFrames());
+
+  renderTimeSeries(currentBasin);
+  renderClimatology(currentBasin);
+}
+
+init().catch(err => {
+  document.getElementById("loading").innerHTML =
+    "<p style='color:var(--muted)'>Error: "+err.message+"</p>";
+});
+</script>
+</body>
+</html>

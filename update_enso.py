@@ -22,6 +22,7 @@ from render_dashboard import classify, render
 from render_hurricanes import render_hurricanes
 from render_precipitation import render_precipitation
 from render_temperature import render_temperature
+from render_sst import render_sst
 
 HISTORY_FILE = "enso_history.json"
 DATA_FILE    = "enso_data.json"
@@ -85,7 +86,10 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
         🌧 Global Precipitation →
       </a>
       <a href="{pages_url}temperature.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
-        🌡 Global Temperature →
+        🌡 Land Temperature →
+      </a>
+      <a href="{pages_url}sst.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
+        🌊 Sea Surface Temp →
       </a>
     </div>
   </div>
@@ -173,6 +177,10 @@ def main() -> None:
     # 2d. Render temperature page
     print("Generating temperature page ...")
     render_temperature("docs/temperature.html")
+
+    # 2e. Render SST page
+    print("Generating SST page ...")
+    render_sst("docs/sst.html")
 
     # 3. History — append current snapshot, then find last week's entry
     history = load_history()

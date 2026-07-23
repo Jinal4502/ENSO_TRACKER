@@ -89,7 +89,7 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Global Temperature Tracker</title>
+<title>Global Land Temperature Tracker</title>
 <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
 <style>
   :root {{
@@ -156,7 +156,8 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
     <a href="index.html">ENSO Dashboard</a>
     <a href="hurricanes.html">Cyclone Tracker</a>
     <a href="precipitation.html">Precipitation</a>
-    <a href="temperature.html" class="nav-active">Temperature</a>
+    <a href="temperature.html" class="nav-active">Land Temp</a>
+    <a href="sst.html">Sea Surface Temp</a>
   </div>
 </nav>
 
@@ -639,7 +640,7 @@ async function loadRegion(key) {{
 
   YR0=sortedKeys[0].split("-")[0];
   YR1=sortedKeys[sortedKeys.length-1].split("-")[0];
-  document.getElementById("pageTitle").textContent=rc.name+" Temperature";
+  document.getElementById("pageTitle").textContent=rc.name+" Land Temperature";
   document.getElementById("pageSubtitle").innerHTML=rc.source_html+" · "+YR0+"–"+YR1;
   document.getElementById("subregionHeader").textContent="Select "+rc.subregion_label;
 
