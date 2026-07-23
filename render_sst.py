@@ -189,7 +189,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
       </div>
     </div>
 
-    <div id="mapDiv" style="height:500px;width:100%"></div>
+    <div id="mapDiv" style="height:540px;width:100%"></div>
   </div>
 
   <div class="card" style="padding:.75rem 1rem;margin-bottom:1rem">
@@ -243,7 +243,7 @@ const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
 const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
 const ENSO_FILL   = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
 const ANOM_MIN = -3, ANOM_MAX = 3;
-const MARKER_SIZE = 18;
+const MARKER_SIZE = 12;   // square markers on Robinson 8° grid
 
 let currentMode   = "tracker";
 let currentBasin  = "Global";
@@ -295,18 +295,19 @@ function parseSST(text) {{
             ssts:ssts.slice(0,i), ensos, basins, n:i }};
 }}
 
-// ── Map trace (scattermapbox — WebGL, fast animation) ─────────────────────────
+// ── Map trace (scattergeo — true global projection, no world tiling) ──────────
 function makeTrace(vals, cmin, cmax, titleText) {{
   return {{
-    type:"scattermapbox", mode:"markers",
+    type:"scattergeo", mode:"markers",
     lat:fixedLats, lon:fixedLons,
     customdata:fixedBasins,
     marker:{{
-      size:MARKER_SIZE, opacity:0.88,
+      size:MARKER_SIZE, symbol:"square", opacity:0.92,
       color:vals,
       colorscale:SST_SCALE,
       cmin: cmin ?? ANOM_MIN,
       cmax: cmax ?? ANOM_MAX,
+      line:{{width:0.5, color:"#0d1117"}},
       colorbar:{{
         title:{{text: titleText ?? "°C anom", font:{{color:DARK.muted,size:11}}}},
         tickfont:{{color:DARK.muted,size:10}},
@@ -326,7 +327,16 @@ function makeBaseLayout(withSlider) {{
     autosize:true,
     paper_bgcolor:DARK.paper,
     uirevision:"sst-map",
-    mapbox:{{style:"carto-darkmatter",center:{{lat:10,lon:0}},zoom:0.4}},
+    geo:{{
+      showland:true,       landcolor:"#1c2128",
+      showocean:true,      oceancolor:"#0d1117",
+      showcoastlines:true, coastlinecolor:"#4a5568",
+      showframe:false,
+      showcountries:false,
+      projection:{{type:"robinson"}},
+      bgcolor:"#0d1117",
+      lataxis:{{range:[-80,85]}},
+    }},
     margin:{{l:0, r:65, t:0, b: withSlider ? 130 : 20}},
   }};
 }}
@@ -359,7 +369,7 @@ function makeTrackerLayout(fd, sliderSteps) {{
     annotations:trackerAnnotations(fd),
     updatemenus:[{{
       type:"buttons", showactive:false,
-      x:0.01, y:0.08, xanchor:"left", yanchor:"top",
+      x:0.01, y:-0.08, xanchor:"left", yanchor:"top",
       buttons:[
         {{label:"▶  Play",  method:"animate",
           args:[null,{{frame:{{duration:250,redraw:true}},fromcurrent:true,
@@ -373,12 +383,12 @@ function makeTrackerLayout(fd, sliderSteps) {{
     }}],
     sliders:[{{
       active:0, steps:sliderSteps,
-      x:0, y:0, xanchor:"left", yanchor:"top", len:1.0,
+      x:0.12, y:-0.05, xanchor:"left", yanchor:"top", len:0.86,
       currentvalue:{{visible:false}},
       transition:{{duration:80}},
       bgcolor:"#21262d", bordercolor:"#30363d",
       tickcolor:"#8b949e", font:{{color:DARK.muted,size:9}},
-      pad:{{b:10,t:70}}, minorticklen:0,
+      pad:{{b:10,t:55}}, minorticklen:0,
     }}],
   }};
 }}
