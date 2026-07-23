@@ -392,6 +392,10 @@ document.getElementById("basinSelector").addEventListener("click", e => {
 document.getElementById("mapTabs").addEventListener("click", e => {
   const btn = e.target.closest("[data-tab]");
   if (!btn || btn.dataset.tab === currentMode) return;
+  // Stop any running animation before switching tabs
+  if (currentMode === "tracker") {
+    Plotly.animate("mapDiv",[null],{frame:{duration:0,redraw:false},mode:"immediate",transition:{duration:0}});
+  }
   document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   currentMode = btn.dataset.tab;
