@@ -21,6 +21,7 @@ from fetch_precipitation import fetch_precipitation_data
 from render_dashboard import classify, render
 from render_hurricanes import render_hurricanes
 from render_precipitation import render_precipitation
+from render_temperature import render_temperature
 
 HISTORY_FILE = "enso_history.json"
 DATA_FILE    = "enso_data.json"
@@ -82,6 +83,9 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
       </a>
       <a href="{pages_url}precipitation.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
         🌧 Global Precipitation →
+      </a>
+      <a href="{pages_url}temperature.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
+        🌡 Global Temperature →
       </a>
     </div>
   </div>
@@ -165,6 +169,10 @@ def main() -> None:
     print("Generating precipitation page ...")
     prcp_meta = fetch_precipitation_data()
     render_precipitation(prcp_meta, "docs/precipitation.html")
+
+    # 2d. Render temperature page
+    print("Generating temperature page ...")
+    render_temperature("docs/temperature.html")
 
     # 3. History — append current snapshot, then find last week's entry
     history = load_history()

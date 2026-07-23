@@ -1,0 +1,20 @@
+{
+  "region_key": "australia",
+  "region_name": "Australia",
+  "first_month": "1970-01",
+  "last_month": "2026-06",
+  "n_months": 678,
+  "n_cells": 1290,
+  "grid_deg": 1.0,
+  "source": "GHCN-CAMS 2m air temperature (NOAA PSL), 0.5\u00b0 monthly",
+  "variable": "temp_c (degrees Celsius)",
+  "smoothing": "gaussian_sigma1.0_then_mean_aggregated_to_1.0deg",
+  "states": [
+    "Central",
+    "NSW-Vic",
+    "Northern",
+    "Queensland",
+    "South",
+    "Western"
+  ]
+}

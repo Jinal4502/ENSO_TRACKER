@@ -316,6 +316,7 @@ def render_hurricanes(data: dict, output: str = "docs/hurricanes.html") -> None:
     <a href="index.html">ENSO Dashboard</a>
     <a href="hurricanes.html" class="nav-active">Cyclone Tracker</a>
     <a href="precipitation.html">Precipitation</a>
+    <a href="temperature.html">Temperature</a>
   </div>
 </nav>
 <h1>Global Tropical Cyclone Tracks &amp; ENSO</h1>
@@ -364,6 +365,7 @@ def render_hurricanes(data: dict, output: str = "docs/hurricanes.html") -> None:
   (NOAA/NCEI best-track archive) ·
   ENSO classification: <a href="https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt" target="_blank">NOAA/CPC ONI</a>
   &nbsp;·&nbsp; <a href="precipitation.html">🌧 Precipitation →</a>
+  &nbsp;·&nbsp; <a href="temperature.html">🌡 Temperature →</a>
 </footer>
 
 <script>

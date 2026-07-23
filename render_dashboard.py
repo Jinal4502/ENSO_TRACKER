@@ -520,6 +520,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     <a href="index.html" class="nav-active">ENSO Dashboard</a>
     <a href="hurricanes.html">Cyclone Tracker</a>
     <a href="precipitation.html">Precipitation</a>
+    <a href="temperature.html">Temperature</a>
   </div>
 </nav>
 <h1>ENSO Tracker</h1>
@@ -634,6 +635,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   Data: <a href="https://www.cpc.ncep.noaa.gov/" target="_blank">NOAA/CPC</a> &amp; <a href="https://iri.columbia.edu/our-expertise/climate/forecasts/enso/current/" target="_blank">IRI</a>
   &nbsp;·&nbsp; <a href="hurricanes.html">🌀 Global Tropical Cyclone Tracker →</a>
   &nbsp;·&nbsp; <a href="precipitation.html">🌧 Precipitation →</a>
+  &nbsp;·&nbsp; <a href="temperature.html">🌡 Temperature →</a>
 </footer>
 
 <script>

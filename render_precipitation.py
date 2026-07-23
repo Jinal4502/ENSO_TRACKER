@@ -156,6 +156,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     <a href="index.html">ENSO Dashboard</a>
     <a href="hurricanes.html">Cyclone Tracker</a>
     <a href="precipitation.html" class="nav-active">Precipitation</a>
+    <a href="temperature.html">Temperature</a>
   </div>
 </nav>
 
