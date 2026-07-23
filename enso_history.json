@@ -1486,5 +1486,36 @@
       "synopsis": "El Ni\u00f1o strengthened over the past month, with a large area of sea surface temperature anomalies in excess of +1.0\u00b0C across the central and eastern equatorial Pacific (Fig. 1). The latest weekly Ni\u00f1o-3.4 index value was +1.2\u00b0C, with the westernmost (Ni\u00f1o-4) and easternmost (Ni\u00f1o-1+2) indices at +0.5\u00b0C and +2.7\u00b0C, respectively (Fig. 2). The equatorial subsurface temperature index (average from 180\u00b0-100\u00b0W) increased (Fig. 3), as a recent downwelling Kelvin wave deepened the thermocline and raised temperatures in the eastern Pacific (Fig. 4). Low-level westerly wind anomalies and upper-level easterly wind anomalies were observed over the western and central equatorial Pacific. Convection was enhanced over the central and east-central equatorial Pacific and was suppressed over Indonesia (Fig. ",
       "issued": ""
     }
+  },
+  {
+    "fetched_utc": "2026-07-23T20:09:01.393520+00:00",
+    "latest_weekly": {
+      "date": "2026-07-15",
+      "nino12": 25.5,
+      "nino12_anom": 3.6,
+      "nino3": 28.1,
+      "nino3_anom": 2.3,
+      "nino34": 29.3,
+      "nino34_anom": 2.1,
+      "nino4": 29.9,
+      "nino4_anom": 1.1
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "AMJ",
+      "sst": 28.71,
+      "oni": 0.98
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "El Ni\u00f1o continues and will strengthen through the end of the year, with a 97% chance it will persist through early spring 2027.",
+      "issued": ""
+    }
   }
 ]
