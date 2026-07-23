@@ -309,7 +309,7 @@ const DARK = {{
 const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
 const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
 const ENSO_FILL   = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
-const ANOM_MIN = -3, ANOM_MAX = 3;
+const ANOM_MIN = -1.5, ANOM_MAX = 1.5;
 
 let currentMode   = "tracker";
 let currentBasin  = "Global";
@@ -368,8 +368,8 @@ function makeTrace(zVals, zmin, zmax, titleText) {{
       tickfont:{{color:DARK.muted,size:10}},
       bgcolor:"rgba(12,17,23,0.80)", bordercolor:DARK.border, borderwidth:1,
       len:0.55, thickness:14, x:1.01, xpad:8,
-      tickvals:[-3,-2,-1,0,1,2,3],
-      ticktext:["-3","-2","-1","0","+1","+2","+3"],
+      tickvals:[-1.5,-1,-0.5,0,0.5,1,1.5],
+      ticktext:["-1.5","-1","-.5","0","+.5","+1","+1.5"],
     }},
     marker:{{line:{{width:0}}}},  // no cell borders → smooth continuous look
     hovertemplate:"<b>%{{customdata}}</b><br>%{{z:+.2f}} °C<extra></extra>",
@@ -419,7 +419,7 @@ function phaseAnnotation(label) {{
     bgcolor:"rgba(13,17,23,0.75)",borderpad:4}}];
 }}
 
-function makeTrackerLayout(fd, sliderSteps) {{
+function makeTrackerLayout(fd, sliderSteps, activeIdx) {{
   return {{
     ...makeBaseLayout(true),
     annotations: trackerAnnotations(fd),
@@ -437,7 +437,7 @@ function makeTrackerLayout(fd, sliderSteps) {{
       bgcolor:"#1c2128",bordercolor:"#30363d",font:{{color:DARK.text,size:12}},
     }}],
     sliders:[{{
-      active:0, steps:sliderSteps,
+      active: activeIdx ?? 0, steps:sliderSteps,
       x:0.12, y:-0.05, xanchor:"left", yanchor:"top", len:0.86,
       currentvalue:{{visible:false}},
       transition:{{duration:80}},
@@ -484,8 +484,9 @@ document.getElementById("mapTabs").addEventListener("click", e => {{
   document.getElementById("compositeControls").style.display = currentMode==="composite" ? "":"none";
   document.getElementById("diffControls").style.display      = currentMode==="diff"      ? "":"none";
   if (currentMode === "tracker") {{
-    const fd = monthlyData[sortedKeys[0]];
-    Plotly.react("mapDiv",[makeTrace(fd.vals)],makeTrackerLayout(fd,cachedSliderSteps),{{responsive:true}});
+    const li = sortedKeys.length - 1;
+    const fd = monthlyData[sortedKeys[li]];
+    Plotly.react("mapDiv",[makeTrace(fd.vals)],makeTrackerLayout(fd,cachedSliderSteps,li),{{responsive:true}});
     Plotly.addFrames("mapDiv", buildFrames());
   }} else if (currentMode === "composite") {{
     const phase = document.querySelector("#ensoToggle .btn.active")?.dataset.enso||"all";
@@ -706,9 +707,10 @@ async function init() {{
   document.getElementById("loading").style.display="none";
   document.getElementById("content").style.display="block";
 
-  const fd0=monthlyData[sortedKeys[0]];
+  const lastIdx = sortedKeys.length - 1;
+  const fd0=monthlyData[sortedKeys[lastIdx]];
   await Plotly.newPlot("mapDiv",[makeTrace(fd0.vals)],
-    makeTrackerLayout(fd0,cachedSliderSteps),{{responsive:true}});
+    makeTrackerLayout(fd0,cachedSliderSteps,lastIdx),{{responsive:true}});
   await Plotly.addFrames("mapDiv",buildFrames());
 
   renderTimeSeries(currentBasin);
