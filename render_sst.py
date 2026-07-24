@@ -441,6 +441,7 @@ function makeRawTrace(rawVals) {{
       tickvals:[0,5,10,15,20,25,28,30,32],
       ticktext:["0","5","10","15","20","25","28","30","32+"],
     }},
+    opacity:0.72,
     marker:{{line:{{width:0}}}},
     hovertemplate:"<b>%{{customdata}}</b><br>%{{z:.1f}} °C<extra></extra>",
     showscale:true,
@@ -461,6 +462,51 @@ function makeNino34OutlineTrace() {{
   }};
 }}
 
+const BASIN_LABEL_LON = [-160, -130,  -35,  -20,   75,    0,   20];
+const BASIN_LABEL_LAT = [  38,  -28,   42,  -28,  -15,  -57,   84];
+const BASIN_LABEL_TXT = ["NORTH PACIFIC","SOUTH PACIFIC","NORTH ATLANTIC",
+                          "SOUTH ATLANTIC","INDIAN OCEAN","SOUTHERN OCEAN","ARCTIC OCEAN"];
+
+function makeBasinLabelTrace() {{
+  return [{{
+    type:"scattergeo", mode:"text",
+    lon:BASIN_LABEL_LON, lat:BASIN_LABEL_LAT, text:BASIN_LABEL_TXT,
+    textfont:{{color:"rgba(220,240,255,0.90)",size:11,
+               family:"'Helvetica Neue',Helvetica,Arial,sans-serif"}},
+    hoverinfo:"skip", showlegend:false,
+  }}];
+}}
+
+// Inject an SVG feGaussianBlur glow filter onto the basin label text nodes.
+// Must be called after every Plotly.react / Plotly.newPlot because Plotly
+// re-creates the SVG DOM on each full render.
+function applyBasinGlow() {{
+  requestAnimationFrame(()=>{{
+    const svg = document.querySelector("#mapDiv svg");
+    if (!svg) return;
+    // Inject filter definition once per SVG lifetime
+    if (!svg.querySelector("#basin-glow")) {{
+      const ns = "http://www.w3.org/2000/svg";
+      const defs = document.createElementNS(ns,"defs");
+      defs.innerHTML = `<filter id="basin-glow" x="-80%" y="-80%" width="360%" height="360%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+        <feFlood flood-color="#7dd3fc" flood-opacity="1" result="color"/>
+        <feComposite in="color" in2="blur" operator="in" result="glow"/>
+        <feMerge>
+          <feMergeNode in="glow"/>
+          <feMergeNode in="glow"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>`;
+      svg.insertBefore(defs, svg.firstChild);
+    }}
+    svg.querySelectorAll(".scatterlayer text").forEach(el=>{{
+      if (BASIN_LABEL_TXT.includes(el.textContent.trim()))
+        el.style.filter="url(#basin-glow)";
+    }});
+  }});
+}}
+
 function makeAnomTrace(anomVals, cmin, cmax, cbTitle) {{
   return {{
     type:"choropleth",
@@ -479,6 +525,7 @@ function makeAnomTrace(anomVals, cmin, cmax, cbTitle) {{
       tickvals:(()=>{{const mn=cmin??ANOM_MIN,mx=cmax??ANOM_MAX;return[mn,mn/2,0,mx/2,mx];}})(),
       ticktext:(()=>{{const mn=cmin??ANOM_MIN,mx=cmax??ANOM_MAX;return[mn.toFixed(1),(mn/2).toFixed(1),"0","+"+(mx/2).toFixed(1),"+"+mx.toFixed(1)];}})(),
     }},
+    opacity:0.72,
     marker:{{line:{{width:0}}}},
     hovertemplate:"<b>%{{customdata}}</b><br>%{{z:+.2f}} °C<extra></extra>",
     showscale:true,
@@ -576,15 +623,15 @@ document.getElementById("mapTabs").addEventListener("click", e => {{
   if (currentMode === "tracker") {{
     const li = sortedKeys.length - 1;
     const fd = monthlyData[sortedKeys[li]];
-    Plotly.react("mapDiv",[makeRawTrace(fd.rawVals),makeNino34OutlineTrace()],makeTrackerLayout(fd,cachedSliderSteps,li),{{responsive:true}});
+    Plotly.react("mapDiv",[makeRawTrace(fd.rawVals),makeNino34OutlineTrace(),...makeBasinLabelTrace()],makeTrackerLayout(fd,cachedSliderSteps,li),{{responsive:true}}).then(applyBasinGlow);
     Plotly.addFrames("mapDiv", buildFrames());
   }} else if (currentMode === "composite") {{
     const phase = document.querySelector("#ensoToggle .btn.active")?.dataset.enso||"all";
-    Plotly.react("mapDiv",[makeAnomTrace(composites[phase]),makeNino34OutlineTrace()],
-      makeStaticLayout(phase==="all"?"All Years (anomaly)":phase+" anomaly"),{{responsive:true}});
+    Plotly.react("mapDiv",[makeAnomTrace(composites[phase]),makeNino34OutlineTrace(),...makeBasinLabelTrace()],
+      makeStaticLayout(phase==="all"?"All Years (anomaly)":phase+" anomaly"),{{responsive:true}}).then(applyBasinGlow);
   }} else {{
-    Plotly.react("mapDiv",[makeAnomTrace(composites["all"],-3,3,"°C diff"),makeNino34OutlineTrace()],
-      makeStaticLayout("Select dates → Plot Difference"),{{responsive:true}});
+    Plotly.react("mapDiv",[makeAnomTrace(composites["all"],-3,3,"°C diff"),makeNino34OutlineTrace(),...makeBasinLabelTrace()],
+      makeStaticLayout("Select dates → Plot Difference"),{{responsive:true}}).then(applyBasinGlow);
   }}
 }});
 
@@ -594,8 +641,8 @@ document.getElementById("ensoToggle").addEventListener("click", e => {{
   document.querySelectorAll("#ensoToggle .btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   const phase = btn.dataset.enso;
-  Plotly.react("mapDiv",[makeAnomTrace(composites[phase]),makeNino34OutlineTrace()],
-    makeStaticLayout(phase==="all"?"All Years (anomaly)":phase+" anomaly"),{{responsive:true}});
+  Plotly.react("mapDiv",[makeAnomTrace(composites[phase]),makeNino34OutlineTrace(),...makeBasinLabelTrace()],
+    makeStaticLayout(phase==="all"?"All Years (anomaly)":phase+" anomaly"),{{responsive:true}}).then(applyBasinGlow);
 }});
 
 // ── Difference map ────────────────────────────────────────────────────────────
@@ -615,8 +662,8 @@ document.getElementById("diffBtn").addEventListener("click", () => {{
     (a==null||fd2.rawVals[i]==null) ? null : +(fd2.rawVals[i]-a).toFixed(2));
   const maxAbs = Math.max(...diff.filter(x=>x!==null).map(Math.abs));
   const bound  = Math.min(Math.ceil(maxAbs*10)/10, 5);
-  Plotly.react("mapDiv",[makeAnomTrace(diff,-bound,bound,"°C diff"),makeNino34OutlineTrace()],
-    makeStaticLayout(`${{d2}} minus ${{d1}}`),{{responsive:true}});
+  Plotly.react("mapDiv",[makeAnomTrace(diff,-bound,bound,"°C diff"),makeNino34OutlineTrace(),...makeBasinLabelTrace()],
+    makeStaticLayout(`${{d2}} minus ${{d1}}`),{{responsive:true}}).then(applyBasinGlow);
 }});
 
 // ── Time series ───────────────────────────────────────────────────────────────
@@ -811,8 +858,9 @@ async function init() {{
 
   const lastIdx = sortedKeys.length - 1;
   const fd0 = monthlyData[sortedKeys[lastIdx]];
-  await Plotly.newPlot("mapDiv",[makeRawTrace(fd0.rawVals),makeNino34OutlineTrace()],
+  await Plotly.newPlot("mapDiv",[makeRawTrace(fd0.rawVals),makeNino34OutlineTrace(),...makeBasinLabelTrace()],
     makeTrackerLayout(fd0,cachedSliderSteps,lastIdx),{{responsive:true}});
+  applyBasinGlow();
   await Plotly.addFrames("mapDiv",buildFrames());
 
   renderTimeSeries(currentBasin);
