@@ -10,9 +10,9 @@ from pathlib import Path
 
 META_FILE = Path("docs/data/sst_meta.json")
 CSV_FILE  = Path("docs/data/sst_grid.csv")
+CELL_HALF = 4.0   # half of 8° grid
 
 # Warm colorscale for absolute SST (−2 → 32 °C)
-# dark navy → blue → cyan → yellow → orange → red → dark red
 SST_RAW_SCALE = [
     [0.00, "#060614"],
     [0.09, "#0c1f52"],
@@ -55,11 +55,12 @@ _ANOM_SCALE_JSON = json.dumps(SST_ANOM_SCALE)
 
 def _build_cells():
     """Read unique cells from the first month of the CSV.
-    Returns (cell_lats_json, cell_lons_json, cell_basins_json,
-             latlon_idx_json, n_cells).
+    Returns GeoJSON (8°×8° filled polygons), string cell IDs, lat/lon arrays,
+    basin list, LAT_LON_IDX lookup, and cell count.
+    Uses string IDs + featureidkey:'properties.cell_id' for robust Plotly matching.
     """
     if not CSV_FILE.exists():
-        return "[]", "[]", "[]", "{}", 0
+        return "null", "[]", "[]", "[]", "[]", "{}", 0
 
     cells = []
     with open(CSV_FILE, newline="") as f:
@@ -75,14 +76,36 @@ def _build_cells():
 
     cells.sort(key=lambda c: (c[0], c[1]))
 
-    cell_lats, cell_lons, cell_basins, latlon_idx = [], [], [], {}
+    features = []
+    cell_ids, cell_lats, cell_lons, cell_basins, latlon_idx = [], [], [], [], {}
     for i, (lat, lon, basin) in enumerate(cells):
+        lat0 = max(-90.0, lat - CELL_HALF)
+        lat1 = min(90.0,  lat + CELL_HALF)
+        lon0, lon1 = lon - CELL_HALF, lon + CELL_HALF
+        sid = str(i)
+        features.append({
+            "type": "Feature",
+            "id": sid,
+            "properties": {"cell_id": sid},
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                    [lon0, lat0], [lon1, lat0],
+                    [lon1, lat1], [lon0, lat1],
+                    [lon0, lat0],
+                ]],
+            },
+        })
+        cell_ids.append(sid)
         cell_lats.append(lat)
         cell_lons.append(lon)
         cell_basins.append(basin)
         latlon_idx[f"{int(lat)},{int(lon)}"] = i
 
+    geojson = {"type": "FeatureCollection", "features": features}
     return (
+        json.dumps(geojson, separators=(",", ":")),
+        json.dumps(cell_ids),
         json.dumps(cell_lats),
         json.dumps(cell_lons),
         json.dumps(cell_basins),
@@ -108,7 +131,8 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
     ])
     basins_json = json.dumps(basins)
 
-    cell_lats_json, cell_lons_json, cell_basins_json, latlon_idx_json, n_cells = _build_cells()
+    geojson_str, cell_ids_json, cell_lats_json, cell_lons_json, \
+        cell_basins_json, latlon_idx_json, n_cells = _build_cells()
 
     # Date dropdowns
     y0i, m0i = int(yr0), 1
@@ -121,9 +145,9 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
         if m > 12:
             m = 1
             y += 1
-    dates_json     = json.dumps(date_options)
-    default_date1  = date_options[max(0, len(date_options) - 13)]
-    default_date2  = date_options[-1]
+    dates_json    = json.dumps(date_options)
+    default_date1 = date_options[max(0, len(date_options) - 13)]
+    default_date2 = date_options[-1]
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -223,7 +247,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
 
     <div id="trackerDesc">
       <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
-        Absolute SST (°C). Dark navy = cold · red = warm.
+        Absolute SST (°C). Dark navy = cold · red/dark = very warm.
         Use &#9654; Play or drag the slider to animate.
       </p>
     </div>
@@ -263,7 +287,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
   </div>
 
   <div class="card">
-    <h2 id="lineTitle">Monthly SST — Global ({yr0}–{yr1})</h2>
+    <h2 id="lineTitle">Monthly SST Anomaly — Global ({yr0}–{yr1})</h2>
     <p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">
       Area-average SST anomaly (°C) for selected basin.
       <span style="background:rgba(239,83,80,.22);padding:1px 5px;border-radius:3px">El Ni&ntilde;o</span>
@@ -302,11 +326,14 @@ const ALL_BASINS  = {basins_json};
 const DATE_LIST   = {dates_json};
 const DEFAULT_D1  = "{default_date1}";
 const DEFAULT_D2  = "{default_date2}";
-const CELL_LATS   = {cell_lats_json};
-const CELL_LONS   = {cell_lons_json};
-const CELL_BASINS = {cell_basins_json};
-const LAT_LON_IDX = {latlon_idx_json};
-const N_CELLS     = {n_cells};
+// GeoJSON with 8°×8° filled polygons — choropleth renders cells seamlessly
+const SST_GEOJSON  = {geojson_str};
+const CELL_IDS     = {cell_ids_json};    // string IDs matching GeoJSON properties.cell_id
+const CELL_LATS    = {cell_lats_json};
+const CELL_LONS    = {cell_lons_json};
+const CELL_BASINS  = {cell_basins_json};
+const LAT_LON_IDX  = {latlon_idx_json};  // "int_lat,int_lon" → cell index
+const N_CELLS      = {n_cells};
 
 const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const DARK = {{
@@ -321,11 +348,11 @@ let currentMode  = "tracker";
 let currentBasin = "Global";
 let monthlyData  = {{}};
 let sortedKeys   = [];
-let composites   = {{}};  // anomaly composites for ENSO composite tab
+let composites   = {{}};
 let basinRows    = {{}};
 let cachedSliderSteps = [];
 
-// ── Fast CSV parser — 8 columns: year,month,lat,lon,sst_anom,sst_raw,enso,basin ──
+// ── Fast CSV parser — 8 cols: year,month,lat,lon,sst_anom,sst_raw,enso,basin ─
 function parseSST(text) {{
   let pos = text.indexOf('\\n') + 1;
   const n = text.split('\\n').length - 1;
@@ -335,15 +362,13 @@ function parseSST(text) {{
   const lons   = new Float32Array(n);
   const anoms  = new Float32Array(n);
   const raws   = new Float32Array(n);
-  const ensos  = [];
-  const basins = [];
+  const ensos  = [], basins = [];
   let i = 0;
   while (pos < text.length) {{
     const end  = text.indexOf('\\n', pos);
     const line = end === -1 ? text.slice(pos) : text.slice(pos, end);
     pos = end === -1 ? text.length : end + 1;
     if (!line.trim()) continue;
-    // Find comma positions
     let p0=line.indexOf(','),
         p1=line.indexOf(',',p0+1),
         p2=line.indexOf(',',p1+1),
@@ -351,23 +376,19 @@ function parseSST(text) {{
         p4=line.indexOf(',',p3+1),
         p5=line.indexOf(',',p4+1),
         p6=line.indexOf(',',p5+1);
-    years[i] =+line.slice(0,p0);
-    months[i]=+line.slice(p0+1,p1);
-    lats[i]  =+line.slice(p1+1,p2);
-    lons[i]  =+line.slice(p2+1,p3);
-    anoms[i] =+line.slice(p3+1,p4);
-    raws[i]  =+line.slice(p4+1,p5);
+    years[i] =+line.slice(0,p0);   months[i]=+line.slice(p0+1,p1);
+    lats[i]  =+line.slice(p1+1,p2); lons[i]  =+line.slice(p2+1,p3);
+    anoms[i] =+line.slice(p3+1,p4); raws[i]  =+line.slice(p4+1,p5);
     ensos.push(line.slice(p5+1,p6));
     basins.push(line.slice(p6+1).trim());
     i++;
   }}
   return {{years:years.slice(0,i),months:months.slice(0,i),
            lats:lats.slice(0,i),lons:lons.slice(0,i),
-           anoms:anoms.slice(0,i),raws:raws.slice(0,i),
-           ensos,basins,n:i}};
+           anoms:anoms.slice(0,i),raws:raws.slice(0,i),ensos,basins,n:i}};
 }}
 
-// ── Geo layout (Robinson projection) ─────────────────────────────────────────
+// ── Geo layout — Robinson projection ─────────────────────────────────────────
 const GEO_CFG = {{
   showland:true,       landcolor:"#1a2035",
   showocean:true,      oceancolor:"#080a14",
@@ -387,57 +408,57 @@ function makeBaseLayout(withSlider) {{
   }};
 }}
 
-// ── Scattergeo trace — large overlapping circles for smooth gradient ──────────
+// ── Choropleth traces — filled 8°×8° polygons, zero borders, seamless tiles ──
 function makeRawTrace(rawVals) {{
   return {{
-    type:"scattergeo", mode:"markers",
-    lat:CELL_LATS, lon:CELL_LONS,
-    marker:{{
-      size:26, symbol:"circle", line:{{width:0}}, opacity:1,
-      color:rawVals,
-      colorscale:SST_RAW_SCALE,
-      cmin:SST_RAW_MIN, cmax:SST_RAW_MAX,
-      colorbar:{{
-        title:{{text:"SST (°C)",font:{{color:DARK.muted,size:11}}}},
-        tickfont:{{color:DARK.muted,size:10}},
-        bgcolor:"rgba(8,10,20,0.85)",bordercolor:DARK.border,borderwidth:1,
-        len:0.6, thickness:14, x:1.01, xpad:8,
-        tickvals:[0,5,10,15,20,25,28,30,32],
-        ticktext:["0","5","10","15","20","25","28","30","32+"],
-      }},
-    }},
+    type:"choropleth",
+    geojson:SST_GEOJSON,
+    featureidkey:"properties.cell_id",
+    locations:CELL_IDS,
+    z:rawVals,
     customdata:CELL_BASINS,
-    hovertemplate:"<b>%{{customdata}}</b><br>%{{marker.color:.1f}} °C<extra></extra>",
-    showlegend:false,
+    colorscale:SST_RAW_SCALE,
+    zmin:SST_RAW_MIN, zmax:SST_RAW_MAX,
+    colorbar:{{
+      title:{{text:"SST (°C)",font:{{color:DARK.muted,size:11}}}},
+      tickfont:{{color:DARK.muted,size:10}},
+      bgcolor:"rgba(8,10,20,0.85)",bordercolor:DARK.border,borderwidth:1,
+      len:0.6,thickness:14,x:1.01,xpad:8,
+      tickvals:[0,5,10,15,20,25,28,30,32],
+      ticktext:["0","5","10","15","20","25","28","30","32+"],
+    }},
+    marker:{{line:{{width:0}}}},
+    hovertemplate:"<b>%{{customdata}}</b><br>%{{z:.1f}} °C<extra></extra>",
+    showscale:true,
   }};
 }}
 
 function makeAnomTrace(anomVals, cmin, cmax, cbTitle) {{
   return {{
-    type:"scattergeo", mode:"markers",
-    lat:CELL_LATS, lon:CELL_LONS,
-    marker:{{
-      size:26, symbol:"circle", line:{{width:0}}, opacity:1,
-      color:anomVals,
-      colorscale:SST_ANOM_SCALE,
-      cmin:cmin ?? ANOM_MIN, cmax:cmax ?? ANOM_MAX,
-      colorbar:{{
-        title:{{text:cbTitle ?? "°C anom",font:{{color:DARK.muted,size:11}}}},
-        tickfont:{{color:DARK.muted,size:10}},
-        bgcolor:"rgba(8,10,20,0.85)",bordercolor:DARK.border,borderwidth:1,
-        len:0.6, thickness:14, x:1.01, xpad:8,
-        tickvals:[ANOM_MIN, ANOM_MIN/2, 0, ANOM_MAX/2, ANOM_MAX],
-        ticktext:[ANOM_MIN.toFixed(1), (ANOM_MIN/2).toFixed(1), "0",
-                  "+"+( ANOM_MAX/2).toFixed(1), "+"+ANOM_MAX.toFixed(1)],
-      }},
-    }},
+    type:"choropleth",
+    geojson:SST_GEOJSON,
+    featureidkey:"properties.cell_id",
+    locations:CELL_IDS,
+    z:anomVals,
     customdata:CELL_BASINS,
-    hovertemplate:"<b>%{{customdata}}</b><br>%{{marker.color:+.2f}} °C<extra></extra>",
-    showlegend:false,
+    colorscale:SST_ANOM_SCALE,
+    zmin:cmin ?? ANOM_MIN, zmax:cmax ?? ANOM_MAX,
+    colorbar:{{
+      title:{{text:cbTitle ?? "°C anom",font:{{color:DARK.muted,size:11}}}},
+      tickfont:{{color:DARK.muted,size:10}},
+      bgcolor:"rgba(8,10,20,0.85)",bordercolor:DARK.border,borderwidth:1,
+      len:0.6,thickness:14,x:1.01,xpad:8,
+      tickvals:[ANOM_MIN, ANOM_MIN/2, 0, ANOM_MAX/2, ANOM_MAX],
+      ticktext:[ANOM_MIN.toFixed(1),(ANOM_MIN/2).toFixed(1),"0",
+                "+"+(ANOM_MAX/2).toFixed(1),"+"+ANOM_MAX.toFixed(1)],
+    }},
+    marker:{{line:{{width:0}}}},
+    hovertemplate:"<b>%{{customdata}}</b><br>%{{z:+.2f}} °C<extra></extra>",
+    showscale:true,
   }};
 }}
 
-// ── Annotation overlays ───────────────────────────────────────────────────────
+// ── Annotation helpers ────────────────────────────────────────────────────────
 function trackerAnnotations(fd) {{
   const label = MONTH_NAMES[fd.month-1]+" "+fd.year;
   const ecol  = ENSO_COLORS[ENSO_PHASES.indexOf(fd.enso)] || DARK.muted;
@@ -452,7 +473,6 @@ function trackerAnnotations(fd) {{
       bgcolor:"rgba(8,10,20,0.6)",borderpad:3}},
   ];
 }}
-
 function phaseAnnotation(label) {{
   return [{{text:label,x:0.01,y:0.97,xref:"paper",yref:"paper",
     xanchor:"left",yanchor:"top",showarrow:false,
@@ -460,7 +480,7 @@ function phaseAnnotation(label) {{
     bgcolor:"rgba(8,10,20,0.75)",borderpad:4}}];
 }}
 
-// ── Tracker layout (with play button + slider) ────────────────────────────────
+// ── Tracker layout (play + slider) ────────────────────────────────────────────
 function makeTrackerLayout(fd, sliderSteps, activeIdx) {{
   return {{
     ...makeBaseLayout(true),
@@ -489,7 +509,6 @@ function makeTrackerLayout(fd, sliderSteps, activeIdx) {{
     }}],
   }};
 }}
-
 function makeStaticLayout(label) {{
   return {{
     ...makeBaseLayout(false),
@@ -504,7 +523,6 @@ function buildBasinSelector() {{
     `<button class="btn${{b===currentBasin?" active":""}}" data-basin="${{b}}">${{b}}</button>`
   ).join("");
 }}
-
 document.getElementById("basinSelector").addEventListener("click", e => {{
   const btn = e.target.closest("[data-basin]");
   if (!btn) return;
@@ -515,11 +533,10 @@ document.getElementById("basinSelector").addEventListener("click", e => {{
   renderClimatology(currentBasin);
 }});
 
-// ── Map tab switching ─────────────────────────────────────────────────────────
+// ── Tab switching ─────────────────────────────────────────────────────────────
 document.getElementById("mapTabs").addEventListener("click", e => {{
   const btn = e.target.closest("[data-tab]");
   if (!btn || btn.dataset.tab === currentMode) return;
-  // Stop any running animation before switching tabs
   if (currentMode === "tracker") {{
     Plotly.animate("mapDiv",[null],{{frame:{{duration:0,redraw:false}},mode:"immediate",transition:{{duration:0}}}});
   }}
@@ -562,7 +579,6 @@ function buildDateDropdowns() {{
   document.getElementById("diffDate1").value = DEFAULT_D1;
   document.getElementById("diffDate2").value = DEFAULT_D2;
 }}
-
 document.getElementById("diffBtn").addEventListener("click", () => {{
   const d1 = document.getElementById("diffDate1").value;
   const d2 = document.getElementById("diffDate2").value;
@@ -589,7 +605,6 @@ function renderTimeSeries(basin) {{
   const msX   = keys.map(k=>{{ const d=mdata[k]; return d.year+"-"+String(d.month).padStart(2,"0")+"-01"; }});
   const msY   = keys.map(k=>+(mdata[k].s/mdata[k].c).toFixed(3));
   const msENSO= keys.map(k=>mdata[k].enso);
-
   const shapes=[];
   for (let si=0;si<msX.length;) {{
     let ei=si;
@@ -604,10 +619,8 @@ function renderTimeSeries(basin) {{
   }}
   shapes.push({{type:"line",xref:"paper",yref:"y",x0:0,x1:1,y0:0,y1:0,
     layer:"above",line:{{color:"#555",dash:"dot",width:1}}}});
-
   document.getElementById("lineTitle").textContent =
     "Monthly SST Anomaly — "+basin+" ({yr0}–{yr1})";
-
   Plotly.react("lineDiv",[
     {{type:"scatter",mode:"lines",x:msX,y:msY,
       fill:"tozeroy",fillcolor:"rgba(14,165,233,0.12)",
@@ -655,20 +668,17 @@ function renderClimatology(basin) {{
     xaxis:{{color:DARK.muted,gridcolor:DARK.grid}},
     yaxis:{{title:"°C anomaly",color:DARK.muted,gridcolor:DARK.grid,
             zeroline:true,zerolinecolor:DARK.grid}},
-    legend:{{font:{{color:DARK.text,size:11}},bgcolor:DARK.card,bordercolor:DARK.border,borderwidth:1}}
+    legend:{{font:{{color:DARK.text,size:11}},bgcolor:DARK.card,
+             bordercolor:DARK.border,borderwidth:1}}
   }},{{responsive:true}});
 }}
 
-// ── Animation frames — update marker.color per frame ─────────────────────────
+// ── Animation frames — choropleth updates z ───────────────────────────────────
 function buildFrames() {{
   return sortedKeys.map(k => {{
     const fd = monthlyData[k];
-    return {{
-      name:k,
-      data:[{{marker:{{color:fd.rawVals}}}}],
-      traces:[0],
-      layout:{{annotations:trackerAnnotations(fd)}},
-    }};
+    return {{name:k, data:[{{z:fd.rawVals}}], traces:[0],
+             layout:{{annotations:trackerAnnotations(fd)}}}};
   }});
 }}
 
@@ -691,13 +701,13 @@ async function init() {{
   document.getElementById("loading").textContent = "Building charts…";
   await new Promise(r=>setTimeout(r,30));
 
-  // Build per-month cell arrays: rawVals and vals (anomaly)
+  // Build per-month cell arrays
   const rawMonthly = {{}};
   for (let i=0;i<data.n;i++) {{
     const k = data.years[i]+"-"+String(data.months[i]).padStart(2,"0");
     if (!rawMonthly[k]) rawMonthly[k]={{
-      rawVals: new Array(N_CELLS).fill(null),
-      vals:    new Array(N_CELLS).fill(null),
+      rawVals:new Array(N_CELLS).fill(null),
+      vals:   new Array(N_CELLS).fill(null),
       enso:data.ensos[i], year:data.years[i], month:data.months[i]
     }};
     const ci = LAT_LON_IDX[Math.round(data.lats[i])+","+Math.round(data.lons[i])];
@@ -716,7 +726,6 @@ async function init() {{
     if(!basinIdxMap[b]) basinIdxMap[b]=[];
     basinIdxMap[b].push(i);
   }}
-  // Global uses full data; create lightweight subset structs per basin
   basinRows["Global"]={{
     years:data.years,months:data.months,anoms:data.anoms,
     ensos:data.ensos,basins:data.basins,n:data.n
@@ -735,7 +744,7 @@ async function init() {{
     basinRows[b]=br;
   }}
 
-  // Anomaly composites for ENSO composite tab
+  // Anomaly composites
   function buildComposite(phase) {{
     const S=new Array(N_CELLS).fill(0),N2=new Array(N_CELLS).fill(0);
     const ks=phase==="all"?sortedKeys:sortedKeys.filter(k=>monthlyData[k].enso===phase);
@@ -759,7 +768,6 @@ async function init() {{
   document.getElementById("loading").style.display="none";
   document.getElementById("content").style.display="block";
 
-  // Start at most recent month
   const lastIdx = sortedKeys.length - 1;
   const fd0 = monthlyData[sortedKeys[lastIdx]];
   await Plotly.newPlot("mapDiv",[makeRawTrace(fd0.rawVals)],
