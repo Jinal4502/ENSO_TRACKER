@@ -89,9 +89,14 @@ def _build_cells():
             "properties": {"cell_id": sid},
             "geometry": {
                 "type": "Polygon",
+                # IMPORTANT: Plotly geo uses d3-geo's spherical winding rule.
+                # Small exterior polygons must be CLOCKWISE.  The previous
+                # counter-clockwise order represented the complement of each
+                # 8-degree cell, so the final feature painted almost the whole
+                # globe a single navy color.
                 "coordinates": [[
-                    [lon0, lat0], [lon1, lat0],
-                    [lon1, lat1], [lon0, lat1],
+                    [lon0, lat0], [lon0, lat1],
+                    [lon1, lat1], [lon1, lat0],
                     [lon0, lat0],
                 ]],
             },
@@ -124,11 +129,16 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
     last  = meta.get("last_month",  "2026-06")
     yr0   = first[:4]
     yr1   = last[:4]
-    basins = meta.get("basins", [
-        "Niño 3.4", "Tropical Pacific", "Tropical Atlantic",
-        "Indian Ocean", "North Pacific", "North Atlantic",
-        "Southern Ocean", "Global",
+    physical_basins = meta.get("basins", [
+        "North Pacific", "South Pacific", "North Atlantic",
+        "South Atlantic", "Indian Ocean", "Southern Ocean", "Arctic Ocean",
     ])
+    # Global is an all-ocean aggregate. Niño 3.4 is an overlapping analysis
+    # region, not a mutually exclusive physical basin.
+    basins = ["Global", "Niño 3.4"] + [
+        basin for basin in physical_basins
+        if basin not in {"Global", "Niño 3.4"}
+    ]
     basins_json = json.dumps(basins)
 
     geojson_str, cell_ids_json, cell_lats_json, cell_lons_json, \
@@ -352,7 +362,7 @@ let composites   = {{}};
 let basinRows    = {{}};
 let cachedSliderSteps = [];
 
-// ── Fast CSV parser — 8 cols: year,month,lat,lon,sst_anom,sst_raw,enso,basin ─
+// ── Fast CSV parser — 9 cols, including is_nino34 ─
 function parseSST(text) {{
   let pos = text.indexOf('\\n') + 1;
   const n = text.split('\\n').length - 1;
@@ -363,6 +373,7 @@ function parseSST(text) {{
   const anoms  = new Float32Array(n);
   const raws   = new Float32Array(n);
   const ensos  = [], basins = [];
+  const nino34 = new Uint8Array(n);
   let i = 0;
   while (pos < text.length) {{
     const end  = text.indexOf('\\n', pos);
@@ -375,17 +386,20 @@ function parseSST(text) {{
         p3=line.indexOf(',',p2+1),
         p4=line.indexOf(',',p3+1),
         p5=line.indexOf(',',p4+1),
-        p6=line.indexOf(',',p5+1);
+        p6=line.indexOf(',',p5+1),
+        p7=line.indexOf(',',p6+1);
     years[i] =+line.slice(0,p0);   months[i]=+line.slice(p0+1,p1);
     lats[i]  =+line.slice(p1+1,p2); lons[i]  =+line.slice(p2+1,p3);
     anoms[i] =+line.slice(p3+1,p4); raws[i]  =+line.slice(p4+1,p5);
     ensos.push(line.slice(p5+1,p6));
-    basins.push(line.slice(p6+1).trim());
+    basins.push(line.slice(p6+1,p7).trim());
+    nino34[i] = +line.slice(p7+1).trim() || 0;
     i++;
   }}
   return {{years:years.slice(0,i),months:months.slice(0,i),
            lats:lats.slice(0,i),lons:lons.slice(0,i),
-           anoms:anoms.slice(0,i),raws:raws.slice(0,i),ensos,basins,n:i}};
+           anoms:anoms.slice(0,i),raws:raws.slice(0,i),
+           ensos,basins,nino34:nino34.slice(0,i),n:i}};
 }}
 
 // ── Geo layout — Robinson projection ─────────────────────────────────────────
@@ -433,6 +447,20 @@ function makeRawTrace(rawVals) {{
   }};
 }}
 
+function makeNino34OutlineTrace() {{
+  return {{
+    type:"scattergeo",
+    mode:"lines",
+    lon:[-170,-170,-120,-120,-170],
+    lat:[-5,5,5,-5,-5],
+    line:{{color:"#ffffff",width:2,dash:"dash"}},
+    hovertemplate:"<b>Niño 3.4 monitoring region</b><br>5°S–5°N, 170°W–120°W<extra></extra>",
+    name:"Niño 3.4",
+    showlegend:true,
+    legendgroup:"nino34-outline",
+  }};
+}}
+
 function makeAnomTrace(anomVals, cmin, cmax, cbTitle) {{
   return {{
     type:"choropleth",
@@ -448,9 +476,8 @@ function makeAnomTrace(anomVals, cmin, cmax, cbTitle) {{
       tickfont:{{color:DARK.muted,size:10}},
       bgcolor:"rgba(8,10,20,0.85)",bordercolor:DARK.border,borderwidth:1,
       len:0.6,thickness:14,x:1.01,xpad:8,
-      tickvals:[ANOM_MIN, ANOM_MIN/2, 0, ANOM_MAX/2, ANOM_MAX],
-      ticktext:[ANOM_MIN.toFixed(1),(ANOM_MIN/2).toFixed(1),"0",
-                "+"+(ANOM_MAX/2).toFixed(1),"+"+ANOM_MAX.toFixed(1)],
+      tickvals:(()=>{{const mn=cmin??ANOM_MIN,mx=cmax??ANOM_MAX;return[mn,mn/2,0,mx/2,mx];}})(),
+      ticktext:(()=>{{const mn=cmin??ANOM_MIN,mx=cmax??ANOM_MAX;return[mn.toFixed(1),(mn/2).toFixed(1),"0","+"+(mx/2).toFixed(1),"+"+mx.toFixed(1)];}})(),
     }},
     marker:{{line:{{width:0}}}},
     hovertemplate:"<b>%{{customdata}}</b><br>%{{z:+.2f}} °C<extra></extra>",
@@ -549,14 +576,14 @@ document.getElementById("mapTabs").addEventListener("click", e => {{
   if (currentMode === "tracker") {{
     const li = sortedKeys.length - 1;
     const fd = monthlyData[sortedKeys[li]];
-    Plotly.react("mapDiv",[makeRawTrace(fd.rawVals)],makeTrackerLayout(fd,cachedSliderSteps,li),{{responsive:true}});
+    Plotly.react("mapDiv",[makeRawTrace(fd.rawVals),makeNino34OutlineTrace()],makeTrackerLayout(fd,cachedSliderSteps,li),{{responsive:true}});
     Plotly.addFrames("mapDiv", buildFrames());
   }} else if (currentMode === "composite") {{
     const phase = document.querySelector("#ensoToggle .btn.active")?.dataset.enso||"all";
-    Plotly.react("mapDiv",[makeAnomTrace(composites[phase])],
+    Plotly.react("mapDiv",[makeAnomTrace(composites[phase]),makeNino34OutlineTrace()],
       makeStaticLayout(phase==="all"?"All Years (anomaly)":phase+" anomaly"),{{responsive:true}});
   }} else {{
-    Plotly.react("mapDiv",[makeAnomTrace(composites["all"],-3,3,"°C diff")],
+    Plotly.react("mapDiv",[makeAnomTrace(composites["all"],-3,3,"°C diff"),makeNino34OutlineTrace()],
       makeStaticLayout("Select dates → Plot Difference"),{{responsive:true}});
   }}
 }});
@@ -567,7 +594,7 @@ document.getElementById("ensoToggle").addEventListener("click", e => {{
   document.querySelectorAll("#ensoToggle .btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
   const phase = btn.dataset.enso;
-  Plotly.react("mapDiv",[makeAnomTrace(composites[phase])],
+  Plotly.react("mapDiv",[makeAnomTrace(composites[phase]),makeNino34OutlineTrace()],
     makeStaticLayout(phase==="all"?"All Years (anomaly)":phase+" anomaly"),{{responsive:true}});
 }});
 
@@ -588,7 +615,7 @@ document.getElementById("diffBtn").addEventListener("click", () => {{
     (a==null||fd2.rawVals[i]==null) ? null : +(fd2.rawVals[i]-a).toFixed(2));
   const maxAbs = Math.max(...diff.filter(x=>x!==null).map(Math.abs));
   const bound  = Math.min(Math.ceil(maxAbs*10)/10, 5);
-  Plotly.react("mapDiv",[makeAnomTrace(diff,-bound,bound,"°C diff")],
+  Plotly.react("mapDiv",[makeAnomTrace(diff,-bound,bound,"°C diff"),makeNino34OutlineTrace()],
     makeStaticLayout(`${{d2}} minus ${{d1}}`),{{responsive:true}});
 }});
 
@@ -730,8 +757,22 @@ async function init() {{
     years:data.years,months:data.months,anoms:data.anoms,
     ensos:data.ensos,basins:data.basins,n:data.n
   }};
+
+  // Niño 3.4 is an overlapping analysis region selected by its flag.
+  const ninoIdx=[];
+  for (let i=0;i<data.n;i++) if(data.nino34[i]===1) ninoIdx.push(i);
+  const ninoN=ninoIdx.length;
+  const ninoRows={{years:new Int16Array(ninoN),months:new Uint8Array(ninoN),
+                  anoms:new Float32Array(ninoN),ensos:[],basins:[],n:ninoN}};
+  for (let j=0;j<ninoN;j++) {{
+    const i=ninoIdx[j];
+    ninoRows.years[j]=data.years[i]; ninoRows.months[j]=data.months[i];
+    ninoRows.anoms[j]=data.anoms[i]; ninoRows.ensos.push(data.ensos[i]);
+    ninoRows.basins.push(data.basins[i]);
+  }}
+  basinRows["Niño 3.4"]=ninoRows;
+
   for (const [b,idxs] of Object.entries(basinIdxMap)) {{
-    if(b==="Global") continue;
     const n=idxs.length;
     const br={{years:new Int16Array(n),months:new Uint8Array(n),
                anoms:new Float32Array(n),ensos:[],basins:[],n}};
@@ -770,7 +811,7 @@ async function init() {{
 
   const lastIdx = sortedKeys.length - 1;
   const fd0 = monthlyData[sortedKeys[lastIdx]];
-  await Plotly.newPlot("mapDiv",[makeRawTrace(fd0.rawVals)],
+  await Plotly.newPlot("mapDiv",[makeRawTrace(fd0.rawVals),makeNino34OutlineTrace()],
     makeTrackerLayout(fd0,cachedSliderSteps,lastIdx),{{responsive:true}});
   await Plotly.addFrames("mapDiv",buildFrames());
 
