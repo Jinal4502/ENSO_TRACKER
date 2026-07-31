@@ -346,14 +346,18 @@ def fetch_impacts_data() -> dict:
     }
 
     # Disasters (OWID/EM-DAT, by disaster type)
-    # Use YoY change to detrend the long-run reporting bias (more events recorded over time
-    # partly due to improved reporting, not just actual increase)
+    # Restrict to years when ONI is measured (1950+) for both display and correlations.
+    # YoY change is computed on the full series first so the 1950 value uses 1949 as baseline,
+    # then we drop everything before the ONI start year.
+    oni_start = min(int(y) for y in oni_annual)
     disasters_domain = None
     if owid:
         disasters_domain = {}
         for dtype, series in owid.items():
-            count_yoy  = yoy_pct_change(series.get("count", {}))
-            damage_yoy = yoy_pct_change(series.get("damage_usd", {}))
+            count_yoy  = {y: v for y, v in yoy_pct_change(series.get("count", {})).items()
+                          if y >= oni_start}
+            damage_yoy = {y: v for y, v in yoy_pct_change(series.get("damage_usd", {})).items()
+                          if y >= oni_start}
             if count_yoy:
                 disasters_domain[dtype] = {
                     "name":    dtype,
