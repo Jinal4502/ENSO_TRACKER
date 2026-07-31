@@ -266,58 +266,82 @@ function oniTrace(xRange) {{
   }};
 }}
 
+// Resolve the series payload for a single domain entry.
+// For disaster entries the payload is nested under .count or .damage;
+// for all other domains it sits directly on the entry.
+function resolveSeries(entry, metric) {{
+  if (!entry) return null;
+  if (metric === "damage" && entry.damage) return entry.damage;
+  if (entry.count) return entry.count;           // disaster mode
+  return entry;                                  // standard mode
+}}
+
 function buildDomain(domKey, containerId) {{
   const dom = D.domains[domKey];
   if (!dom || !dom.countries) return;
-  const countries = dom.countries;
-  const isoList   = Object.keys(countries);
-  if (!isoList.length) return;
+  const countries  = dom.countries;
+  const keyList    = Object.keys(countries);
+  if (!keyList.length) return;
+
+  const isDisaster = !!countries[keyList[0]].count;  // detect disaster structure
 
   const container = document.getElementById(containerId);
-  const tsId   = containerId + "_ts";
-  const lagId  = containerId + "_lag";
-  const selId  = containerId + "_sel";
+  const tsId  = containerId + "_ts";
+  const lagId = containerId + "_lag";
 
-  // Country selector
-  const sel = container.querySelector("." + selId);
-  isoList.forEach(iso => {{
+  // Primary selector (country or disaster type)
+  const sel = container.querySelector("." + containerId + "_sel");
+  keyList.forEach(k => {{
     const opt = document.createElement("option");
-    opt.value = iso;
-    opt.textContent = countries[iso].name;
+    opt.value = k;
+    opt.textContent = countries[k].name || k;
     sel.appendChild(opt);
   }});
 
-  function plotCountry(iso) {{
-    const c = countries[iso];
-    const yrs = c.years, vals = c.values;
-    const xRange = [Math.min(...yrs) - 1, Math.max(...yrs) + 1];
-    const shapes  = ALL_SHAPES.filter(s => s.x0 >= xRange[0] - 2 && s.x1 <= xRange[1] + 2);
+  // Metric toggle for disasters (count vs damage)
+  let currentMetric = "count";
+  const metricSel = container.querySelector("." + containerId + "_metric");
+  if (metricSel) {{
+    metricSel.addEventListener("change", () => {{
+      currentMetric = metricSel.value;
+      plotSeries(sel.value);
+    }});
+  }}
+
+  function plotSeries(key) {{
+    const entry  = countries[key];
+    const series = resolveSeries(entry, currentMetric);
+    if (!series || !series.years || !series.years.length) return;
+
+    const yrs  = series.years, vals = series.values;
+    const xRange    = [Math.min(...yrs) - 1, Math.max(...yrs) + 1];
     const allShapes = [...CONFOUND_SHAPES, ...ensoShapes(D.oni_annual)];
 
+    const seriesLabel = isDisaster
+      ? (currentMetric === "damage" ? "Econ. damage YoY %" : "Event count YoY %")
+      : dom.label.split("(")[0].trim();
+
     const barTrace = {{
-      type:"bar", name: dom.label.split(" (")[0],
+      type:"bar", name: seriesLabel,
       x: yrs, y: vals,
       marker: {{color: barColor(vals)}},
-      hovertemplate:"%{{x}}: %{{y:.2f}}<extra></extra>"
+      hovertemplate:"%{{x}}: %{{y:.2f}}%<extra></extra>"
     }};
 
     const layout = baseLayout(
-      dom.label + " — " + (countries[iso].name || iso),
-      dom.label.split("(")[0].trim(),
-      xRange, allShapes
+      dom.label + " — " + (entry.name || key),
+      seriesLabel, xRange, allShapes
     );
 
     Plotly.react(tsId, [barTrace, oniTrace(xRange)], layout, {{responsive:true, displayModeBar:false}});
 
-    // Lag chart
-    Plotly.react(lagId, lagTraces(c.corr),
-      lagLayout("Lagged correlation: ONI → " + (countries[iso].name || iso)),
+    Plotly.react(lagId, lagTraces(series.corr),
+      lagLayout("Lagged correlation: ONI → " + (entry.name || key)),
       {{responsive:true, displayModeBar:false}});
 
-    // Correlation table
     const tbody = container.querySelector(".corr-tbody");
     tbody.innerHTML = "";
-    c.corr.forEach(row => {{
+    series.corr.forEach(row => {{
       const tr = document.createElement("tr");
       function fmt(v) {{
         if (v == null) return '<td class="corr-weak">—</td>';
@@ -331,8 +355,8 @@ function buildDomain(domKey, containerId) {{
     }});
   }}
 
-  sel.addEventListener("change", () => plotCountry(sel.value));
-  plotCountry(isoList[0]);
+  sel.addEventListener("change", () => plotSeries(sel.value));
+  plotSeries(keyList[0]);
 }}
 
 // ── Render domain cards ───────────────────────────────────────────────────────
@@ -344,7 +368,7 @@ const DOMAIN_META = [
   {{ key:"food_price", title:"Food Commodity Prices",   icon:"🛒",
      desc:"FAO Food Price Index year-over-year change. El Niño–driven droughts in major growing regions can spike global commodity prices with a 0–2 year lag." }},
   {{ key:"disasters",  title:"Natural Disasters",        icon:"🌪",
-     desc:"Annual global disaster count from EM-DAT. El Niño intensifies floods, droughts, and cyclones across different regions simultaneously." }},
+     desc:"Event count &amp; economic damage year-over-year change (OWID/EM-DAT). El Niño intensifies hydro-meteorological disasters globally while La Niña amplifies flooding in parts of South Asia and East Africa." }},
 ];
 
 const panels = document.getElementById("panels");
@@ -356,12 +380,18 @@ DOMAIN_META.forEach(meta => {{
   const card = document.createElement("div");
   card.className = "domain-card";
   card.id = cid;
+  const isDisaster = meta.key === "disasters";
   card.innerHTML = `
     <div class="domain-header">
       <span class="domain-title">${{meta.icon}} ${{meta.title}}</span>
-      ${{hasData
-          ? `<select class="country-select ${{cid}}_sel"></select>`
-          : `<span style="font-size:.75rem;color:var(--muted)">No data — upload EM-DAT CSV to docs/data/emdat.csv</span>`
+      ${{hasData ? `
+        <div style="display:flex;gap:.4rem;align-items:center">
+          <select class="country-select ${{cid}}_sel"></select>
+          ${{isDisaster ? `<select class="country-select ${{cid}}_metric">
+            <option value="count">Event count</option>
+            <option value="damage">Econ. damage</option>
+          </select>` : ""}}
+        </div>` : `<span style="font-size:.75rem;color:var(--muted)">No data</span>`
       }}
     </div>
     <p style="font-size:.75rem;color:var(--muted);margin-bottom:.6rem">${{meta.desc}}</p>

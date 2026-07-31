@@ -219,50 +219,68 @@ def fetch_fao_fpi() -> dict:
     }
 
 
-# ── 4. EM-DAT (optional) ─────────────────────────────────────────────────────
+# ── 4. OWID disaster data (via EM-DAT, free, no auth) ────────────────────────
 
-def load_emdat():
+# Disaster types to surface; "All disasters" is the composite
+DISASTER_TYPES = ["All disasters", "Flood", "Drought", "Extreme weather",
+                  "Extreme temperature", "Wildfire"]
+
+def _parse_owid_disaster_csv(text: str, value_col: str) -> dict[str, dict[int, float]]:
     """
-    Read EM-DAT CSV if present. Aggregate to annual global disaster count + damage.
-    Expected columns (flexible): Year, Total Deaths, Total Damage ('000 US$), Disaster Type
-    Returns {year: {count, damage_musd}} or None if file absent.
+    Parse an OWID disaster CSV with columns: Entity, Code, Year, <value_col>.
+    Returns {entity: {year: value}}.
     """
-    if not EMDAT_CSV.exists():
-        print("  EM-DAT CSV not found — skipping disasters domain.")
-        return None
+    reader = csv.DictReader(io.StringIO(text))
+    out = defaultdict(dict)
+    for row in reader:
+        entity = row.get("Entity", "").strip()
+        if entity not in DISASTER_TYPES:
+            continue
+        try:
+            year = int(row["Year"])
+            val  = float(row[value_col])
+        except (KeyError, ValueError):
+            continue
+        out[entity][year] = val
+    return dict(out)
 
-    print(f"  Loading EM-DAT from {EMDAT_CSV} ...")
-    counts: dict[int, int] = defaultdict(int)
-    damage: dict[int, float] = defaultdict(float)
 
-    with open(EMDAT_CSV, newline="", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            # Try common column name variants
-            year_raw = row.get("Year") or row.get("year") or row.get("Dis Year") or ""
-            dmg_raw  = (row.get("Total Damage, Adjusted ('000 US$)")
-                        or row.get("Total Damage ('000 US$)")
-                        or row.get("Total Damage")
-                        or "0")
-            try:
-                year = int(str(year_raw).strip())
-            except ValueError:
-                continue
-            counts[year] += 1
-            try:
-                damage[year] += float(str(dmg_raw).replace(",", "").strip() or "0")
-            except ValueError:
-                pass
+def fetch_owid_disasters():
+    """
+    Fetch OWID disaster event counts and economic damages (both from EM-DAT).
+    Returns {type_name: {"count": {year: n}, "damage_usd": {year: v}}} or None on failure.
+    """
+    url_counts = "https://ourworldindata.org/grapher/number-of-natural-disaster-events.csv"
+    url_damage = "https://ourworldindata.org/grapher/economic-damage-from-natural-disasters.csv"
 
-    if not counts:
+    print("  Fetching OWID disaster counts ...")
+    try:
+        counts_by_type = _parse_owid_disaster_csv(_fetch_text(url_counts), "Disasters")
+    except Exception as e:
+        print(f"  [WARN] Disaster counts fetch failed: {e}")
+        counts_by_type = {}
+
+    print("  Fetching OWID disaster economic damages ...")
+    try:
+        raw_text = _fetch_text(url_damage)
+        # Detect the value column name (varies slightly across OWID releases)
+        header = raw_text.splitlines()[0]
+        dmg_col = next((c for c in csv.reader([header]).__next__()
+                        if "damage" in c.lower() or "economic" in c.lower()), None)
+        damage_by_type = _parse_owid_disaster_csv(raw_text, dmg_col) if dmg_col else {}
+    except Exception as e:
+        print(f"  [WARN] Disaster damage fetch failed: {e}")
+        damage_by_type = {}
+
+    if not counts_by_type and not damage_by_type:
         return None
 
     result = {}
-    for yr in sorted(set(counts) | set(damage)):
-        result[yr] = {
-            "count":       counts.get(yr, 0),
-            "damage_musd": round(damage.get(yr, 0.0) / 1000, 2),  # → million USD
-        }
+    for dtype in DISASTER_TYPES:
+        c = counts_by_type.get(dtype, {})
+        d = damage_by_type.get(dtype, {})
+        if c or d:
+            result[dtype] = {"count": c, "damage_usd": d}
     return result
 
 
@@ -298,7 +316,7 @@ def fetch_impacts_data() -> dict:
     gdp_raw       = fetch_gdp_growth()
     food_prod_raw = fetch_food_production()
     fpi           = fetch_fao_fpi()
-    emdat         = load_emdat()
+    owid          = fetch_owid_disasters()
 
     # GDP: raw growth rates are already the detrended form
     gdp_domain = {}
@@ -327,28 +345,31 @@ def fetch_impacts_data() -> dict:
         }
     }
 
-    # Disasters
+    # Disasters (OWID/EM-DAT, by disaster type)
+    # Use YoY change to detrend the long-run reporting bias (more events recorded over time
+    # partly due to improved reporting, not just actual increase)
     disasters_domain = None
-    if emdat:
-        count_series  = {yr: v["count"]        for yr, v in emdat.items()}
-        damage_series = {yr: v["damage_musd"]  for yr, v in emdat.items()}
-        disasters_domain = {
-            "global": {
-                "name": "Global",
-                "count":       _series_payload(count_series,  oni_annual),
-                "damage_musd": _series_payload(damage_series, oni_annual),
-            }
-        }
+    if owid:
+        disasters_domain = {}
+        for dtype, series in owid.items():
+            count_yoy  = yoy_pct_change(series.get("count", {}))
+            damage_yoy = yoy_pct_change(series.get("damage_usd", {}))
+            if count_yoy:
+                disasters_domain[dtype] = {
+                    "name":    dtype,
+                    "count":   _series_payload(count_yoy,  oni_annual),
+                    "damage":  _series_payload(damage_yoy, oni_annual) if damage_yoy else None,
+                }
 
     payload = {
         "generated":       datetime.now(timezone.utc).isoformat(),
         "oni_annual":      oni_annual,
         "confound_events": CONFOUND_EVENTS,
         "domains": {
-            "gdp":        {"label": "GDP Growth Rate (%)",           "countries": gdp_domain},
+            "gdp":        {"label": "GDP Growth Rate (%)",             "countries": gdp_domain},
             "food_prod":  {"label": "Food Prod. Index YoY Change (%)", "countries": food_prod_domain},
             "food_price": {"label": "FAO Food Price Index YoY Change (%)", "countries": fpi_domain},
-            "disasters":  {"label": "Global Disaster Count",          "countries": disasters_domain},
+            "disasters":  {"label": "Disaster Count YoY Change (%)",   "countries": disasters_domain},
         },
     }
 
