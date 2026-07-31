@@ -147,9 +147,26 @@ function confoundShapes(events) {
   }));
 }
 
+// Build confound event name annotations (rotated labels inside each band)
+function confoundAnnotations(events, xRange) {
+  return events
+    .filter(ev => ev.end >= xRange[0] && ev.start <= xRange[1])
+    .map(ev => ({
+      xref:"x", yref:"paper",
+      x: (ev.start + ev.end) / 2,
+      y: 0.98,
+      text: ev.name,
+      textangle: -90,
+      showarrow: false,
+      font: {size: 8.5, color: "rgba(220,170,40,0.85)"},
+      xanchor: "center",
+      yanchor: "top",
+    }));
+}
+
 // ── Plotly layout base ────────────────────────────────────────────────────────
 const BG = "#0d1117", CARD = "#161b22", TEXT = "#c9d1d9", MUTED = "#8b949e", GRID = "#21262d";
-function baseLayout(title, yLabel, xRange, shapes) {
+function baseLayout(title, yLabel, xRange, shapes, annotations) {
   return {
     paper_bgcolor: CARD, plot_bgcolor: CARD,
     margin: {t:32, r:60, b:40, l:55},
@@ -171,6 +188,7 @@ function baseLayout(title, yLabel, xRange, shapes) {
       tickfont:{size:10, color:MUTED}
     },
     shapes: shapes,
+    annotations: annotations || [],
     showlegend: true,
     legend: {bgcolor:"rgba(0,0,0,0)", font:{size:10, color:MUTED},
               x:0, y:1.02, orientation:"h"},
@@ -317,7 +335,8 @@ function buildDomain(domKey, containerId) {
 
     const layout = baseLayout(
       dom.label + " — " + (entry.name || key),
-      seriesLabel, xRange, allShapes
+      seriesLabel, xRange, allShapes,
+      confoundAnnotations(D.confound_events, xRange)
     );
 
     Plotly.react(tsId, [barTrace, oniTrace(xRange)], layout, {responsive:true, displayModeBar:false});
