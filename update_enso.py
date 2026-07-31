@@ -23,6 +23,8 @@ from render_hurricanes import render_hurricanes
 from render_precipitation import render_precipitation
 from render_temperature import render_temperature
 from render_sst import render_sst
+from fetch_impacts import fetch_impacts_data
+from render_impacts import render_impacts
 
 HISTORY_FILE = "enso_history.json"
 DATA_FILE    = "enso_data.json"
@@ -181,6 +183,11 @@ def main() -> None:
     # 2e. Render SST page
     print("Generating SST page ...")
     render_sst("docs/sst.html")
+
+    # 2f. Render impacts page
+    print("Generating impacts page ...")
+    impacts_data = fetch_impacts_data()
+    render_impacts(impacts_data, "docs/impacts.html")
 
     # 3. History — append current snapshot, then find last week's entry
     history = load_history()

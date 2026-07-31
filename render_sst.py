@@ -230,6 +230,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
     <a href="precipitation.html">Precipitation</a>
     <a href="temperature.html">Land Temp</a>
     <a href="sst.html" class="nav-active">Sea Surface Temp</a>
+    <a href="impacts.html">Impacts</a>
   </div>
 </nav>
 

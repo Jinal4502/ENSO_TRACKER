@@ -158,6 +158,7 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
     <a href="precipitation.html">Precipitation</a>
     <a href="temperature.html" class="nav-active">Land Temp</a>
     <a href="sst.html">Sea Surface Temp</a>
+    <a href="impacts.html">Impacts</a>
   </div>
 </nav>
 

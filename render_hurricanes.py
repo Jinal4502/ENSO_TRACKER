@@ -318,6 +318,7 @@ def render_hurricanes(data: dict, output: str = "docs/hurricanes.html") -> None:
     <a href="precipitation.html">Precipitation</a>
     <a href="temperature.html">Land Temp</a>
     <a href="sst.html">Sea Surface Temp</a>
+    <a href="impacts.html">Impacts</a>
   </div>
 </nav>
 <h1>Global Tropical Cyclone Tracks &amp; ENSO</h1>
