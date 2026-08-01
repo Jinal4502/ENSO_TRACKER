@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENSO Quick Facts</title>
+<style>
+  :root {
+    --bg:     #0d1117;
+    --card:   #161b22;
+    --border: #30363d;
+    --text:   #c9d1d9;
+    --muted:  #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+         font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+         padding: 1.5rem; }
+  .topnav { display:flex; align-items:center; justify-content:space-between;
+             padding:.5rem 0; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }
+  .nav-brand { font-weight:700; font-size:.95rem; color:var(--text); text-decoration:none; }
+  .nav-links { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:.82rem;
+                  padding:.3rem .7rem; border-radius:5px; }
+  .nav-links a:hover { color:var(--text); background:var(--card); }
+  .nav-links a.nav-active { color:#fff; background:#f5a623; font-weight:600; }
+  h1 { font-size:1.4rem; font-weight:700; margin-bottom:.2rem; }
+  .subtitle { color:var(--muted); font-size:.85rem; margin-bottom:1.2rem; }
+
+  /* Filter row */
+  .filter-row { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; margin-bottom:.6rem; }
+  .filter-label { font-size:.78rem; color:var(--muted); white-space:nowrap; }
+  .pill { background:var(--card); border:1px solid var(--border); color:var(--muted);
+           font-size:.75rem; padding:.28rem .65rem; border-radius:20px; cursor:pointer;
+           transition:all .15s; }
+  .pill:hover { color:var(--text); border-color:#8b949e; }
+  .pill.active { background:#f5a623; border-color:#f5a623; color:#0d1117; font-weight:600; }
+
+  /* Category legend */
+  .cat-legend { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1rem; font-size:.73rem; color:var(--muted); }
+  .cat-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:3px; }
+
+  .fact-meta { font-size:.75rem; color:var(--muted); margin-bottom:.5rem; }
+  .fact-count span { font-weight:600; color:var(--text); }
+
+  /* Fact grid */
+  .fact-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+  .fact-card { background:var(--card); border:1px solid var(--border); border-radius:8px;
+                padding:1rem; display:flex; flex-direction:column; gap:.6rem;
+                transition:border-color .15s; cursor:default; }
+  .fact-card:hover { border-color:#8b949e; }
+  .fact-card.hidden { display:none; }
+  .card-top { display:flex; align-items:center; justify-content:space-between; gap:.4rem; }
+  .cat-badge { font-size:.68rem; font-weight:600; padding:.2rem .5rem; border-radius:4px;
+                white-space:nowrap; }
+  .country-tags { display:flex; gap:.3rem; flex-wrap:wrap; }
+  .ctag { font-size:.68rem; color:var(--muted); background:#21262d;
+           border-radius:3px; padding:.1rem .35rem; }
+  .fact-text { font-size:.87rem; line-height:1.6; color:var(--text); flex:1; }
+  .source-link { font-size:.72rem; color:var(--muted); text-decoration:none;
+                  border-top:1px solid var(--border); padding-top:.5rem; margin-top:auto;
+                  display:block; }
+  .source-link:hover { color:var(--text); }
+  .fact-num { font-size:.65rem; color:#444; font-weight:700; }
+
+  footer { font-size:.75rem; color:var(--muted); margin-top:1.5rem; text-align:center; }
+  footer a { color:var(--muted); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-brand" href="index.html">ENSO Tracker</a>
+  <div class="nav-links">
+    <a href="index.html">ENSO Dashboard</a>
+    <a href="hurricanes.html">Cyclones</a>
+    <a href="precipitation.html">Precipitation</a>
+    <a href="temperature.html">Temperature</a>
+    <a href="sst.html">SST</a>
+    <a href="impacts.html">Impacts</a>
+    <a href="facts.html" class="nav-active">Quick Facts</a>
+  </div>
+</nav>
+
+<h1>ENSO Quick Facts</h1>
+<p class="subtitle">Key findings from research papers and major reports on El Niño &amp; La Niña impacts. Click a source to read the original.</p>
+
+<div class="filter-row">
+  <span class="filter-label">Region:</span>
+  <button class="pill active" data-country="All">All</button>
+</div>
+
+<div class="cat-legend" id="cat-legend"></div>
+<p class="fact-meta">Showing <strong><span id="fact-count">20</span></strong> of 20 facts</p>
+
+<div class="fact-grid" id="fact-grid"></div>
+
+<footer>
+  Sources: original research papers and reports linked on each card. &nbsp;·&nbsp;
+  <a href="index.html">ENSO Dashboard</a> &nbsp;·&nbsp;
+  <a href="impacts.html">📊 ENSO Global Impacts →</a>
+</footer>
+
+<script>
+const FACTS = [{"id":1,"fact":"El Ni\u00f1o events cost the global economy an estimated $4.1 trillion in lost income between 1982 and 2023 \u2014 with the damage persisting for more than 5 years after each event, not just the event year itself.","countries":["Global"],"category":"Economy","source":"Callahan & Mankin (2023). Persistent effect of El Ni\u00f1o on global economic growth. Science, 380, 1237\u20131241.","url":"https://www.science.org/doi/10.1126/science.adf2983"},{"id":2,"fact":"South American fishermen named the warm current 'El Ni\u00f1o de Navidad' \u2014 'The Christ Child' \u2014 because it typically peaks around December, disrupting the cold Humboldt Current that their anchovy fishery depends on.","countries":["Global","Peru"],"category":"Climate","source":"NOAA Ocean Service \u2014 What is El Ni\u00f1o?","url":"https://oceanservice.noaa.gov/facts/ninonina.html"},{"id":3,"fact":"Peru's anchovy catch peaked at 13.1 million tonnes in 1971 \u2014 then the 1972 El Ni\u00f1o warmed coastal waters, suppressed upwelling, and collapsed the fishery. It reshaped global fishmeal markets and caused a worldwide livestock feed shortage.","countries":["Peru"],"category":"Agriculture","source":"Wikipedia \u2014 Peruvian Anchoveta (citing FAO FishStat data).","url":"https://en.wikipedia.org/wiki/Peruvian_anchoveta"},{"id":4,"fact":"The 1997\u201398 El Ni\u00f1o-driven peatland and forest fires in Indonesia released an estimated 0.8\u20132.6 billion tonnes of carbon in a single season \u2014 equivalent to 13\u201340% of global annual fossil fuel emissions at the time.","countries":["Indonesia","Global"],"category":"Disaster","source":"Page et al. (2002). The amount of carbon released from peat and forest fires in Indonesia during 1997. Nature, 420, 61\u201365.","url":"https://doi.org/10.1038/nature01131"},{"id":5,"fact":"El Ni\u00f1o events consistently suppress India's summer monsoon, and virtually every major drought in India on record has occurred in an El Ni\u00f1o year. Rain-fed farming across the subcontinent suffers severely \u2014 strong El Ni\u00f1o droughts have triggered widespread crop failures and food crises affecting hundreds of millions.","countries":["India"],"category":"Agriculture","source":"Wikipedia \u2014 Monsoon of South Asia (El Ni\u00f1o teleconnection section).","url":"https://en.wikipedia.org/wiki/Monsoon_of_South_Asia"},{"id":6,"fact":"The simultaneous El Ni\u00f1o-driven crop failures of 1877\u201378 across China, India, Brazil, and Africa triggered famines that killed an estimated 30\u201360 million people \u2014 arguably the deadliest climate-linked disaster in recorded history, now known as the 'Victorian Holocaust'.","countries":["China","India","Brazil","Nigeria","Global"],"category":"Disaster","source":"Davis, M. (2001). Late Victorian Holocausts: El Ni\u00f1o Famines and the Making of the Third World. Verso Books.","url":"https://archive.org/details/latevictorianhol0000davi"},{"id":7,"fact":"El Ni\u00f1o suppresses Atlantic hurricane activity by 40\u201350% through increased upper-level wind shear that tears apart developing tropical storms. The entire 1997 Atlantic season produced just 3 hurricanes, compared to the seasonal average of 6.","countries":["USA"],"category":"Disaster","source":"Gray, W.M. (1984). Atlantic seasonal hurricane frequency. Part I: El Ni\u00f1o and 30 mb QBO influences. Monthly Weather Review, 112, 1649\u20131668.","url":"https://doi.org/10.1175/1520-0493(1984)112%3C1649:ASHFPI%3E2.0.CO;2"},{"id":8,"fact":"El Ni\u00f1o-driven drought can halve or more than halve eastern Australia's wheat yields in the worst event years. Since Australia is among the world's largest wheat exporters, strong El Ni\u00f1o events reliably push up global grain prices \u2014 making ENSO a key variable for commodity traders and food importers worldwide.","countries":["Australia"],"category":"Agriculture","source":"Bureau of Meteorology (Australia) \u2014 El Ni\u00f1o, La Ni\u00f1a and Australian Climate.","url":"https://www.bom.gov.au/climate/enso/"},{"id":9,"fact":"The 1997\u201398 El Ni\u00f1o triggered the first globally coordinated mass coral bleaching event, exposing an estimated 21% of the world's reef area to damaging heat stress. Coral cover losses reached up to 90% in the Maldives, Seychelles, and parts of the eastern Indian Ocean \u2014 the worst bleaching disaster in recorded history at the time.","countries":["Australia","Indonesia","Global"],"category":"Climate","source":"Wikipedia \u2014 Coral Bleaching (1997\u201398 event section).","url":"https://en.wikipedia.org/wiki/Coral_bleaching"},{"id":10,"fact":"Atmospheric CO\u2082 growth nearly doubles in strong El Ni\u00f1o years: in 1998 and 2016, CO\u2082 rose at ~3 ppm per year \u2014 almost twice the long-term average of ~1.6 ppm/yr \u2014 as tropical droughts shrank vegetation uptake and Indonesian peatland fires released massive carbon stores. ENSO is therefore a direct, if temporary, accelerant of climate change.","countries":["Global"],"category":"Climate","source":"NOAA Global Monitoring Laboratory \u2014 Annual Mean CO\u2082 Growth Rates.","url":"https://gml.noaa.gov/ccgg/trends/gr.html"},{"id":11,"fact":"The 2015\u201316 El Ni\u00f1o \u2014 among the strongest on record \u2014 simultaneously triggered severe droughts across southern Africa, Indonesia, and eastern Australia while delivering above-average winter rainfall to drought-stricken California. It vividly illustrated how a single ENSO event can reshape precipitation across multiple continents at once.","countries":["USA"],"category":"Climate","source":"NOAA Ocean Service \u2014 What is El Ni\u00f1o?","url":"https://oceanservice.noaa.gov/facts/ninonina.html"},{"id":12,"fact":"El Ni\u00f1o events increase malaria incidence by 30\u201350% in parts of Venezuela, Colombia, and sub-Saharan Africa by creating warmer, wetter conditions that expand the breeding range and survival of Anopheles mosquitoes.","countries":["Nigeria","Global"],"category":"Health","source":"Kovats et al. (2003). El Ni\u00f1o and health. The Lancet, 362, 1481\u20131489.","url":"https://doi.org/10.1016/S0140-6736(03)14695-8"},{"id":13,"fact":"El Ni\u00f1o droughts in southeast Brazil can reduce coffee production by 20\u201330%. Since Brazil supplies ~40% of global coffee, ENSO is a significant \u2014 and underappreciated \u2014 driver of coffee price volatility on global commodity markets.","countries":["Brazil"],"category":"Agriculture","source":"International Coffee Organization \u2014 Coffee production data by country.","url":"https://www.ico.org/trade-statistics/"},{"id":14,"fact":"Extreme El Ni\u00f1o events \u2014 like 1982\u201383 and 1997\u201398 \u2014 are projected to roughly double in frequency by 2100 under high-emission scenarios, occurring approximately once per decade instead of once every 20 years.","countries":["Global"],"category":"Climate","source":"Cai et al. (2014). Increasing frequency of extreme El Ni\u00f1o events due to greenhouse warming. Nature Climate Change, 4, 111\u2013116.","url":"https://doi.org/10.1038/nclimate2100"},{"id":15,"fact":"The 2015\u201316 El Ni\u00f1o contributed to a food crisis affecting over 60 million people across eastern and southern Africa, triggering one of the largest WFP humanitarian responses in history across Ethiopia, Zimbabwe, and Malawi.","countries":["Nigeria","Global"],"category":"Disaster","source":"FAO / WFP (2016). El Ni\u00f1o Response in Agriculture and Food Security. FAO.","url":"https://www.fao.org/resilience/resources/resources-detail/en/c/416967/"},{"id":16,"fact":"All 10 of the hottest years in the global surface temperature record have occurred since 2010. El Ni\u00f1o events consistently push individual years to new records: 2016 and 2024 both set all-time highs during or just after strong El Ni\u00f1o episodes, showing how ENSO temporarily amplifies the background warming trend from greenhouse gases.","countries":["Global"],"category":"Climate","source":"WMO State of the Global Climate Report (2024). World Meteorological Organization.","url":"https://wmo.int/publication-series/state-of-global-climate-2024"},{"id":17,"fact":"During the 1997\u201398 El Ni\u00f1o, smoke from Indonesia's peatland fires blanketed Southeast Asia for months, causing an estimated 20 million respiratory illness cases and over $9 billion in economic damage to the region.","countries":["Indonesia"],"category":"Health","source":"Marlier et al. (2013). El Ni\u00f1o and health risks from landscape fire emissions in Southeast Asia. Nature Climate Change, 3, 131\u2013136.","url":"https://doi.org/10.1038/nclimate1658"},{"id":18,"fact":"La Ni\u00f1a \u2014 El Ni\u00f1o's cold counterpart \u2014 drove the catastrophic 2010\u201311 Queensland floods, with disaster zones declared across an area roughly the size of France and Germany combined. The floods killed 35 people and caused approximately $2.55 billion AUD in infrastructure damage, making it one of Australia's most expensive natural disasters.","countries":["Australia"],"category":"Disaster","source":"van den Honert & McAneney (2011). The 2011 Brisbane floods: Causes, impacts and implications. Water, 3(4), 1149\u20131173.","url":"https://www.mdpi.com/2073-4441/3/4/1149"},{"id":19,"fact":"China's Yangtze River basin faces elevated flood risk during La Ni\u00f1a years. The 1998 Yangtze floods killed 3,656 people, displaced 14 million, and caused $26 billion in damage \u2014 triggered by anomalously strong summer monsoon rainfall linked to La Ni\u00f1a.","countries":["China"],"category":"Disaster","source":"Zong & Chen (2000). The 1998 flood on the Yangtze, China. Natural Hazards, 22, 165\u2013184.","url":"https://doi.org/10.1023/A:1008119805106"},{"id":20,"fact":"ENSO is the single largest source of year-to-year climate variability on Earth, influencing temperature, rainfall, and extreme weather on every continent. Scientists consider it the closest thing to a global climate remote control.","countries":["Global"],"category":"Climate","source":"McPhaden et al. (2006). ENSO as an Integrating Concept in Earth System Science. Science, 314, 1740\u20131745.","url":"https://doi.org/10.1126/science.1132588"}];
+const CAT_COLORS = {"Economy":{"bg":"rgba(245,166,35,0.15)","border":"rgba(245,166,35,0.5)","text":"#f5a623"},"Agriculture":{"bg":"rgba(63,185,80,0.15)","border":"rgba(63,185,80,0.5)","text":"#3fb950"},"Disaster":{"bg":"rgba(239,83,80,0.15)","border":"rgba(239,83,80,0.5)","text":"#ef5350"},"Climate":{"bg":"rgba(30,136,229,0.15)","border":"rgba(30,136,229,0.5)","text":"#58a6ff"},"Health":{"bg":"rgba(158,120,198,0.15)","border":"rgba(158,120,198,0.5)","text":"#9e78c6"}};
+const COUNTRIES = ["USA","Australia","China","Brazil","India","Indonesia","Nigeria","Peru"];
+
+// Build country filter pills
+const filterRow = document.querySelector(".filter-row");
+COUNTRIES.forEach(c => {
+  const btn = document.createElement("button");
+  btn.className = "pill";
+  btn.dataset.country = c;
+  btn.textContent = c;
+  btn.onclick = () => setCountry(c);
+  filterRow.appendChild(btn);
+});
+
+// Build category legend
+const legend = document.getElementById("cat-legend");
+Object.entries(CAT_COLORS).forEach(([cat, col]) => {
+  legend.innerHTML += `<span>
+    <span class="cat-dot" style="background:${col.text}"></span>${cat}
+  </span>`;
+});
+
+// Build fact cards
+const grid = document.getElementById("fact-grid");
+FACTS.forEach(f => {
+  const col = CAT_COLORS[f.category] || {};
+  const card = document.createElement("div");
+  card.className = "fact-card";
+  card.dataset.countries = f.countries.join(",");
+
+  const countryTags = f.countries
+    .filter(c => c !== "Global")
+    .map(c => `<span class="ctag">${c}</span>`).join("");
+  const globalTag = f.countries.includes("Global")
+    ? `<span class="ctag" style="border:1px solid #444">🌍 Global</span>` : "";
+
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="cat-badge"
+        style="background:${col.bg};border:1px solid ${col.border};color:${col.text}">
+        ${f.category}
+      </span>
+      <div class="country-tags">${globalTag}${countryTags}</div>
+      <span class="fact-num">#${f.id}</span>
+    </div>
+    <p class="fact-text">${f.fact}</p>
+    <a class="source-link" href="${f.url}" target="_blank" rel="noopener">
+      📄 ${f.source} →
+    </a>
+  `;
+  grid.appendChild(card);
+});
+
+function setCountry(country) {
+  // Update active pill
+  document.querySelectorAll(".pill").forEach(p => {
+    p.classList.toggle("active", p.dataset.country === country);
+  });
+
+  // Filter cards
+  let visible = 0;
+  document.querySelectorAll(".fact-card").forEach(card => {
+    const countries = card.dataset.countries.split(",");
+    const show = country === "All"
+      || countries.includes(country)
+      || countries.includes("Global");
+    card.classList.toggle("hidden", !show);
+    if (show) visible++;
+  });
+
+  document.getElementById("fact-count").textContent = visible;
+}
+
+// Wire All button
+document.querySelector('[data-country="All"]').onclick = () => setCountry("All");
+</script>
+</body>
+</html>

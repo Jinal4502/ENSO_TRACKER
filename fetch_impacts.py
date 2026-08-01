@@ -30,11 +30,19 @@ EMDAT_CSV = OUT_DIR / "emdat.csv"
 COUNTRIES = {
     "WLD": "World",
     "USA": "United States",
+    "AUS": "Australia",
     "CHN": "China",
     "BRA": "Brazil",
     "IND": "India",
     "IDN": "Indonesia",
     "NGA": "Nigeria",
+}
+
+CROP_URLS = {
+    "wheat":   "https://ourworldindata.org/grapher/wheat-yields.csv",
+    "rice":    "https://ourworldindata.org/grapher/rice-yields.csv",
+    "maize":   "https://ourworldindata.org/grapher/maize-yields.csv",
+    "soybean": "https://ourworldindata.org/grapher/soybean-yields.csv",
 }
 
 MAX_LAG = 5   # years
@@ -164,6 +172,57 @@ def fetch_gdp_growth() -> dict[str, dict[int, float]]:
 
 def fetch_food_production() -> dict[str, dict[int, float]]:
     return _fetch_wb("AG.PRD.FOOD.XD")
+
+
+def fetch_peru_fisheries() -> dict[int, float]:
+    """
+    Peru total marine capture fisheries in tonnes (World Bank ER.FSH.CAPT.MT / FAO FishStat).
+    Peru's catch is ~80-90% Peruvian anchoveta (Engraulis ringens), so this series
+    faithfully tracks anchoveta population collapses driven by ENSO warm events.
+    """
+    url = (
+        "https://api.worldbank.org/v2/country/PER/indicator/ER.FSH.CAPT.MT"
+        "?format=json&per_page=100&date=1960:2024"
+    )
+    print("  Fetching Peru marine fisheries (World Bank / FAO FishStat) ...")
+    raw = json.loads(_fetch_text(url))
+    records = raw[1] if isinstance(raw, list) and len(raw) > 1 else []
+    return {int(r["date"]): float(r["value"]) for r in records if r.get("value") is not None}
+
+
+def fetch_crop_yields() -> dict:
+    """
+    Fetch OWID/FAOSTAT crop yield data (tonnes/ha) for our countries.
+    Returns {crop: {iso: {year: value}}}.
+    Auto-detects the yield column by searching for "yield" in column names.
+    """
+    result = {}
+    for crop, url in CROP_URLS.items():
+        print(f"  Fetching {crop} yields from OWID ...")
+        try:
+            raw = _fetch_text(url)
+        except Exception as e:
+            print(f"  [WARN] {crop} yield fetch failed: {e}")
+            continue
+        reader = csv.DictReader(io.StringIO(raw))
+        fieldnames = reader.fieldnames or []
+        val_col = next((c for c in fieldnames if "yield" in c.lower()), None)
+        if not val_col:
+            print(f"  [WARN] {crop}: no yield column found in {fieldnames}")
+            continue
+        by_iso: dict[str, dict[int, float]] = defaultdict(dict)
+        for row in reader:
+            iso = row.get("Code", "").strip()
+            if iso not in COUNTRIES or iso == "WLD":
+                continue
+            try:
+                year = int(row["Year"])
+                val  = float(row[val_col])
+            except (KeyError, ValueError):
+                continue
+            by_iso[iso][year] = val
+        result[crop] = dict(by_iso)
+    return result
 
 
 # ── 3. FAO Food Price Index ───────────────────────────────────────────────────
@@ -315,8 +374,10 @@ def fetch_impacts_data() -> dict:
     oni_annual    = fetch_oni_annual()
     gdp_raw       = fetch_gdp_growth()
     food_prod_raw = fetch_food_production()
+    crop_yields   = fetch_crop_yields()
     fpi           = fetch_fao_fpi()
     owid          = fetch_owid_disasters()
+    peru_fish_raw = fetch_peru_fisheries()
 
     # GDP: raw growth rates are already the detrended form
     gdp_domain = {}
@@ -343,6 +404,13 @@ def fetch_impacts_data() -> dict:
             continue
         annual = yoy_pct_change(annual_raw)
         food_prod_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
+        crops = {}
+        for crop, iso_data in crop_yields.items():
+            if iso in iso_data:
+                crop_yoy = yoy_pct_change(iso_data[iso])
+                if crop_yoy:
+                    crops[crop] = _series_payload(crop_yoy, oni_annual)
+        food_prod_domain[iso]["crops"] = crops
 
     # FAO food price: YoY % change on the composite + sub-indices
     fpi_annual = yoy_pct_change(fpi["annual"])
@@ -351,7 +419,7 @@ def fetch_impacts_data() -> dict:
         "global": {
             "name": "Global",
             **_series_payload(fpi_annual, oni_annual),
-            "sub_indices": {k: {"years": sorted(v), "values": [v[y] for y in sorted(v)]}
+            "sub_indices": {k: _series_payload(v, oni_annual)
                             for k, v in fpi_subs.items()},
         }
     }
@@ -376,6 +444,20 @@ def fetch_impacts_data() -> dict:
                     "damage":  _series_payload(damage_yoy, oni_annual) if damage_yoy else None,
                 }
 
+    # Peruvian fisheries: YoY % change on total catch (proxy for anchoveta)
+    fisheries_domain = None
+    if peru_fish_raw:
+        peru_fish_yoy = yoy_pct_change(peru_fish_raw)
+        # Also store absolute catch in million tonnes for hover context
+        peru_fish_mt = {y: round(v / 1e6, 3) for y, v in peru_fish_raw.items()}
+        fisheries_domain = {
+            "PER": {
+                "name": "Peru (marine catch)",
+                **_series_payload(peru_fish_yoy, oni_annual),
+                "raw_mt": peru_fish_mt,  # absolute values in million tonnes for tooltip
+            }
+        }
+
     payload = {
         "generated":       datetime.now(timezone.utc).isoformat(),
         "oni_annual":      oni_annual,
@@ -385,6 +467,7 @@ def fetch_impacts_data() -> dict:
             "food_prod":  {"label": "Food Prod. Index YoY Change (%)", "countries": food_prod_domain},
             "food_price": {"label": "FAO Food Price Index YoY Change (%)", "countries": fpi_domain},
             "disasters":  {"label": "Disaster Count YoY Change (%)",   "countries": disasters_domain},
+            "fisheries":  {"label": "Peru Catch YoY Change (%)",       "countries": fisheries_domain},
         },
     }
 

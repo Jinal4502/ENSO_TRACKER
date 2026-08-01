@@ -231,6 +231,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
     <a href="temperature.html">Land Temp</a>
     <a href="sst.html" class="nav-active">Sea Surface Temp</a>
     <a href="impacts.html">Impacts</a>
+    <a href="facts.html">Quick Facts</a>
   </div>
 </nav>
 
@@ -324,6 +325,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
   &nbsp;&middot;&nbsp; SST: <a href="https://psl.noaa.gov/data/gridded/data.noaa.ersst.v5.html" target="_blank">NOAA ERSST v5</a>
   &nbsp;&middot;&nbsp; <a href="precipitation.html">🌧 Precipitation →</a>
   &nbsp;&middot;&nbsp; <a href="temperature.html">🌡 Land Temp →</a>
+  &nbsp;&middot;&nbsp; <a href="impacts.html">📊 ENSO Global Impacts →</a>
 </footer>
 
 <script>

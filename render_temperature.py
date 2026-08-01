@@ -159,6 +159,7 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
     <a href="temperature.html" class="nav-active">Land Temp</a>
     <a href="sst.html">Sea Surface Temp</a>
     <a href="impacts.html">Impacts</a>
+    <a href="facts.html">Quick Facts</a>
   </div>
 </nav>
 
@@ -252,6 +253,7 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
      target="_blank">NOAA/PSL</a>
   &nbsp;&middot;&nbsp;
   <a href="precipitation.html">&#127783; Precipitation &rarr;</a>
+  &nbsp;&middot;&nbsp; <a href="impacts.html">📊 ENSO Global Impacts →</a>
 </footer>
 
 <script>

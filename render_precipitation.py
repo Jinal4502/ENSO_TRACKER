@@ -159,6 +159,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     <a href="temperature.html">Land Temp</a>
     <a href="sst.html">Sea Surface Temp</a>
     <a href="impacts.html">Impacts</a>
+    <a href="facts.html">Quick Facts</a>
   </div>
 </nav>
 
@@ -250,6 +251,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
            target="_blank">NOAA/CPC ONI</a>
   &nbsp;&middot;&nbsp;
   <a href="hurricanes.html">&#127744; Cyclone Tracker &rarr;</a>
+  &nbsp;&middot;&nbsp; <a href="impacts.html">📊 ENSO Global Impacts →</a>
 </footer>
 
 <script>
