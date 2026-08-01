@@ -325,13 +325,24 @@ def fetch_impacts_data() -> dict:
         if annual:
             gdp_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
 
-    # Food production: YoY % change to detrend the rising index
+    # Food production: YoY % change to detrend the rising index.
+    # WLD is excluded: the World Bank global aggregate is locked at 100.0 from 2015 onward
+    # (a rebasing artifact) and goes NULL from 2021, making it unusable.
     food_prod_domain = {}
     for iso, name in COUNTRIES.items():
+        if iso == "WLD":
+            continue
         annual_raw = food_prod_raw.get(iso, {})
-        if annual_raw:
-            annual = yoy_pct_change(annual_raw)
-            food_prod_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
+        if not annual_raw:
+            continue
+        # Drop trailing nulls — WB often publishes placeholder NULLs for most-recent years
+        annual_raw = {y: v for y, v in annual_raw.items() if v is not None}
+        # Skip if post-2014 values are all identical (broken series detection)
+        post14 = [v for y, v in annual_raw.items() if y > 2014]
+        if post14 and len(set(round(v, 1) for v in post14)) == 1:
+            continue
+        annual = yoy_pct_change(annual_raw)
+        food_prod_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
 
     # FAO food price: YoY % change on the composite + sub-indices
     fpi_annual = yoy_pct_change(fpi["annual"])
