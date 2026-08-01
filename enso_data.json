@@ -1,5 +1,5 @@
 {
-  "fetched_utc": "2026-07-27T16:24:15.156293+00:00",
+  "fetched_utc": "2026-08-01T03:12:51.969042+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o continues and will strengthen through the end of the year, with a 97% chance it will persist through early spring 2027.",
@@ -2303,7 +2303,6 @@
   ],
   "iri_strength": {
     "seasons": [
-      "JAS",
       "ASO",
       "SON",
       "OND",
@@ -2311,7 +2310,8 @@
       "DJF",
       "JFM",
       "FMA",
-      "MAM"
+      "MAM",
+      "JAS"
     ],
     "traces": [
       {
@@ -2384,8 +2384,8 @@
           0,
           0,
           0,
-          0,
-          11
+          11,
+          0
         ],
         "color": "#66bb6a"
       },
@@ -2398,16 +2398,15 @@
           0,
           0,
           0,
-          0,
           17,
-          22
+          22,
+          0
         ],
         "color": "#ffee58"
       },
       {
         "name": "Moderate El Ni\u00f1o",
         "y": [
-          12,
           8,
           4,
           4,
@@ -2415,14 +2414,14 @@
           0,
           16,
           22,
-          33
+          33,
+          12
         ],
         "color": "#ffa726"
       },
       {
         "name": "Strong El Ni\u00f1o",
         "y": [
-          35,
           19,
           15,
           8,
@@ -2430,14 +2429,14 @@
           20,
           32,
           39,
-          28
+          28,
+          35
         ],
         "color": "#ef5350"
       },
       {
         "name": "Very Strong El Ni\u00f1o",
         "y": [
-          54,
           73,
           81,
           88,
@@ -2445,7 +2444,8 @@
           80,
           53,
           22,
-          6
+          6,
+          54
         ],
         "color": "#b71c1c"
       }
@@ -2454,12 +2454,12 @@
       26,
       26,
       26,
-      26,
       22,
       20,
       19,
       18,
-      18
+      18,
+      26
     ],
     "title": "ENSO Strength Categories"
   }
