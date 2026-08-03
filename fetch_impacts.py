@@ -68,11 +68,21 @@ for ev in CONFOUND_EVENTS:
 
 _HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; ENSOTracker/1.0; research)"}
 
-def _fetch_text(url: str) -> str:
+def _fetch_text(url: str, retries: int = 4) -> str:
     import requests as _req
-    r = _req.get(url, headers=_HEADERS, timeout=30)
-    r.raise_for_status()
-    return r.text
+    import time
+    timeouts = [30, 60, 90, 120]
+    for attempt, timeout in enumerate(timeouts[:retries], 1):
+        try:
+            r = _req.get(url, headers=_HEADERS, timeout=timeout)
+            r.raise_for_status()
+            return r.text
+        except (_req.exceptions.Timeout, _req.exceptions.ConnectionError) as e:
+            if attempt == retries:
+                raise
+            wait = 5 * attempt
+            print(f"  [WARN] attempt {attempt} failed ({e.__class__.__name__}), retrying in {wait}s ...")
+            time.sleep(wait)
 
 
 def _corr_pair(x: list, y: list) -> dict:
@@ -370,111 +380,117 @@ def _series_payload(annual: dict[int, float], oni: dict[int, float]) -> dict:
 def fetch_impacts_data() -> dict:
     print("Fetching ENSO Impacts data ...")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    cache_path = OUT_DIR / "impacts_data.json"
 
-    oni_annual    = fetch_oni_annual()
-    gdp_raw       = fetch_gdp_growth()
-    food_prod_raw = fetch_food_production()
-    crop_yields   = fetch_crop_yields()
-    fpi           = fetch_fao_fpi()
-    owid          = fetch_owid_disasters()
-    peru_fish_raw = fetch_peru_fisheries()
+    try:
+        oni_annual    = fetch_oni_annual()
+        gdp_raw       = fetch_gdp_growth()
+        food_prod_raw = fetch_food_production()
+        crop_yields   = fetch_crop_yields()
+        fpi           = fetch_fao_fpi()
+        owid          = fetch_owid_disasters()
+        peru_fish_raw = fetch_peru_fisheries()
 
-    # GDP: raw growth rates are already the detrended form
-    gdp_domain = {}
-    for iso, name in COUNTRIES.items():
-        annual = gdp_raw.get(iso, {})
-        if annual:
-            gdp_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
+        # GDP: raw growth rates are already the detrended form
+        gdp_domain = {}
+        for iso, name in COUNTRIES.items():
+            annual = gdp_raw.get(iso, {})
+            if annual:
+                gdp_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
 
-    # Food production: YoY % change to detrend the rising index.
-    # WLD is excluded: the World Bank global aggregate is locked at 100.0 from 2015 onward
-    # (a rebasing artifact) and goes NULL from 2021, making it unusable.
-    food_prod_domain = {}
-    for iso, name in COUNTRIES.items():
-        if iso == "WLD":
-            continue
-        annual_raw = food_prod_raw.get(iso, {})
-        if not annual_raw:
-            continue
-        # Drop trailing nulls — WB often publishes placeholder NULLs for most-recent years
-        annual_raw = {y: v for y, v in annual_raw.items() if v is not None}
-        # Skip if post-2014 values are all identical (broken series detection)
-        post14 = [v for y, v in annual_raw.items() if y > 2014]
-        if post14 and len(set(round(v, 1) for v in post14)) == 1:
-            continue
-        annual = yoy_pct_change(annual_raw)
-        food_prod_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
-        crops = {}
-        for crop, iso_data in crop_yields.items():
-            if iso in iso_data:
-                crop_yoy = yoy_pct_change(iso_data[iso])
-                if crop_yoy:
-                    crops[crop] = _series_payload(crop_yoy, oni_annual)
-        food_prod_domain[iso]["crops"] = crops
+        # Food production: YoY % change to detrend the rising index.
+        # WLD is excluded: the World Bank global aggregate is locked at 100.0 from 2015 onward
+        # (a rebasing artifact) and goes NULL from 2021, making it unusable.
+        food_prod_domain = {}
+        for iso, name in COUNTRIES.items():
+            if iso == "WLD":
+                continue
+            annual_raw = food_prod_raw.get(iso, {})
+            if not annual_raw:
+                continue
+            # Drop trailing nulls — WB often publishes placeholder NULLs for most-recent years
+            annual_raw = {y: v for y, v in annual_raw.items() if v is not None}
+            # Skip if post-2014 values are all identical (broken series detection)
+            post14 = [v for y, v in annual_raw.items() if y > 2014]
+            if post14 and len(set(round(v, 1) for v in post14)) == 1:
+                continue
+            annual = yoy_pct_change(annual_raw)
+            food_prod_domain[iso] = {"name": name, **_series_payload(annual, oni_annual)}
+            crops = {}
+            for crop, iso_data in crop_yields.items():
+                if iso in iso_data:
+                    crop_yoy = yoy_pct_change(iso_data[iso])
+                    if crop_yoy:
+                        crops[crop] = _series_payload(crop_yoy, oni_annual)
+            food_prod_domain[iso]["crops"] = crops
 
-    # FAO food price: YoY % change on the composite + sub-indices
-    fpi_annual = yoy_pct_change(fpi["annual"])
-    fpi_subs   = {k: yoy_pct_change(v) for k, v in fpi["sub_annual"].items()}
-    fpi_domain = {
-        "global": {
-            "name": "Global",
-            **_series_payload(fpi_annual, oni_annual),
-            "sub_indices": {k: _series_payload(v, oni_annual)
-                            for k, v in fpi_subs.items()},
-        }
-    }
-
-    # Disasters (OWID/EM-DAT, by disaster type)
-    # Restrict to years when ONI is measured (1950+) for both display and correlations.
-    # YoY change is computed on the full series first so the 1950 value uses 1949 as baseline,
-    # then we drop everything before the ONI start year.
-    oni_start = min(int(y) for y in oni_annual)
-    disasters_domain = None
-    if owid:
-        disasters_domain = {}
-        for dtype, series in owid.items():
-            count_yoy  = {y: v for y, v in yoy_pct_change(series.get("count", {})).items()
-                          if y >= oni_start}
-            damage_yoy = {y: v for y, v in yoy_pct_change(series.get("damage_usd", {})).items()
-                          if y >= oni_start}
-            if count_yoy:
-                disasters_domain[dtype] = {
-                    "name":    dtype,
-                    "count":   _series_payload(count_yoy,  oni_annual),
-                    "damage":  _series_payload(damage_yoy, oni_annual) if damage_yoy else None,
-                }
-
-    # Peruvian fisheries: YoY % change on total catch (proxy for anchoveta)
-    fisheries_domain = None
-    if peru_fish_raw:
-        peru_fish_yoy = yoy_pct_change(peru_fish_raw)
-        # Also store absolute catch in million tonnes for hover context
-        peru_fish_mt = {y: round(v / 1e6, 3) for y, v in peru_fish_raw.items()}
-        fisheries_domain = {
-            "PER": {
-                "name": "Peru (marine catch)",
-                **_series_payload(peru_fish_yoy, oni_annual),
-                "raw_mt": peru_fish_mt,  # absolute values in million tonnes for tooltip
+        # FAO food price: YoY % change on the composite + sub-indices
+        fpi_annual = yoy_pct_change(fpi["annual"])
+        fpi_subs   = {k: yoy_pct_change(v) for k, v in fpi["sub_annual"].items()}
+        fpi_domain = {
+            "global": {
+                "name": "Global",
+                **_series_payload(fpi_annual, oni_annual),
+                "sub_indices": {k: _series_payload(v, oni_annual)
+                                for k, v in fpi_subs.items()},
             }
         }
 
-    payload = {
-        "generated":       datetime.now(timezone.utc).isoformat(),
-        "oni_annual":      oni_annual,
-        "confound_events": CONFOUND_EVENTS,
-        "domains": {
-            "gdp":        {"label": "GDP Growth Rate (%)",             "countries": gdp_domain},
-            "food_prod":  {"label": "Food Prod. Index YoY Change (%)", "countries": food_prod_domain},
-            "food_price": {"label": "FAO Food Price Index YoY Change (%)", "countries": fpi_domain},
-            "disasters":  {"label": "Disaster Count YoY Change (%)",   "countries": disasters_domain},
-            "fisheries":  {"label": "Peru Catch YoY Change (%)",       "countries": fisheries_domain},
-        },
-    }
+        # Disasters (OWID/EM-DAT, by disaster type)
+        oni_start = min(int(y) for y in oni_annual)
+        disasters_domain = None
+        if owid:
+            disasters_domain = {}
+            for dtype, series in owid.items():
+                count_yoy  = {y: v for y, v in yoy_pct_change(series.get("count", {})).items()
+                              if y >= oni_start}
+                damage_yoy = {y: v for y, v in yoy_pct_change(series.get("damage_usd", {})).items()
+                              if y >= oni_start}
+                if count_yoy:
+                    disasters_domain[dtype] = {
+                        "name":    dtype,
+                        "count":   _series_payload(count_yoy,  oni_annual),
+                        "damage":  _series_payload(damage_yoy, oni_annual) if damage_yoy else None,
+                    }
 
-    with open(OUT_FILE, "w") as f:
-        json.dump(payload, f, indent=2)
-    print(f"Saved → {OUT_FILE}  ({OUT_FILE.stat().st_size // 1024} KB)")
-    return payload
+        # Peruvian fisheries: YoY % change on total catch (proxy for anchoveta)
+        fisheries_domain = None
+        if peru_fish_raw:
+            peru_fish_yoy = yoy_pct_change(peru_fish_raw)
+            peru_fish_mt = {y: round(v / 1e6, 3) for y, v in peru_fish_raw.items()}
+            fisheries_domain = {
+                "PER": {
+                    "name": "Peru (marine catch)",
+                    **_series_payload(peru_fish_yoy, oni_annual),
+                    "raw_mt": peru_fish_mt,
+                }
+            }
+
+        payload = {
+            "generated":       datetime.now(timezone.utc).isoformat(),
+            "oni_annual":      oni_annual,
+            "confound_events": CONFOUND_EVENTS,
+            "domains": {
+                "gdp":        {"label": "GDP Growth Rate (%)",             "countries": gdp_domain},
+                "food_prod":  {"label": "Food Prod. Index YoY Change (%)", "countries": food_prod_domain},
+                "food_price": {"label": "FAO Food Price Index YoY Change (%)", "countries": fpi_domain},
+                "disasters":  {"label": "Disaster Count YoY Change (%)",   "countries": disasters_domain},
+                "fisheries":  {"label": "Peru Catch YoY Change (%)",       "countries": fisheries_domain},
+            },
+        }
+
+        with open(OUT_FILE, "w") as f:
+            json.dump(payload, f, indent=2)
+        print(f"Saved → {OUT_FILE}  ({OUT_FILE.stat().st_size // 1024} KB)")
+        return payload
+
+    except Exception as e:
+        print(f"  [WARN] fetch_impacts_data failed: {e}")
+        if cache_path.exists():
+            print(f"  [INFO] Falling back to cached {cache_path}")
+            with open(cache_path) as f:
+                return json.load(f)
+        raise
 
 
 if __name__ == "__main__":
