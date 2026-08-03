@@ -1,19 +1,19 @@
 {
-  "fetched_utc": "2026-08-01T03:12:51.969042+00:00",
+  "fetched_utc": "2026-08-03T16:48:43.213838+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o continues and will strengthen through the end of the year, with a 97% chance it will persist through early spring 2027.",
     "issued": ""
   },
   "latest_weekly": {
-    "date": "2026-07-22",
+    "date": "2026-07-29",
     "nino12": 25.4,
-    "nino12_anom": 3.8,
-    "nino3": 28.1,
-    "nino3_anom": 2.5,
-    "nino34": 29.3,
-    "nino34_anom": 2.2,
-    "nino4": 29.8,
+    "nino12_anom": 4.1,
+    "nino3": 28.3,
+    "nino3_anom": 2.8,
+    "nino34": 29.4,
+    "nino34_anom": 2.3,
+    "nino4": 29.7,
     "nino4_anom": 1.0
   },
   "latest_oni": {
@@ -29,17 +29,6 @@
     "roni": 1.5
   },
   "weekly_history": [
-    {
-      "date": "2025-07-30",
-      "nino12": 21.8,
-      "nino12_anom": 0.4,
-      "nino3": 25.3,
-      "nino3_anom": -0.2,
-      "nino34": 26.7,
-      "nino34_anom": -0.3,
-      "nino4": 28.6,
-      "nino4_anom": -0.1
-    },
     {
       "date": "2025-08-06",
       "nino12": 21.9,
@@ -571,10 +560,10 @@
     {
       "date": "2026-07-08",
       "nino12": 25.5,
-      "nino12_anom": 3.4,
-      "nino3": 28.3,
-      "nino3_anom": 2.3,
-      "nino34": 29.4,
+      "nino12_anom": 3.3,
+      "nino3": 28.2,
+      "nino3_anom": 2.2,
+      "nino34": 29.3,
       "nino34_anom": 2.0,
       "nino4": 30.0,
       "nino4_anom": 1.2
@@ -599,6 +588,17 @@
       "nino34": 29.3,
       "nino34_anom": 2.2,
       "nino4": 29.8,
+      "nino4_anom": 1.0
+    },
+    {
+      "date": "2026-07-29",
+      "nino12": 25.4,
+      "nino12_anom": 4.1,
+      "nino3": 28.3,
+      "nino3_anom": 2.8,
+      "nino34": 29.4,
+      "nino34_anom": 2.3,
+      "nino4": 29.7,
       "nino4_anom": 1.0
     }
   ],
