@@ -1734,5 +1734,36 @@
       "synopsis": "El Ni\u00f1o continues and will strengthen through the end of the year, with a 97% chance it will persist through early spring 2027.",
       "issued": ""
     }
+  },
+  {
+    "fetched_utc": "2026-08-17T14:31:40.568957+00:00",
+    "latest_weekly": {
+      "date": "2026-08-12",
+      "nino12": 25.0,
+      "nino12_anom": 4.0,
+      "nino3": 28.4,
+      "nino3_anom": 3.2,
+      "nino34": 29.6,
+      "nino34_anom": 2.7,
+      "nino4": 29.7,
+      "nino4_anom": 1.0
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "MJJ",
+      "sst": 29.02,
+      "oni": 1.39
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "El Ni\u00f1o is strengthening, with a greater than 90% chance of a very strong event during the Northern Hemisphere fall and winter 2026-27.",
+      "issued": ""
+    }
   }
 ]
