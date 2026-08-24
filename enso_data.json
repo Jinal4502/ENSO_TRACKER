@@ -1,20 +1,20 @@
 {
-  "fetched_utc": "2026-08-17T14:31:40.568957+00:00",
+  "fetched_utc": "2026-08-24T14:46:33.450019+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o is strengthening, with a greater than 90% chance of a very strong event during the Northern Hemisphere fall and winter 2026-27.",
     "issued": ""
   },
   "latest_weekly": {
-    "date": "2026-08-12",
-    "nino12": 25.0,
+    "date": "2026-08-19",
+    "nino12": 24.8,
     "nino12_anom": 4.0,
-    "nino3": 28.4,
-    "nino3_anom": 3.2,
-    "nino34": 29.6,
-    "nino34_anom": 2.7,
-    "nino4": 29.7,
-    "nino4_anom": 1.0
+    "nino3": 28.3,
+    "nino3_anom": 3.3,
+    "nino34": 29.4,
+    "nino34_anom": 2.6,
+    "nino4": 29.5,
+    "nino4_anom": 0.8
   },
   "latest_oni": {
     "year": 2026,
@@ -29,17 +29,6 @@
     "roni": 1.5
   },
   "weekly_history": [
-    {
-      "date": "2025-08-20",
-      "nino12": 20.8,
-      "nino12_anom": -0.1,
-      "nino3": 24.7,
-      "nino3_anom": -0.3,
-      "nino34": 26.4,
-      "nino34_anom": -0.4,
-      "nino4": 28.6,
-      "nino4_anom": -0.1
-    },
     {
       "date": "2025-08-27",
       "nino12": 20.5,
@@ -570,12 +559,12 @@
     },
     {
       "date": "2026-07-29",
-      "nino12": 25.4,
-      "nino12_anom": 4.1,
-      "nino3": 28.3,
+      "nino12": 25.2,
+      "nino12_anom": 3.8,
+      "nino3": 28.2,
       "nino3_anom": 2.8,
       "nino34": 29.4,
-      "nino34_anom": 2.3,
+      "nino34_anom": 2.4,
       "nino4": 29.7,
       "nino4_anom": 1.0
     },
@@ -600,6 +589,17 @@
       "nino34_anom": 2.7,
       "nino4": 29.7,
       "nino4_anom": 1.0
+    },
+    {
+      "date": "2026-08-19",
+      "nino12": 24.8,
+      "nino12_anom": 4.0,
+      "nino3": 28.3,
+      "nino3_anom": 3.3,
+      "nino34": 29.4,
+      "nino34_anom": 2.6,
+      "nino4": 29.5,
+      "nino4_anom": 0.8
     }
   ],
   "oni_history": [
@@ -1039,10 +1039,10 @@
     }
   ],
   "iri_images": {
-    "cpc_probs": "https://cpc.ncep.noaa.gov/archives/enso/roni/images/2026/enso-probs-072026.png",
-    "iri_sst_history": "https://iri.columbia.edu/wp-content/uploads/2026/07/figure2.png",
-    "iri_probs": "https://iri.columbia.edu/wp-content/uploads/2026/07/figure3.png",
-    "sst_plume": "https://ensoforecast.iri.columbia.edu/cgi-bin/sst_table_img?month=6&year=2026"
+    "cpc_probs": "https://cpc.ncep.noaa.gov/archives/enso/roni/images/2026/enso-probs-082026.png",
+    "iri_sst_history": "https://iri.columbia.edu/wp-content/uploads/2026/08/figure2.png",
+    "iri_probs": "https://iri.columbia.edu/wp-content/uploads/2026/08/figure3.png",
+    "sst_plume": "https://ensoforecast.iri.columbia.edu/cgi-bin/sst_table_img?month=7&year=2026"
   },
   "iri_model_predictions": [
     {
