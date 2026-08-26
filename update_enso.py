@@ -101,6 +101,9 @@ def build_email_html(data: dict, diff: str, pages_url: str) -> str:
       <a href="{pages_url}facts.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
         📋 Quick Facts →
       </a>
+      <a href="{pages_url}research.html" style="display:inline-block;background:#1c2128;color:#c9d1d9;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.9rem;border:1px solid #30363d">
+        🔬 Research Intelligence →
+      </a>
     </div>
   </div>
   <div style="padding:12px 24px;background:#f6f8fa;font-size:.75rem;color:#888">
