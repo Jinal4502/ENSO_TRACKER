@@ -316,8 +316,6 @@ details[open] .sources-summary::before { content: "▾ "; }
 <div class="page-head">
   <h1>ENSO Research Intelligence</h1>
   <div class="page-meta">
-    <span><span class="meta-lit">●</span> __TOTAL_LIT__ literature chunks</span>
-    <span><span class="meta-news">●</span> __TOTAL_NEWS__ news chunks</span>
     <span>__N_CATS__ domains · __N_EVENTS__ events: __EVENT_DISPLAYS__</span>
     <span>Generated __GENERATED__</span>
   </div>
