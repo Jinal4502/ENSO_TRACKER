@@ -160,6 +160,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     <a href="sst.html">Sea Surface Temp</a>
     <a href="impacts.html">Impacts</a>
     <a href="facts.html">Quick Facts</a>
+    <a href="research.html">Research</a>
   </div>
 </nav>
 

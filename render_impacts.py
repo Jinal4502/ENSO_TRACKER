@@ -318,6 +318,7 @@ def render_impacts(data: dict, output_path: str = "docs/impacts.html") -> None:
     <a href="sst.html">SST</a>
     <a href="impacts.html" class="nav-active">Impacts</a>
     <a href="facts.html">Quick Facts</a>
+    <a href="research.html">Research</a>
   </div>
 </nav>
 

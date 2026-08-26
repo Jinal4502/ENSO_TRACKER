@@ -1,0 +1,1662 @@
+{
+  "generated_at": "2026-08-26T04:24:26.481523+00:00",
+  "events": [
+    {
+      "key": "current_2026",
+      "display": "2026-27 (upcoming)"
+    },
+    {
+      "key": "1982_83",
+      "display": "1982-83"
+    },
+    {
+      "key": "1997_98",
+      "display": "1997-98"
+    },
+    {
+      "key": "2015_16",
+      "display": "2015-16"
+    }
+  ],
+  "llm_model": "qwen2.5:14b-instruct",
+  "embed_model": "nomic-embed-text",
+  "categories": [
+    {
+      "domain": "physical_climate_science",
+      "label": "Physical Climate & Forecast",
+      "by_event": {
+        "current_2026": {
+          "domain": "physical_climate_science",
+          "label": "Physical Climate & Forecast",
+          "question": "What is the current strength and forecast trajectory of the upcoming 2026-27 El Nino, including sea surface temperature anomalies and forecaster confidence?",
+          "synthesis": "The current strength and forecast trajectory of the 2026-27 El Ni\u00f1o event indicate that it may become one of the strongest on record. According to multiple sources:\n\n1. **Current Strength**: As of July 2026, El Ni\u00f1o conditions are already present in the Pacific Ocean and are expected to persist and strengthen into autumn (N0007 [event: current_2026], N0015 [event: current_2026]).\n\n2. **Forecast Trajectory**: The forecast suggests that sea surface temperature anomalies could exceed 3\u00b0C in key monitoring regions by the August-October period, with some models predicting a peak anomaly of around 3.6\u00b0C (N0004 [event: current_2026], N0006 [event: current_2026]). This would be significantly higher than previous record-holding events.\n\n3. **Sea Surface Temperature Anomalies**: The Relative Oceanic Ni\u00f1o Index (RONI) is used to distinguish El Ni\u00f1o warming from broader ocean warming trends due to global climate change. According to this metric, the 1982-83 event holds the current RONI record at 2.69\u00b0C, but many models predict that the 2026-27 event could surpass this (N0004 [event: current_2026], N0006 [event: current_2026]).\n\n4. **Forecaster Confidence**: Forecasters have gained confidence in their predictions after overcoming the \"spring predictability barrier,\" with models showing a high degree of agreement on the strength and trajectory of El Ni\u00f1o (N0015 [event: current_2026]). The World Meteorological Organization (WMO) and NOAA's Climate Prediction Center indicate that multi-model ensemble forecasts now show an increased probability of colder-than-average conditions across portions of the central and eastern U.S. during early winter, while warmer-than-average conditions may prevail in other regions (N0007 [event: current_2026]).\n\nIn summary, the 2026-27 El Ni\u00f1o event is forecast to intensify significantly, potentially becoming the strongest on record based on both absolute and relative measures of sea surface temperature anomalies.",
+          "sources": [
+            {
+              "id": "N0007",
+              "type": "news",
+              "title": "Strengthening El Ni\u00f1o and Atlantic cold anomaly in focus for Winter 2026\u201327 outlook - The Watchers",
+              "source": "watchers.news",
+              "url": "https://watchers.news/2026/07/07/strengthening-el-nino-and-atlantic-cold-anomaly-in-focus-for-winter-2026-27-outlook",
+              "published_date": "Tue, 07 Jul 2026 15:17:50 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0015",
+              "type": "literature",
+              "title": "El Ni\u00f1o has begun. It may become the strongest this century",
+              "source": "science.org",
+              "url": "https://www.science.org/content/article/el-nino-has-begun-it-may-become-strongest-century",
+              "published_date": "Thu, 11 Jun 2026 13:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0001",
+              "type": "news",
+              "title": "Strong El Ni\u00f1o expected to intensify",
+              "source": "wmo.int",
+              "url": "https://wmo.int/media/news/strong-el-nino-expected-intensify",
+              "published_date": "Mon, 27 Jul 2026 08:04:16 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0004",
+              "type": "news",
+              "title": "The Strongest El Ni\u00f1o Ever - by Zeke Hausfather",
+              "source": "theclimatebrink.com",
+              "url": "https://www.theclimatebrink.com/p/the-strongest-el-nino-ever",
+              "published_date": "Thu, 16 Jul 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0006",
+              "type": "news",
+              "title": "State of the climate: Rapidly developing El Ni\u00f1o raises ...",
+              "source": "carbonbrief.org",
+              "url": "https://www.carbonbrief.org/state-of-the-climate-rapidly-developing-el-nino-raises-chance-of-record-warm-2026",
+              "published_date": "Fri, 24 Jul 2026 10:59:37 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0002",
+              "type": "news",
+              "title": "This could be the strongest El Ni\u00f1o on record",
+              "source": "yaleclimateconnections.org",
+              "url": "https://yaleclimateconnections.org/2026/07/this-could-be-the-strongest-el-nino-on-record",
+              "published_date": "Tue, 14 Jul 2026 16:57:26 GMT",
+              "event_label": "current_2026"
+            }
+          ],
+          "n_literature_chunks": 1,
+          "n_news_chunks": 7,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "physical_climate_science",
+          "label": "Physical Climate & Forecast",
+          "question": "How strong was the 1982-83 El Nino, including sea surface temperature anomalies, and how does its intensity rank historically?",
+          "synthesis": "The 1982-1983 El Ni\u00f1o event is described as one of the strongest on record. According to [0117], it had an SST anomaly of 3.5\u00b0C in the Ni\u00f1o 3.4 region, which is noted as the strongest El Ni\u00f1o with such a high anomaly. This places it ahead of the 1997 event, which had an SST anomaly of 2.8\u00b0C.\n\nAdditionally, [N0096] describes dramatic rises in sea surface temperatures during this period, including a significant temperature increase along the coast of Peru where sea-surface temperatures rose by 7.2 degrees Fahrenheit (4 degrees Celsius) within just 24 hours on September 24, 1982.\n\nHistorically, based on [0319], while the 2015/2016 El Ni\u00f1o was also very strong and marked by record-breaking warm anomalies in the central Pacific, it is still considered weaker than both the 1982/1983 and 1997/1998 events when comparing SST anomalies over the eastern Pacific (Ni\u00f1o3 and Ni\u00f1o1+2 regions). This further emphasizes that the 1982-1983 El Ni\u00f1o is historically ranked as one of the strongest, if not the strongest, based on these metrics.",
+          "sources": [
+            {
+              "id": "N0096",
+              "type": "news",
+              "title": "1982-1983 El Ni\u00f1o: The worst there ever was",
+              "source": "whoi.edu",
+              "url": "https://www.whoi.edu/science/b/people/kamaral/1982-1983ElNino.html",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "0319",
+              "type": "literature",
+              "title": "The Defining Characteristics of ENSO Extremes and the Strong 2015/2016 El Ni\u00f1o",
+              "journal": "Reviews of Geophysics",
+              "year": "2017",
+              "authors": "Agus Santoso; Michael J. Mcphaden; Wenju Cai",
+              "doi": "10.1002/2017rg000560",
+              "url": "https://doi.org/10.1002/2017rg000560"
+            },
+            {
+              "id": "0117",
+              "type": "literature",
+              "title": "El Ni\u00f1o variability in simple ocean data assimilation (SODA), 1871\u20132008",
+              "journal": "Journal of Geophysical Research",
+              "year": "2011",
+              "authors": "Benjamin S. Giese; Sulagna Ray",
+              "doi": "10.1029/2010jc006695",
+              "url": "https://doi.org/10.1029/2010jc006695"
+            },
+            {
+              "id": "N0097",
+              "type": "news",
+              "title": "The 2015/2016 El Ni\u00f1o Event in Context of the MERRA-2 Reanalysis: A Comparison of the Tropical Pacific with 1982/1983 and 1997/1998 - PMC",
+              "source": "pmc.ncbi.nlm.nih.gov",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6021759",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0099",
+              "type": "news",
+              "title": "NASA SVS | Ni\u00f1o 3.4 Index and Sea Surface Temperature Anomaly Timeline: 1982-2017",
+              "source": "svs.gsfc.nasa.gov",
+              "url": "https://svs.gsfc.nasa.gov/4695",
+              "published_date": "",
+              "event_label": "1982_83"
+            }
+          ],
+          "n_literature_chunks": 4,
+          "n_news_chunks": 4,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "physical_climate_science",
+          "label": "Physical Climate & Forecast",
+          "question": "How strong was the 1997-98 El Nino, including sea surface temperature anomalies, and how does its intensity rank historically?",
+          "synthesis": "The 1997-98 El Ni\u00f1o event is considered one of the strongest on record. According to [0394], it had a peak value of the CTI (Composite Temperature Index) at 2.3\u00b0C, which is three standard deviations above normal and ranks it as an \"extreme\" El Ni\u00f1o event. Additionally, [0117] indicates that the SST anomaly for this event was approximately 2.8\u00b0C in the Nino 3.4 region (170\u00b0W to 120\u00b0W and 5\u00b0S to 5\u00b0N), making it one of the strongest El Ni\u00f1o events recorded, second only to the 1982-83 event which had an SST anomaly of 3.5\u00b0C according to [0117]. This places the 1997-98 El Ni\u00f1o as the second most intense historically based on SST anomalies in the Nino 3.4 region, just behind the 1982-83 event.",
+          "sources": [
+            {
+              "id": "N0168",
+              "type": "news",
+              "title": "1997-1998 El Ni\u00f1o: the most recent event",
+              "source": "ww2010.atmos.uiuc.edu",
+              "url": "http://ww2010.atmos.uiuc.edu/(Gh)/guides/mtr/eln/rcnt.rxml",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0172",
+              "type": "news",
+              "title": "El Ni\u00f1o",
+              "source": "education.nationalgeographic.org",
+              "url": "https://education.nationalgeographic.org/resource/el-nino",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0117",
+              "type": "literature",
+              "title": "El Ni\u00f1o variability in simple ocean data assimilation (SODA), 1871\u20132008",
+              "journal": "Journal of Geophysical Research",
+              "year": "2011",
+              "authors": "Benjamin S. Giese; Sulagna Ray",
+              "doi": "10.1029/2010jc006695",
+              "url": "https://doi.org/10.1029/2010jc006695"
+            },
+            {
+              "id": "0394",
+              "type": "literature",
+              "title": "Why were the 2015/2016 and 1997/1998 extreme El Ni\u00f1os different?",
+              "journal": "Geophysical Research Letters",
+              "year": "2017",
+              "authors": "Houk Paek; Jin\u2010Yi Yu; Chengcheng Qian",
+              "doi": "10.1002/2016gl071515",
+              "url": "https://doi.org/10.1002/2016gl071515"
+            },
+            {
+              "id": "N0170",
+              "type": "news",
+              "title": "1997\u20131998 El Ni\u00f1o event - Wikipedia",
+              "source": "en.wikipedia.org",
+              "url": "https://en.wikipedia.org/wiki/1997%E2%80%931998_El_Ni%C3%B1o_event",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0174",
+              "type": "news",
+              "title": "Mcph2029",
+              "source": "pmel.noaa.gov",
+              "url": "https://www.pmel.noaa.gov/pubs/outstand/mcph2029/text.shtml",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0319",
+              "type": "literature",
+              "title": "The Defining Characteristics of ENSO Extremes and the Strong 2015/2016 El Ni\u00f1o",
+              "journal": "Reviews of Geophysics",
+              "year": "2017",
+              "authors": "Agus Santoso; Michael J. Mcphaden; Wenju Cai",
+              "doi": "10.1002/2017rg000560",
+              "url": "https://doi.org/10.1002/2017rg000560"
+            },
+            {
+              "id": "0355",
+              "type": "literature",
+              "title": "The very strong coastal El Ni\u00f1o in 1925 in the far-eastern Pacific",
+              "journal": "Climate Dynamics",
+              "year": "2019",
+              "authors": "Ken Takahashi; Alejandra G. Mart\u00ednez",
+              "doi": "10.1007/s00382-017-3702-1",
+              "url": "https://doi.org/10.1007/s00382-017-3702-1"
+            }
+          ],
+          "n_literature_chunks": 4,
+          "n_news_chunks": 4,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "physical_climate_science",
+          "label": "Physical Climate & Forecast",
+          "question": "How strong was the 2015-16 El Nino, including sea surface temperature anomalies, and how does its intensity rank historically?",
+          "synthesis": "The 2015/16 El Ni\u00f1o event was among the strongest observed since 1950. During November to January 2015\u201316, values within NOAA's Oceanic Ni\u00f1o Index (ONI) peaked at 2.3 \u00b0C (4.1 \u00b0F), which tied it with the 1997/98 event for the strongest values on record based on a three-month average from November 2015 to January 2016 of the ONI [N0226]. However, while some aspects rivaled previous major El Ni\u00f1os like those in 1982/83 and 1997/98, it also differed importantly. For instance, remarkably above-average sea surface temperature (SST) anomalies occurred in the western and central equatorial Pacific but were milder near the coast of South America [N0228]. The SST anomalies peaked at +2.5\u00b0C during November\u2013January 2015/16 for Ni\u00f1o-3.4 and Ni\u00f1o-3 indices, which was close to record levels but not definitively surpassing them due to uncertainties in the data sets [N0228].\n\nThe event is considered one of the three strongest El Ni\u00f1o events since 1950, with its strength measured through various methods that sometimes yield different rankings [N0226]. The 2015/16 El Ni\u00f1o was also marked by unusually warm conditions in 2014 and long-term background warming, contributing to its extremity [0319].\n\nIn summary, the 2015/16 El Ni\u00f1o event is definitively one of the strongest on record but may not surpass the 1982/83 or 1997/98 events in all metrics due to differences in SST anomaly patterns and magnitudes [N0228, 0319].",
+          "sources": [
+            {
+              "id": "N0226",
+              "type": "news",
+              "title": "2014\u20132016 El Ni\u00f1o event - Wikipedia",
+              "source": "en.wikipedia.org",
+              "url": "https://en.wikipedia.org/wiki/2014%E2%80%932016_El_Ni%C3%B1o_event",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0319",
+              "type": "literature",
+              "title": "The Defining Characteristics of ENSO Extremes and the Strong 2015/2016 El Ni\u00f1o",
+              "journal": "Reviews of Geophysics",
+              "year": "2017",
+              "authors": "Agus Santoso; Michael J. Mcphaden; Wenju Cai",
+              "doi": "10.1002/2017rg000560",
+              "url": "https://doi.org/10.1002/2017rg000560"
+            },
+            {
+              "id": "N0228",
+              "type": "literature",
+              "title": "Observing and Predicting the 2015/16 El Ni\u00f1o in: Bulletin of the American Meteorological Society Volume 98 Issue 7 (2017)",
+              "source": "journals.ametsoc.org",
+              "url": "https://journals.ametsoc.org/view/journals/bams/98/7/bams-d-16-0009.1.xml",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0285",
+              "type": "literature",
+              "title": "STATE OF THE CALIFORNIA CURRENT 2015-16 COMPARISONS WITH THE 1997-98 EL NINO",
+              "journal": "",
+              "year": "",
+              "authors": "",
+              "doi": "",
+              "url": "https://escholarship.org/content/qt730558jh/qt730558jh.pdf"
+            }
+          ],
+          "n_literature_chunks": 7,
+          "n_news_chunks": 1,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    },
+    {
+      "domain": "agriculture_food_security",
+      "label": "Agriculture & Food Security",
+      "by_event": {
+        "current_2026": {
+          "domain": "agriculture_food_security",
+          "label": "Agriculture & Food Security",
+          "question": "What impacts is the upcoming 2026-27 El Nino expected to have on agriculture, crop yields, and food security?",
+          "synthesis": "The upcoming 2026-27 El Ni\u00f1o event is anticipated to significantly impact agriculture, crop yields, and food security in several ways:\n\n1. **Global Food Prices**: The World Meteorological Organization (WMO) indicates that the Super El Ni\u00f1o of 2026 could be the most intense on record, leading to a potential doubling of global food prices compared to current levels over the course of a year [N0024]. Analysts predict a surge in core commodity prices ranging from 10% to 50%, with some crops like rice, palm oil, sugar, and coffee potentially rising by up to 100% or more [N0028].\n\n2. **Crop Yields**: Historical data suggests that strong El Ni\u00f1o events can lead to significant yield reductions in certain regions. For instance, maize yields fell during strong El Ni\u00f1o years by approximately 0.37 percent on average, while wheat yields declined by about 1.33 percent globally [N0017]. In Australia specifically, winter wheat yields could decrease by 20-40% due to the event's impact on growing regions [N0017].\n\n3. **Regional Disparities**: The impacts are not uniform across all crops or regions. For example, while South American soybean production may benefit from El Ni\u00f1o-induced rainfall, other regions like Australia and parts of Africa could experience severe droughts leading to significant yield reductions [N0024]. Additionally, the United States is largely insulated due to its crop harvesting schedule, but this does not mitigate indirect impacts such as increased input costs [N0017].\n\n4. **Food Security**: The event threatens to exacerbate existing food insecurity issues in vulnerable regions like East Africa and Central America. Displacement risks are heightened for populations already facing conflicts and drought conditions, potentially leading to re-displacement among the most vulnerable groups [N0020]. Ethiopia is highlighted as a region where El Ni\u00f1o-driven rainfall delays and deficits raise concerns about harvests [N0021].\n\n5. **Supply Chain Disruptions**: The event could cause disruptions in fertilizer supplies due to geopolitical tensions, particularly through the Strait of Hormuz, which sees one-third of global fertilizer trade passing through it [N0024]. This disruption can lead to higher input costs for farmers and further strain food production systems.\n\n6. **Long-term Impacts**: Analysts predict that the full impact on food prices could take until the second half of 2028 to be fully realized, due to delays in extreme weather hitting harvest cycles and logistical challenges [N0028].\n\nThese impacts underscore the need for robust preparedness measures by governments and humanitarian organizations to mitigate potential crises.",
+          "sources": [
+            {
+              "id": "N0021",
+              "type": "news",
+              "title": "El Ni\u00f1o Impacts on Food Security: Lessons from past El Ni\u00f1o events for 2026/27 preparedness (June 2026) - World | ReliefWeb",
+              "source": "reliefweb.int",
+              "url": "https://reliefweb.int/report/world/el-nino-impacts-food-security-lessons-past-el-nino-events-202627-preparedness-june-2026",
+              "published_date": "Mon, 15 Jun 2026 06:43:26 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0024",
+              "type": "news",
+              "title": "El Ni\u00f1o 2026: the agricultural commodity risk investors are missing - RankiaPro",
+              "source": "rankiapro.com",
+              "url": "https://rankiapro.com/en/insights/super-el-nino-2026-why-the-agricultural-risk-is-underestimated-by-the-markets",
+              "published_date": "Tue, 23 Jun 2026 08:22:02 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0017",
+              "type": "news",
+              "title": "El Ni\u00f1o 2026: Converging Pressures on Vegetable Oil Markets - Center for Commercial Agriculture",
+              "source": "ag.purdue.edu",
+              "url": "https://ag.purdue.edu/commercialag/home/paer-article/el-nino-2026-converging-pressures-on-vegetable-oil-markets",
+              "published_date": "Fri, 17 Jul 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0028",
+              "type": "news",
+              "title": "\u2018Super\u2019 El Ni\u00f1o could cause global food price shock lasting into 2028, analysts say | Global economy",
+              "source": "theguardian.com",
+              "url": "https://www.theguardian.com/business/2026/jul/12/super-el-nino-severe-shock-global-food-prices-lasting-into-2028-economists-warn",
+              "published_date": "Sun, 12 Jul 2026 07:00:11 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0020",
+              "type": "news",
+              "title": "Potentially historic El Ni\u00f1o to come, analysis shows ...",
+              "source": "joint-research-centre.ec.europa.eu",
+              "url": "https://joint-research-centre.ec.europa.eu/jrc-news-and-updates/potentially-historic-el-nino-come-analysis-shows-humanitarian-toll-2026-06-15_en",
+              "published_date": "Mon, 15 Jun 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            }
+          ],
+          "n_literature_chunks": 0,
+          "n_news_chunks": 8,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "agriculture_food_security",
+          "label": "Agriculture & Food Security",
+          "question": "What impact did the 1982-83 El Nino have on agriculture, crop yields, and food security?",
+          "synthesis": "During the 1982/83 El Ni\u00f1o event, severe flooding and extensive weather-related damage occurred in Latin America, while drought affected parts of Asia [N0115]. In Latin America, this resulted in significant agricultural impacts including severe drought and flood damage in several countries. First season crops were particularly affected by drought in most Central American and some Caribbean countries, with average losses estimated at about 15 percent compared to the previous year's average crops, though local losses were more severe [N0115]. In South America, wheat planting was impacted by a wetter than normal winter season, leading to a significant reduction in planted area reported in Argentina and Brazil [N0115].\n\nThese conditions posed substantial threats to food security due to reduced agricultural production and the potential for further impacts on crops to be planted in subsequent months [N0115].",
+          "sources": [
+            {
+              "id": "N0112",
+              "type": "news",
+              "title": "FAO/GIEWS - Food Outlook FAO Conference Summary, November 1997   page4",
+              "source": "fao.org",
+              "url": "https://www.fao.org/4/w7174e/w7174e18.htm",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0115",
+              "type": "news",
+              "title": "FAO/GIEWS - Food Outlook, November 1997   page11",
+              "source": "fao.org",
+              "url": "https://www.fao.org/4/w7174e/w7174e11.htm",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0110",
+              "type": "news",
+              "title": "Impact of El Ni\u00f1o on Agriculture, Fisheries and Forestry - World | ReliefWeb",
+              "source": "reliefweb.int",
+              "url": "https://reliefweb.int/report/world/impact-el-ni%C3%B1o-agriculture-fisheries-and-forestry",
+              "published_date": "",
+              "event_label": "1982_83"
+            }
+          ],
+          "n_literature_chunks": 0,
+          "n_news_chunks": 8,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "agriculture_food_security",
+          "label": "Agriculture & Food Security",
+          "question": "What impact did the 1997-98 El Nino have on agriculture, crop yields, and food security?",
+          "synthesis": "The 1997\u20131998 El Ni\u00f1o had significant impacts on agriculture, crop yields, and food security globally. In East Africa, particularly in Kenya's Mount Kenya region [N0180], major food crops such as maize, beans, and Irish potatoes were affected by the heavy rains associated with El Ni\u00f1o. Maize yields did not fall but rather showed good harvests in some areas like Buuri and Abothuguchi West divisions; however, beans and Irish potatoes failed due to factors including waterlogging, fungal diseases, and floods [N0180].\n\nIn Latin America and parts of the Horn of Africa, El Ni\u00f1o led to massive flooding that caused extensive damage to infrastructure and resulted in thousands of deaths. In Indonesia, drought conditions caused a cereal shortfall of over 3.5 million metric tons, leading to food commodity prices becoming prohibitively expensive [N0183].\n\nWorldwide, rice production was minimally affected by El Ni\u00f1o initially, but there were concerns about the potential impact on crops to be planted in late 1997 and harvested in 1998. The FAO noted that while some countries experienced reduced harvests due to adverse weather conditions linked to El Ni\u00f1o, global cereal production was expected to remain largely unaffected [N0182].\n\nIn terms of specific crop impacts:\n- Maize yields fell during strong El Ni\u00f1o years like 1997\u20131998 in regions such as southeastern United States, China, East and West Africa, Mexico, and Indonesia [N0184].\n- Rice production faced significant risks due to dryness disrupting paddy cultivation during reproductive growth stages in southern China, Myanmar, and Indonesia [N0184].\n\nOverall, the 1997\u20131998 El Ni\u00f1o event had a mixed impact on agriculture with some regions experiencing positive outcomes (e.g., improved maize yields in parts of Kenya) while others faced severe disruptions to food security due to droughts or floods.",
+          "sources": [
+            {
+              "id": "N0180",
+              "type": "literature",
+              "title": "Impact of the 1997\u20131998 El Ni\u00f1o Rains on Farms in the Mount Kenya Region",
+              "source": "bioone.org",
+              "url": "https://bioone.org/journals/mountain-research-and-development/volume-25/issue-4/0276-4741_2005_025_0326_IOTENR_2.0.CO_2/Impact-of-the-19971998-El-Ni%C3%B1o-Rains-on-Farms-in/10.1659/0276-4741(2005)025[0326:IOTENR]2.0.CO;2.full",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0183",
+              "type": "news",
+              "title": "El Ni\u00f1o in 1997-1998: Impacts and CARE's Response - World | ReliefWeb",
+              "source": "reliefweb.int",
+              "url": "https://reliefweb.int/report/world/el-ni\u00f1o-1997-1998-impacts-and-cares-response",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0182",
+              "type": "news",
+              "title": "Impact of El Ni\u00f1o on Agriculture, Fisheries and Forestry - World | ReliefWeb",
+              "source": "reliefweb.int",
+              "url": "https://reliefweb.int/report/world/impact-el-ni\u00f1o-agriculture-fisheries-and-forestry",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0184",
+              "type": "news",
+              "title": "El Nino & La Nina Impact on Global Agriculture",
+              "source": "hectar.global",
+              "url": "https://hectar.global/insights/article/el-nino-la-nina-agriculture-how-enso-cycles-reshape-crop-yields-and-commodity-prices-across-5-key-regions",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0186",
+              "type": "news",
+              "title": "Decades of farm gains, inventories strengthen food system against 'super' El Nino | The Business Standard",
+              "source": "tbsnews.net",
+              "url": "https://www.tbsnews.net/environment/climate-change/decades-farm-gains-inventories-strengthen-food-system-against-super-el",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            }
+          ],
+          "n_literature_chunks": 2,
+          "n_news_chunks": 6,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "agriculture_food_security",
+          "label": "Agriculture & Food Security",
+          "question": "What impact did the 2015-16 El Nino have on agriculture, crop yields, and food security?",
+          "synthesis": "The 2015\u20132016 El Ni\u00f1o event significantly impacted global agriculture, leading to reduced crop yields in several regions. According to reports from FAO [N0237], the impact of this El Ni\u00f1o was one of the most intense and widespread in a century, affecting more than 60 million people globally through droughts, floods, and extreme weather conditions.\n\nSpecifically:\n- In Southern Africa, dry growing conditions reduced corn crop sizes [N0238].\n- Drier-than-average conditions in Southeast Asia negatively impacted rice yields [N0238].\n- India experienced warmer temperatures and below-average winter rains, which are expected to impact wheat production; planting was 27 percent lower than the previous year's levels, with experts predicting a fall below 90 million tonnes [N0238].\n\nAdditionally:\n- Maize farmers in Honduras lost up to 80% of their crop due to dry conditions [N0238].\n- Global rice and corn production declined compared to the previous year, partly attributed to El Ni\u00f1o impacts [N0238].\n- Despite these regional declines, global wheat production was projected at a record level for 2015\u201316, largely due to increases in Russia and Pakistan [N0238].\n\nThe overall effect on food security varied by region:\n- Reduced harvests led to food shortages in some areas, while others saw little impact on aggregate crop yields.\n- The report highlights the need for early action and response strategies to mitigate the negative impacts of El Ni\u00f1o on agriculture and food security [N0237].\n\nThese findings underscore the complex interplay between meteorological factors and agricultural outcomes during an El Ni\u00f1o event.",
+          "sources": [
+            {
+              "id": "N0237",
+              "type": "news",
+              "title": "2015\u20132016 El Ni\u00f1o: Early action and response for agriculture, food security and nutrition - Update # 9 - World | ReliefWeb",
+              "source": "reliefweb.int",
+              "url": "https://reliefweb.int/report/world/2015-2016-el-ni-o-early-action-and-response-agriculture-food-security-and-nutrition-5",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0238",
+              "type": "news",
+              "title": "El Ni\u00f1o and the Outlook for 2016 | Food Security Portal",
+              "source": "foodsecurityportal.org",
+              "url": "https://www.foodsecurityportal.org/blog/el-nino-and-outlook-2016",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0236",
+              "type": "news",
+              "title": "[PDF] 2015\u20132016 El Ni\u00f1o - FAO Knowledge Repository",
+              "source": "openknowledge.fao.org",
+              "url": "https://openknowledge.fao.org/server/api/core/bitstreams/a80370e6-1845-4c16-aa6f-0b817b99032f/content",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0240",
+              "type": "news",
+              "title": "[PDF] El Ni\u00f1o and Cereal Production Shortfalls - CGSpace - CGIAR",
+              "source": "cgspace.cgiar.org",
+              "url": "https://cgspace.cgiar.org/server/api/core/bitstreams/01e8d293-c54c-46bc-9dee-84f4c5384f51/content",
+              "published_date": "",
+              "event_label": "2015_16"
+            }
+          ],
+          "n_literature_chunks": 0,
+          "n_news_chunks": 8,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    },
+    {
+      "domain": "fisheries_marine",
+      "label": "Fisheries & Marine Ecosystems",
+      "by_event": {
+        "current_2026": {
+          "domain": "fisheries_marine",
+          "label": "Fisheries & Marine Ecosystems",
+          "question": "What impacts is the upcoming 2026-27 El Nino expected to have on fisheries and marine ecosystems?",
+          "synthesis": "The upcoming 2026-27 El Ni\u00f1o event is anticipated to significantly impact fisheries and marine ecosystems in several ways:\n\n1. **Fisheries Disruption**: The development of a strong El Ni\u00f1o could disrupt fishing seasons, as seen with the anchovy fishery in Peru where government officials have effectively canceled the fishing season due to warm water conditions [N0035]. This disruption can lead to economic losses for fisheries and instability for those dependent on these industries.\n\n2. **Ecosystem Shifts**: El Ni\u00f1o events are known to cause shifts in marine ecosystems, including changes in species distributions and productivity levels. During past strong El Ni\u00f1os, such as the 1997-98 event, there were significant disruptions to fisheries and crab seasons [N0033]. The current overlapping marine heatwave and potential for a \"super\" El Ni\u00f1o raises concerns about prolonged ecosystem disruption and reduced fishery productivity.\n\n3. **Harmful Algal Blooms**: Warmer ocean temperatures can fuel harmful algal blooms, which have severe impacts on marine life and fisheries [N0033]. These blooms can lead to mass mortality events among seabirds and other marine species, further destabilizing the ecosystem.\n\n4. **Regional Variability in Impacts**: While some regions may experience declines in fish populations due to warmer waters and reduced upwelling of nutrient-rich water, others might see temporary increases in certain fisheries [N0035]. For example, Southern California has reported successful tuna fishing seasons despite overall negative impacts on other species.\n\nThese impacts highlight the complex and varied effects that El Ni\u00f1o can have on marine ecosystems and fisheries, underscoring the need for adaptive management strategies to mitigate potential losses.",
+          "sources": [
+            {
+              "id": "N0033",
+              "type": "news",
+              "title": "How a monster ocean heatwave could fuel a super El Ni\u00f1o - Bulletin of the Atomic Scientists",
+              "source": "thebulletin.org",
+              "url": "https://thebulletin.org/2026/05/how-a-monster-ocean-heatwave-could-fuel-a-super-el-nino",
+              "published_date": "Sat, 30 May 2026 10:00:14 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0036",
+              "type": "news",
+              "title": "Record-breaking El Ni\u00f1o could gut California\u2019s crab and salmon fleets - Los Angeles Times",
+              "source": "latimes.com",
+              "url": "https://www.latimes.com/science/story/2026-07-29/record-breaking-el-nino-could-gut-californias-crab-salmon-fleets",
+              "published_date": "Wed, 29 Jul 2026 10:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0032",
+              "type": "news",
+              "title": "Are we heading towards a Super El Ni\u00f1o in 2026?",
+              "source": "zerocarbon-analytics.org",
+              "url": "https://zerocarbon-analytics.org/insights/briefings/el-nino-and-climate-change",
+              "published_date": "Tue, 21 Apr 2026 09:47:28 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0035",
+              "type": "news",
+              "title": "El Ni\u00f1o Is Already Wreaking Havoc on Pacific Fisheries | WIRED",
+              "source": "wired.com",
+              "url": "https://www.wired.com/story/el-nino-wreaking-havoc-on-pacific-fisheries",
+              "published_date": "Fri, 10 Jul 2026 09:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "0130",
+              "type": "literature",
+              "title": "Environmental \u2018loopholes\u2019 and fish population dynamics: comparative pattern recognition with focus on El Ni\u00f1o effects in the Pacific",
+              "journal": "Fisheries Oceanography",
+              "year": "2003",
+              "authors": "Andrew Bakun; Kenneth Broad",
+              "doi": "10.1046/j.1365-2419.2003.00258.x",
+              "url": "https://doi.org/10.1046/j.1365-2419.2003.00258.x"
+            },
+            {
+              "id": "0154",
+              "type": "literature",
+              "title": "From small\u2010scale habitat loopholes to decadal cycles: a habitat\u2010based hypothesis explaining fluctuation in pelagic fish populations off Peru",
+              "journal": "Fish and Fisheries",
+              "year": "2004",
+              "authors": "Arnaud Bertrand; Marceliano Segura; Mariano Guti\u00e9rrez; Luis V\u00e1squez",
+              "doi": "10.1111/j.1467-2679.2004.00165.x",
+              "url": "https://doi.org/10.1111/j.1467-2679.2004.00165.x"
+            }
+          ],
+          "n_literature_chunks": 3,
+          "n_news_chunks": 5,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "fisheries_marine",
+          "label": "Fisheries & Marine Ecosystems",
+          "question": "What impact did the 1982-83 El Nino have on fisheries and marine ecosystems?",
+          "synthesis": "During the 1982\u20131983 El Ni\u00f1o event, significant impacts were observed in Peruvian waters affecting pelagic fisheries. The anchovy population was disrupted during the peak intensity of El Ni\u00f1o, awaiting better environmental conditions to recover. Meanwhile, reproductive activities of other pelagic resources such as sardine, Pacific mackerel, and longnose anchovy increased at the beginning of the El Ni\u00f1o period (0174). Additionally, there were changes in biomass structure with a prevalence shift from anchovy dominance towards species like sardine, jack mackerel, Pacific mackerel, longnose anchovy, vinctiguerria, lumptail searobin, Pacific cutlassfishes, and myctophydae (0174). These changes indicate that El Ni\u00f1o events cause a quick renovation of these stocks. Furthermore, the landings shifted from being monospecific to multispecific fisheries with an increased percentage of other pelagic resources and reduced anchovy percentages (0174).\n\nIn Ecuador, heavy rainfall and flooding led to high fish and shrimp harvests during this period [N0127]. However, these benefits were overshadowed by the broader ecological disruptions, including significant declines in marine species populations due to warmer waters and altered food chains.",
+          "sources": [
+            {
+              "id": "N0127",
+              "type": "news",
+              "title": "1982\u20131983 El Ni\u00f1o event - Wikipedia",
+              "source": "en.wikipedia.org",
+              "url": "https://en.wikipedia.org/wiki/1982%E2%80%9383_El_Ni%C3%B1o_event",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "0174",
+              "type": "literature",
+              "title": "Impact of El Ni\u00f1o events on pelagic fisheries in Peruvian waters",
+              "journal": "Deep Sea Research Part II: Topical Studies in Oceanography",
+              "year": "2004",
+              "authors": "Miguel \u00d1iquen; Maril\u00fa Bouchon",
+              "doi": "10.1016/j.dsr2.2004.03.001",
+              "url": "https://doi.org/10.1016/j.dsr2.2004.03.001"
+            }
+          ],
+          "n_literature_chunks": 1,
+          "n_news_chunks": 2,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "fisheries_marine",
+          "label": "Fisheries & Marine Ecosystems",
+          "question": "What impact did the 1997-98 El Nino have on fisheries and marine ecosystems?",
+          "synthesis": "During the 1997-98 El Ni\u00f1o event, significant impacts were observed in both fisheries and marine ecosystems:\n\n1. **Fisheries Impact**: The anchovy fishing industry off the coast of Peru faltered due to unusually warm water conditions [N0195]. This decline is consistent with broader patterns where strong El Ni\u00f1o events can reduce fish populations and disrupt catches, impacting seafood supply chains and livelihoods dependent on fisheries [N0194].\n\n2. **Marine Ecosystem Impact**: Coral reef bleaching occurred extensively in the Indo-Pacific region, Caribbean, and Florida Keys during this period [N0195]. Additionally, marine heat waves intensified, damaging seagrass meadows and kelp forests, increasing stress and disease risks for aquaculture, and altering plankton and fish populations' timing and distribution [N0194].\n\nThese impacts highlight the far-reaching consequences of El Ni\u00f1o on marine ecosystems and fisheries, underscoring the need for early warning systems and adaptive management strategies to mitigate such effects.",
+          "sources": [
+            {
+              "id": "N0198",
+              "type": "news",
+              "title": "Super El Ni\u00f1o explained: What this could mean for marine life | Marine Conservation Society",
+              "source": "mcsuk.org",
+              "url": "https://www.mcsuk.org/news/article/super-el-nino-explained-what-this-could-mean-for-marine-life",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0196",
+              "type": "news",
+              "title": "Earth Shaker - #ThrowbackMeteo | The 1997\u20131998 Major El...",
+              "source": "facebook.com",
+              "url": "https://www.facebook.com/earthshakerph/posts/throwbackmeteo-the-19971998-major-el-ni%C3%B1o-during-mid-1997-sea-surface-temperatur/3304982659555848",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0194",
+              "type": "news",
+              "title": "2026 Super El Ni\u00f1o Impacts, Explained | World Resources Institute",
+              "source": "wri.org",
+              "url": "https://www.wri.org/insights/super-el-nino-impacts-explained",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "N0195",
+              "type": "news",
+              "title": "El Ni\u00f1o and La Ni\u00f1a | Oceanography | Research Starters | EBSCO Research",
+              "source": "ebsco.com",
+              "url": "https://www.ebsco.com/research-starters/oceanography/el-nino-and-la-nina",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0154",
+              "type": "literature",
+              "title": "From small\u2010scale habitat loopholes to decadal cycles: a habitat\u2010based hypothesis explaining fluctuation in pelagic fish populations off Peru",
+              "journal": "Fish and Fisheries",
+              "year": "2004",
+              "authors": "Arnaud Bertrand; Marceliano Segura; Mariano Guti\u00e9rrez; Luis V\u00e1squez",
+              "doi": "10.1111/j.1467-2679.2004.00165.x",
+              "url": "https://doi.org/10.1111/j.1467-2679.2004.00165.x"
+            },
+            {
+              "id": "0130",
+              "type": "literature",
+              "title": "Environmental \u2018loopholes\u2019 and fish population dynamics: comparative pattern recognition with focus on El Ni\u00f1o effects in the Pacific",
+              "journal": "Fisheries Oceanography",
+              "year": "2003",
+              "authors": "Andrew Bakun; Kenneth Broad",
+              "doi": "10.1046/j.1365-2419.2003.00258.x",
+              "url": "https://doi.org/10.1046/j.1365-2419.2003.00258.x"
+            }
+          ],
+          "n_literature_chunks": 2,
+          "n_news_chunks": 5,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "fisheries_marine",
+          "label": "Fisheries & Marine Ecosystems",
+          "question": "What impact did the 2015-16 El Nino have on fisheries and marine ecosystems?",
+          "synthesis": "The 2015-16 El Ni\u00f1o had significant negative impacts on fisheries and marine ecosystems. According to Ocean Conservancy experts, during this period, krill populations declined first, leading to starvation in various fish, sea lions, seabirds, and whales due to the disruption of entire food webs (N0246). Additionally, toxic algae bloomed, causing massive die-offs of seabirds, whale deaths, entanglements, and starving sea lion pups. The event required more than $141 million in fisheries relief efforts.\n\nNASA scientists noted a substantial decrease in phytoplankton populations off the coasts of Peru and Chile during this El Ni\u00f1o peak (N0251). This reduction in primary productivity had cascading effects up the food chain, impacting fish populations that rely on these organisms for sustenance. The event also led to significant reductions in catches of affected species in the Southeast Pacific region by an average of 0.28 million metric tonnes per year, mainly due to lower Peruvian anchoveta catches (N0245).\n\nIn coastal Kenya, the 2015-16 El Ni\u00f1o caused large-scale die-back in mangrove areas and increased sedimentation due to heavy rainfall on eroding coastal catchments (N0247). Coral reefs also experienced bleaching events, further stressing marine ecosystems.\n\nOverall, these impacts highlight the severe disruptions that strong El Ni\u00f1o events can cause to marine biodiversity and fisheries productivity.",
+          "sources": [
+            {
+              "id": "N0246",
+              "type": "news",
+              "title": "NEWS: West Coast Fishing Communities at Risk as Developing Super El Ni\u00f1o Threatens Key Fish Stocks, Livelihoods - Ocean Conservancy",
+              "source": "oceanconservancy.org",
+              "url": "https://oceanconservancy.org/newsroom/press-release/2026/07/22/super_el_nino_threats_fisheries",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0245",
+              "type": "news",
+              "title": "El Ni\u00f1o impacts and policies for the fisheries sector",
+              "source": "openknowledge.fao.org",
+              "url": "https://openknowledge.fao.org/server/api/core/bitstreams/b5c99596-9e65-4001-bb5e-fa1818108521/content",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0251",
+              "type": "news",
+              "title": "NASA Examines El Nino's Impact on Fish Populations | The Fish Site",
+              "source": "thefishsite.com",
+              "url": "https://thefishsite.com/articles/nasa-examines-el-ninos-impact-on-fish-populations",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0247",
+              "type": "news",
+              "title": "Multiple impact pathways of the 2015\u20132016 El Ni\u00f1o in coastal Kenya - PMC",
+              "source": "pmc.ncbi.nlm.nih.gov",
+              "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7708579",
+              "published_date": "",
+              "event_label": "2015_16"
+            }
+          ],
+          "n_literature_chunks": 0,
+          "n_news_chunks": 8,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    },
+    {
+      "domain": "disaster_hazards",
+      "label": "Disaster & Hazard Risk",
+      "by_event": {
+        "current_2026": {
+          "domain": "disaster_hazards",
+          "label": "Disaster & Hazard Risk",
+          "question": "What drought, flooding, and other disaster or hazard risks are associated with the upcoming 2026-27 El Nino?",
+          "synthesis": "The upcoming 2026-27 El Ni\u00f1o is associated with several significant drought, flooding, and other disaster or hazard risks:\n\n1. **Flooding**: East Africa and Asia face severe flooding threats due to heavy rainfall expected during the latter part of 2026 and into early 2027. This includes regions such as Somalia, Kenya, Uganda, Bangladesh, Pakistan, and Afghanistan [N0045]. In Somalia, there is a 60% chance of above-average rainfall in June, with river levels rising quickly along the country's main waterways due to heavy rains in the Ethiopian highlands [N0045].\n\n2. **Drought**: Southern Africa may experience hotter and drier conditions during El Ni\u00f1o events, raising risks of drought, water shortages, and food insecurity [N0047]. Additionally, some regions might face extreme heatwaves and dry conditions before transitioning to a flood-prone period later in the year [N0054].\n\n3. **Health Risks**: Flooding can lead to disease outbreaks such as cholera and acute watery diarrhea due to contaminated water sources [N0045]. In East Africa, communities are particularly vulnerable because of existing drought conditions and reduced humanitarian funding, which limits their ability to cope with additional shocks [N0045].\n\n4. **Displacement**: The anticipated flooding could result in significant displacement of populations across affected regions [N0046], [N0047]. In Somalia alone, 4.8 million people are already in need of urgent aid due to overlapping crises of drought and displacement, a number expected to rise as El Ni\u00f1o impacts worsen [N0045].\n\n5. **Agricultural Impacts**: Flooding can destroy crops and damage infrastructure essential for agriculture, exacerbating food insecurity and economic losses [N0046]. The destruction of almost 13,000 tons of crops in a previous flood event highlights the severe agricultural impacts expected during this El Ni\u00f1o cycle [N0045].\n\n6. **Increased Hunger**: The UN has warned that El Ni\u00f1o could push an additional 49 million people into acute hunger by exacerbating existing food insecurity and disrupting livelihoods [N0048]. This includes regions already struggling with drought, conflict, and shrinking aid budgets.\n\n7. **Extreme Weather Events**: In the Americas, heavy rainstorms originating in the Gulf of Mexico are expected to cause rapid rainfall leading to roadway washouts and landslides [N0049].\n\nThese risks underscore the need for early action and anticipatory measures to mitigate potential disasters and protect vulnerable populations from the compounded impacts of El Ni\u00f1o.",
+          "sources": [
+            {
+              "id": "N0045",
+              "type": "news",
+              "title": "El Ni\u00f1o threatens deadly floods and disease across East Africa and Asia | The IRC",
+              "source": "rescue.org",
+              "url": "https://www.rescue.org/press-release/el-nino-threatens-deadly-floods-and-disease-across-east-africa-and-asia",
+              "published_date": "Thu, 16 Jul 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0054",
+              "type": "news",
+              "title": "Danger Season Is Here Again, with Triple the Danger for 2026 - Union of Concerned Scientists",
+              "source": "blog.ucs.org",
+              "url": "https://blog.ucs.org/erika-spanger-siegfried/danger-season-is-here-again-with-triple-the-danger-for-2026",
+              "published_date": "Wed, 13 May 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0047",
+              "type": "news",
+              "title": "EL Nino puts Africa at risk of drought and floods",
+              "source": "dw.com",
+              "url": "https://www.dw.com/en/is-africa-ready-for-el-nino-drought-floods/a-77826694",
+              "published_date": "Mon, 06 Jul 2026 13:59:20 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0046",
+              "type": "news",
+              "title": "Record El Ni\u00f1o threatens to unleash floods across East Africa and Asia | Floods News | Al Jazeera",
+              "source": "aljazeera.com",
+              "url": "https://www.aljazeera.com/news/2026/7/14/record-el-nino-threatens-to-unleash-floods-across-east-africa-and-asia",
+              "published_date": "Tue, 14 Jul 2026 01:27:57 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "0303",
+              "type": "literature",
+              "title": "Strong influence of El Ni\u00f1o Southern Oscillation on flood risk around the world",
+              "journal": "Proceedings of the National Academy of Sciences",
+              "year": "2014",
+              "authors": "Philip J. Ward; Brenden Jongman; Matti Kummu; Michael D. Dettinger; Frederiek C. Sperna Weiland; Hessel C. Winsemius",
+              "doi": "10.1073/pnas.1409822111",
+              "url": "https://doi.org/10.1073/pnas.1409822111"
+            },
+            {
+              "id": "N0048",
+              "type": "news",
+              "title": "Strengthening El Ni\u00f1o to push 49 million more people into acute hunger | UN News",
+              "source": "news.un.org",
+              "url": "https://news.un.org/en/story/2026/08/1168079",
+              "published_date": "Wed, 05 Aug 2026 11:33:40 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0049",
+              "type": "news",
+              "title": "2026 El Ni\u00f1o Health Risks: Six Extreme Weather Threats Facing the Americas",
+              "source": "directrelief.org",
+              "url": "https://www.directrelief.org/2026/06/2026-el-nino-health-risks-weather-americas",
+              "published_date": "Mon, 15 Jun 2026 08:16:00 GMT",
+              "event_label": "current_2026"
+            }
+          ],
+          "n_literature_chunks": 2,
+          "n_news_chunks": 6,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "disaster_hazards",
+          "label": "Disaster & Hazard Risk",
+          "question": "What drought, flooding, and other disaster or hazard impacts occurred during the 1982-83 El Nino?",
+          "synthesis": "During the 1982-83 El Ni\u00f1o event:\n\n- Drought conditions led to extreme hardship in many regions globally. For instance, Indonesia and parts of Africa experienced severe drought followed by deadly dust storms and massive wildfires [N0138].\n- Flooding was extensive in coastal Peru where rainfall and flooding affected approximately 1.2 million people, damaged over 50,000 houses, and impacted about 76,000 hectares of croplands [0048].\n- In the Brazilian state of Santa Catarina, flooding during this El Ni\u00f1o event affected 186 out of 199 municipalities, leaving 220,000 people homeless, causing 65 deaths and/or missing persons, and leading to economic losses exceeding US$1.1 billion [0048].\n- In California, the state was assaulted by coastal storms and heavy rains causing floods, numerous landslides, and damages to agriculture with statewide losses totaling $265 million in damages and 14 lives lost [0182].\n\nThese impacts highlight the significant economic and human toll of the 1982-83 El Ni\u00f1o event across various regions.",
+          "sources": [
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            },
+            {
+              "id": "N0138",
+              "type": "news",
+              "title": "The Winter of 1983 - Topanga New Times",
+              "source": "topanganewtimes.com",
+              "url": "https://topanganewtimes.com/2026/07/24/the-winter-of-1983",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "0048",
+              "type": "literature",
+              "title": "Climate impacts of the El Ni\u00f1o\u2013Southern Oscillation on South America",
+              "journal": "Nature Reviews Earth & Environment",
+              "year": "2020",
+              "authors": "Wenju Cai; Michael J. McPhaden; Alice M. Grimm; Regina R. Rodrigues; Andr\u00e9a S. Taschetto; Ren\u00e9 D. Garreaud; Boris Dewitte; Germ\u00e1n Poveda; Yoo-Geun Ham; Agus Santoso; Benjamin Ng; Weston Anderson; Guojian Wang; Tao Geng; Hyun-Su Jo; Jos\u00e9 A. Marengo; Lincoln M. Alves; Marisol Osman; Shujun Li; Lixin Wu; Christina Karamperidou; Ken Takahashi; Carolina Vera",
+              "doi": "10.1038/s43017-020-0040-3",
+              "url": "https://doi.org/10.1038/s43017-020-0040-3"
+            },
+            {
+              "id": "0303",
+              "type": "literature",
+              "title": "Strong influence of El Ni\u00f1o Southern Oscillation on flood risk around the world",
+              "journal": "Proceedings of the National Academy of Sciences",
+              "year": "2014",
+              "authors": "Philip J. Ward; Brenden Jongman; Matti Kummu; Michael D. Dettinger; Frederiek C. Sperna Weiland; Hessel C. Winsemius",
+              "doi": "10.1073/pnas.1409822111",
+              "url": "https://doi.org/10.1073/pnas.1409822111"
+            }
+          ],
+          "n_literature_chunks": 5,
+          "n_news_chunks": 3,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "disaster_hazards",
+          "label": "Disaster & Hazard Risk",
+          "question": "What drought, flooding, and other disaster or hazard impacts occurred during the 1997-98 El Nino?",
+          "synthesis": "During the 1997-98 El Ni\u00f1o event:\n\n- Southern Africa experienced its worst drought since 1997, leaving about five million people at risk of famine [N0203].\n- Indonesia and Papua New Guinea faced severe droughts and forest fires due to reduced rainfall [N0203].\n- Chile, Peru, Ecuador, Argentina, Uruguay, and eastern Brazil along the eastern Pacific coast were hit by storms and heavy snowfall. More than 51,000 people became refugees due to flooding in nine of Chile's 13 regions [N0203].\n- In Peru, the coastal area around Callao experienced violent floods that disrupted communications and left thousands homeless [N0203].\n\nIn the United States:\n\n- California was assaulted by coastal storms and heavy rains causing floods, numerous landslides, and damages to agriculture with losses totaling $1.1 billion statewide [0182].\n- Florida, Texas, and several other southern states were struck by severe rainstorms and numerous tornadoes, leading to over 100 deaths and property and agricultural losses in Florida reaching $500 million [0182].\n- A record early damaging snowstorm swept across the high plains and upper Midwest in October, followed by an extremely severe ice storm in January that created losses exceeding $400 million and caused 28 deaths [0182].\n\nThese impacts highlight the diverse range of disasters associated with the 1997-98 El Ni\u00f1o event.",
+          "sources": [
+            {
+              "id": "N0203",
+              "type": "news",
+              "title": "The Disasters El Nino Brings - Disaster Risk Reduction Knowledge Service",
+              "source": "ikcest-drr.data.ac.cn",
+              "url": "https://ikcest-drr.data.ac.cn/tutorial/p94b2",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            },
+            {
+              "id": "N0206",
+              "type": "literature",
+              "title": "Impacts of 1997\u201398 EI Ni\u00f1o\u2013Generated Weather in the United States in: Bulletin of the American Meteorological Society Volume 80 Issue 9 (1999)",
+              "source": "journals.ametsoc.org",
+              "url": "https://journals.ametsoc.org/view/journals/bams/80/9/1520-0477_1999_080_1819_ioenog_2_0_co_2.xml",
+              "published_date": "",
+              "event_label": "1997_98"
+            }
+          ],
+          "n_literature_chunks": 7,
+          "n_news_chunks": 1,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "disaster_hazards",
+          "label": "Disaster & Hazard Risk",
+          "question": "What drought, flooding, and other disaster or hazard impacts occurred during the 2015-16 El Nino?",
+          "synthesis": "During the 2015-16 El Ni\u00f1o event:\n\n- Drought conditions severely affected staple crops in Central America, causing losses of up to 100 percent [N0258].\n- The Indian monsoon fell to extremely low levels, impacting agriculture significantly [N0258].\n- Southern Africa and the Horn of Africa experienced severe drought, with Ethiopia, Malawi, and Angola being particularly affected [N0258].\n- Flooding occurred in Brazil's Santa Catarina state during this period, affecting 186 out of 199 municipalities, leaving 220,000 homeless, causing 65 deaths or disappearances, and leading to economic losses exceeding US$1.1 billion [0048].\n- In central Chile, three times the average rainfall fell during June-July-August 2017, resulting in extreme floods that damaged over 13,000 houses, caused 21 fatalities, and led to economic losses of US$300 million [0048].\n- Peru experienced flooding affecting approximately 1.2 million people and damaging over 50,000 houses and 76,000 hectares of croplands [0048].\n\nThese impacts highlight the diverse range of hazards associated with El Ni\u00f1o events, including severe droughts and devastating floods in different regions around the world.",
+          "sources": [
+            {
+              "id": "N0258",
+              "type": "news",
+              "title": "[PDF] TO EL NI\u00d1O AND LA NI\u00d1A - United Nations Development Programme",
+              "source": "undp.org",
+              "url": "https://www.undp.org/sites/g/files/zskgke326/files/publications/El%20Ni%C3%B1o%20UNDP%20Response.pdf",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0261",
+              "type": "news",
+              "title": "El Nino 2015 - 2016 | PreventionWeb",
+              "source": "preventionweb.net",
+              "url": "https://www.preventionweb.net/collections/el-nino-2015-2016?page=5",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0048",
+              "type": "literature",
+              "title": "Climate impacts of the El Ni\u00f1o\u2013Southern Oscillation on South America",
+              "journal": "Nature Reviews Earth & Environment",
+              "year": "2020",
+              "authors": "Wenju Cai; Michael J. McPhaden; Alice M. Grimm; Regina R. Rodrigues; Andr\u00e9a S. Taschetto; Ren\u00e9 D. Garreaud; Boris Dewitte; Germ\u00e1n Poveda; Yoo-Geun Ham; Agus Santoso; Benjamin Ng; Weston Anderson; Guojian Wang; Tao Geng; Hyun-Su Jo; Jos\u00e9 A. Marengo; Lincoln M. Alves; Marisol Osman; Shujun Li; Lixin Wu; Christina Karamperidou; Ken Takahashi; Carolina Vera",
+              "doi": "10.1038/s43017-020-0040-3",
+              "url": "https://doi.org/10.1038/s43017-020-0040-3"
+            },
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            },
+            {
+              "id": "N0262",
+              "type": "news",
+              "title": "What is El Ni\u00f1o? Causes, impacts and disaster preparedness",
+              "source": "shelterbox.org",
+              "url": "https://shelterbox.org/disasters-explained/el-nino",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0257",
+              "type": "news",
+              "title": "The economic impact of El Ni\u00f1o-related floods and drought on small and medium enterprises in Botswana, Kenya and Zambia - Grantham Research Institute on climate change and the environment",
+              "source": "lse.ac.uk",
+              "url": "https://www.lse.ac.uk/granthaminstitute/el-nino",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0255",
+              "type": "news",
+              "title": "[PDF] Preparing for the 2015-2016 El Ni\u00f1o:",
+              "source": "climatecentre.org",
+              "url": "https://www.climatecentre.org/wp-content/uploads/Preparing-for-the-2015-2016-El-Nino.pdf",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0303",
+              "type": "literature",
+              "title": "Strong influence of El Ni\u00f1o Southern Oscillation on flood risk around the world",
+              "journal": "Proceedings of the National Academy of Sciences",
+              "year": "2014",
+              "authors": "Philip J. Ward; Brenden Jongman; Matti Kummu; Michael D. Dettinger; Frederiek C. Sperna Weiland; Hessel C. Winsemius",
+              "doi": "10.1073/pnas.1409822111",
+              "url": "https://doi.org/10.1073/pnas.1409822111"
+            }
+          ],
+          "n_literature_chunks": 3,
+          "n_news_chunks": 5,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    },
+    {
+      "domain": "socioeconomic_policy",
+      "label": "Economy & Commodity Markets",
+      "by_event": {
+        "current_2026": {
+          "domain": "socioeconomic_policy",
+          "label": "Economy & Commodity Markets",
+          "question": "What economic, trade, and commodity-price impacts are expected from the upcoming 2026-27 El Nino?",
+          "synthesis": "The upcoming 2026-27 El Ni\u00f1o event is anticipated to have significant economic, trade, and commodity price impacts. According to forecasts by the World Meteorological Organization [N0058], there is a high probability (90%) that this El Ni\u00f1o will persist until November 2026, with nearly a two-thirds chance of reaching very strong intensity levels by November-December [N0057]. This could exacerbate existing economic and geopolitical challenges.\n\n### Economic Impacts\n1. **Global Income Losses**: Previous strong El Ni\u00f1os in 1982 and 1997 led to global income losses worth $4.1 trillion and $5.7 trillion, respectively [N0056]. The cumulative effects of such events over the century could amount to $84 trillion in economic losses.\n   \n2. **Inflationary Pressures**: El Ni\u00f1o is expected to contribute to rising food prices due to disruptions in agricultural output from extreme weather conditions like droughts and floods, which can lead to higher inflation rates [N0056, N0057].\n\n3. **Commodity Price Increases**: The European Commission forecasted that staple crops such as wheat, corn, and rice will likely see price increases throughout the El Ni\u00f1o cycle [N0056]. Additionally, sugar and cocoa prices are expected to rise due to their vulnerability to El Ni\u00f1o conditions [N0059].\n\n### Trade Impacts\n1. **Disruptions in Shipping**: Historically, El Ni\u00f1o has hampered shipping by causing low water levels in critical transit points like the Panama Canal, leading to potential delays and increased costs for global trade [N0056].\n   \n2. **Energy and Fertilizer Shortages**: The closure of the Strait of Hormuz has disrupted energy supplies, including fertilizers, pushing prices to their highest since 2022 [N0057]. This disruption is expected to continue into 2026, exacerbating input costs for agriculture.\n\n### Commodity Price Impacts\n1. **Agricultural Commodities**: El Ni\u00f1o typically brings excessive rainfall and flooding in South America while triggering drought conditions across Southeast Asia, India, parts of Africa, and Australia [N0059]. This disrupts planting and harvesting across multiple crops and geographies, leading to tighter global supply and higher price volatility.\n\n2. **Metals and Credit**: Copper output could face disruptions due to wetter weather and flooding in Chile, potentially leading to higher prices. In debt markets, El Ni\u00f1o poses risks to sovereign credit in parts of Latin America and Africa [N0062].\n\n3. **Regional Variability**: While global food fears may be overstated at the macro level, regional agricultural output is significantly impacted by El Ni\u00f1o conditions, particularly in Asia-Pacific regions [N0063]. This variability means that while some countries might face severe disruptions, others could see localized benefits.\n\nIn summary, the 2026-27 El Ni\u00f1o event is expected to cause substantial economic losses and inflationary pressures globally. Trade will be affected by shipping disruptions and energy/fertilizer shortages, leading to higher commodity prices, especially for agricultural products like wheat, corn, rice, sugar, and cocoa. The impact on metals and credit markets also highlights the broad-reaching effects of El Ni\u00f1o across various sectors and regions.",
+          "sources": [
+            {
+              "id": "N0056",
+              "type": "news",
+              "title": "El Ni\u00f1o events have led to trillions in economic losses, and the 2026 cycle won\u2019t be any different | Fortune",
+              "source": "fortune.com",
+              "url": "https://fortune.com/2026/06/17/el-nino-global-economy-trillions-in-losses",
+              "published_date": "Wed, 17 Jun 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0059",
+              "type": "news",
+              "title": "A Sea Change for Commodity Prices: Why Markets appear ...",
+              "source": "nb.com",
+              "url": "https://www.nb.com/insights/a-sea-change-for-commodity-prices-why-markets-appear-to-be-underpricing-el-ni-o-risks",
+              "published_date": "Thu, 18 Jun 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0058",
+              "type": "news",
+              "title": "\u201cEl Ni\u00f1o\u201d threatens to trigger waves of inflation due to rising commodity prices | The Corner",
+              "source": "thecorner.eu",
+              "url": "https://thecorner.eu/news-the-world/el-nino-threatens-to-trigger-waves-of-inflation-due-to-rising-commodity-prices/127169",
+              "published_date": "Sat, 08 Aug 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0057",
+              "type": "news",
+              "title": "When risks stack up: Threats to global food markets in 2026",
+              "source": "blogs.worldbank.org",
+              "url": "https://blogs.worldbank.org/en/developmenttalk/when-risks-stack-up--threats-to-global-food-markets-in-2026",
+              "published_date": "Tue, 16 Jun 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0062",
+              "type": "news",
+              "title": "El Ni\u00f1o: A Cross-Asset Event",
+              "source": "morganstanley.com",
+              "url": "https://www.morganstanley.com/insights/articles/super-el-nino-global-economic-impact-2026",
+              "published_date": "Wed, 12 Aug 2026 19:35:45 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0063",
+              "type": "news",
+              "title": "El Ni\u00f1o casts a shadow over agri markets, but global food fears may be overblown | articles | ING THINK",
+              "source": "think.ing.com",
+              "url": "https://think.ing.com/articles/el-nino-casts-a-shadow-over-agri-markets",
+              "published_date": "Mon, 20 Jul 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "0146",
+              "type": "literature",
+              "title": "Fair weather or foul? The macroeconomic effects of El Ni\u00f1o",
+              "journal": "Journal of International Economics",
+              "year": "2017",
+              "authors": "Paul Cashin; Kamiar Mohaddes; Mehdi Raissi",
+              "doi": "10.1016/j.jinteco.2017.01.010",
+              "url": "https://doi.org/10.1016/j.jinteco.2017.01.010"
+            }
+          ],
+          "n_literature_chunks": 2,
+          "n_news_chunks": 6,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "socioeconomic_policy",
+          "label": "Economy & Commodity Markets",
+          "question": "What economic, trade, and commodity-price impacts occurred during the 1982-83 El Nino?",
+          "synthesis": "During the 1982-83 El Ni\u00f1o event:\n\n- Global oil markets were still recovering from supply disruptions caused by the 1979 Iranian Revolution. The outbreak of the Iran-Iraq War in 1980 further reduced Middle Eastern oil export capacity [N0144].\n- Australia, a significant coal-exporting nation at the time, experienced severe drought conditions and widespread wildfires that directly disrupted coal production and transportation [N0144]. \n- International palm oil prices climbed more than 65% between August 1982 and March 1983, while tropical commodities such as natural rubber rose over 30% between July 1982 and February 1983 [N0144].\n- U.S. industrial natural gas prices increased by 21.8% over the twelve months from August 1982 to August 1983, rising from $2.89 to $3.52 per thousand cubic feet [N0144]. Gasoline prices also increased by approximately 15% during this period.\n- Africa experienced severe droughts and famine [N0144].\n- In the United States, extreme heat significantly reduced agricultural output across large portions of the Midwest [N0144].\n\nThese climate-induced shortages combined with geopolitical energy supply disruptions to cause a broad surge in commodity prices globally.",
+          "sources": [
+            {
+              "id": "N0145",
+              "type": "news",
+              "title": "Risks to global food commodity prices from El Ni\u00f1o",
+              "source": "ecb.europa.eu",
+              "url": "https://www.ecb.europa.eu/press/economic-bulletin/focus/2023/html/ecb.ebbox202306_01~36e78cc75e.en.html",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0147",
+              "type": "news",
+              "title": "Fair Weather or Foul? The Macroeconomic Effects of El Ni\u00f1o",
+              "source": "imf.org",
+              "url": "https://www.imf.org/-/media/websites/imf/imported-full-text-pdf/external/pubs/ft/wp/2015/_wp1589.pdf",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0149",
+              "type": "news",
+              "title": "Fair Weather or Foul? The Macroeconomic Effects of El Ni\u00f1o",
+              "source": "dallasfed.org",
+              "url": "https://www.dallasfed.org/~/media/documents/institute/wpapers/2015/0239.pdf",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "0146",
+              "type": "literature",
+              "title": "Fair weather or foul? The macroeconomic effects of El Ni\u00f1o",
+              "journal": "Journal of International Economics",
+              "year": "2017",
+              "authors": "Paul Cashin; Kamiar Mohaddes; Mehdi Raissi",
+              "doi": "10.1016/j.jinteco.2017.01.010",
+              "url": "https://doi.org/10.1016/j.jinteco.2017.01.010"
+            },
+            {
+              "id": "N0146",
+              "type": "news",
+              "title": "[PDF] http://www.worldbank.org/commodities",
+              "source": "thedocs.worldbank.org",
+              "url": "https://thedocs.worldbank.org/en/doc/276141444853736953-0050022015/original/CMOOct2015FeatureElNino.pdf",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0144",
+              "type": "news",
+              "title": "[TMGM Financial Breakfast] El Ni\u00f1o Meets Middle East Supply Risks \u2014 How Three Historic Climate Events Triggered Global Energy and Food Inflation",
+              "source": "tmgm.com",
+              "url": "https://www.tmgm.com/es/analysis/market-news/el-nino-middle-east-supply-risks-energy-food-inflation-warning-2026",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "N0148",
+              "type": "news",
+              "title": "[PDF] The Role of El Ni\u00f1o Southern Oscillation in Commodity Price ...",
+              "source": "arefiles.ucdavis.edu",
+              "url": "https://arefiles.ucdavis.edu/uploads/filer_public/ff/55/ff553c41-f240-430f-93ea-c92d4b08467c/ubilava_prices.pdf",
+              "published_date": "",
+              "event_label": "1982_83"
+            }
+          ],
+          "n_literature_chunks": 2,
+          "n_news_chunks": 6,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "socioeconomic_policy",
+          "label": "Economy & Commodity Markets",
+          "question": "What economic, trade, and commodity-price impacts occurred during the 1997-98 El Nino?",
+          "synthesis": "During the 1997-98 El Ni\u00f1o event:\n\n- Economic losses in the United States were estimated at $4.2 to $4.5 billion [0182].\n- The U.S. experienced economic gains of approximately $19.6 to $19.9 billion, including savings on heating costs and increased retail sales due to milder winter conditions [0182].\n- Globally, the 1997-98 El Ni\u00f1o may have caused up to USD 5.7 trillion in economic damages according to a FocusEconomics report [N0209], though this figure is not directly supported by other excerpts and should be treated with caution.\n- Commodity prices saw significant impacts, including severe disruptions in agricultural supply chains worldwide [N0210].\n- Cocoa experienced an extraordinary 250% price increase during the cycle due to a combination of extreme weather events and pre-existing crop weaknesses [N0210].\n- Palm oil markets faced export disruptions in Indonesia and Malaysia, consistent with previous El Ni\u00f1o cycles [N0210].\n\nThese impacts highlight both direct economic losses and gains as well as significant commodity price volatility during the 1997-98 El Ni\u00f1o event.",
+          "sources": [
+            {
+              "id": "0146",
+              "type": "literature",
+              "title": "Fair weather or foul? The macroeconomic effects of El Ni\u00f1o",
+              "journal": "Journal of International Economics",
+              "year": "2017",
+              "authors": "Paul Cashin; Kamiar Mohaddes; Mehdi Raissi",
+              "doi": "10.1016/j.jinteco.2017.01.010",
+              "url": "https://doi.org/10.1016/j.jinteco.2017.01.010"
+            },
+            {
+              "id": "N0210",
+              "type": "news",
+              "title": "Too hot to handle: El Ni\u00f1o or supply chain disruption",
+              "source": "tradetreasurypayments.com",
+              "url": "https://tradetreasurypayments.com/articles/too-hot-to-handle-el-ni-o-or-supply-chain-disruption",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            },
+            {
+              "id": "N0209",
+              "type": "news",
+              "title": "Special Report: El Ni\u00f1o",
+              "source": "focus-economics.com",
+              "url": "https://www.focus-economics.com/blog/special-report-el-nino",
+              "published_date": "",
+              "event_label": "1997_98"
+            }
+          ],
+          "n_literature_chunks": 6,
+          "n_news_chunks": 2,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "socioeconomic_policy",
+          "label": "Economy & Commodity Markets",
+          "question": "What economic, trade, and commodity-price impacts occurred during the 2015-16 El Nino?",
+          "synthesis": "During the 2015-16 El Ni\u00f1o event, several significant economic, trade, and commodity-price impacts were observed:\n\n1. **Economic Growth Impact**: Countries such as Indonesia, Australia, and New Zealand experienced negative growth due to droughts and reduced agricultural output [N0266]. In contrast, Brazil saw increased rain in eastern regions leading to higher agricultural production, which partially offset the negative impact of droughts in northern parts on coffee, sugar, and citrus prices [N0266].\n\n2. **Commodity Prices**: The 2015-16 El Ni\u00f1o event led to significant fluctuations in commodity prices. For instance, palm oil, cocoa, and robusta coffee faced supply pressures due to droughts, while soybeans and corn saw price declines because of favorable growing conditions [N0265]. Additionally, the study by Cashin et al. (2017) found that El Ni\u00f1o events can cause a rise in global food prices by around 5% within a year [N0265].\n\n3. **Trade Flows and Supply Chains**: The event disrupted trade flows and supply chains, particularly affecting shipping routes like the Panama Canal due to drought conditions, leading to reduced transits and increased cargo load restrictions [N0265]. This disruption can lead to higher freight costs and delays in global trade.\n\n4. **Energy Prices**: El Ni\u00f1o-induced droughts curtailed hydropower generation in affected regions, increasing demand for coal and crude oil for thermal power generation, thereby raising energy prices [N0265].\n\nThese impacts highlight the complex interplay between weather events like El Ni\u00f1o and economic activities across different sectors and geographies.",
+          "sources": [
+            {
+              "id": "N0266",
+              "type": "news",
+              "title": "El Ni\u00f1o is coming. What are the effects on GDP, commodity prices and inflation? - Bond Vigilantes",
+              "source": "bondvigilantes.com",
+              "url": "https://bondvigilantes.com/blog/2015/09/el-nino-coming-effects-gdp-commodity-prices-inflation",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0263",
+              "type": "news",
+              "title": "Why El Ni\u00f1o Can Impact Margin Requirements?",
+              "source": "opengamma.com",
+              "url": "https://opengamma.com/why-el-nino-can-impact-margin-requirements",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0146",
+              "type": "literature",
+              "title": "Fair weather or foul? The macroeconomic effects of El Ni\u00f1o",
+              "journal": "Journal of International Economics",
+              "year": "2017",
+              "authors": "Paul Cashin; Kamiar Mohaddes; Mehdi Raissi",
+              "doi": "10.1016/j.jinteco.2017.01.010",
+              "url": "https://doi.org/10.1016/j.jinteco.2017.01.010"
+            },
+            {
+              "id": "N0265",
+              "type": "news",
+              "title": "Super El Ni\u00f1o risk: more inflation in Asia, oversupply in ...",
+              "source": "allianz.com",
+              "url": "https://www.allianz.com/content/dam/onemarketing/azcom/Allianz_com/economic-research/publications/specials/en/2026/july/2026_07_15_El_Nino.pdf",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0264",
+              "type": "literature",
+              "title": "Full article: Global agricultural commodity market responses to extreme weather",
+              "source": "tandfonline.com",
+              "url": "https://www.tandfonline.com/doi/full/10.1080/1331677X.2023.2186913",
+              "published_date": "",
+              "event_label": "2015_16"
+            }
+          ],
+          "n_literature_chunks": 4,
+          "n_news_chunks": 4,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    },
+    {
+      "domain": "public_health",
+      "label": "Public Health",
+      "by_event": {
+        "current_2026": {
+          "domain": "public_health",
+          "label": "Public Health",
+          "question": "What public health impacts, such as disease outbreaks or heat stress, are expected from the upcoming 2026-27 El Nino?",
+          "synthesis": "The upcoming 2026-27 El Ni\u00f1o is expected to bring several significant public health impacts:\n\n1. **Heat Stress and Heat-Related Deaths**: The global average near-surface temperature reached 1.5 degrees Celsius above the pre-industrial baseline in 2024, which was the warmest year on record [N0071]. Rising temperatures directly contribute to heat-related deaths, with an estimated 30% of excess heat-related deaths attributed to climate change [N0071].\n\n2. **Infectious Diseases**: El Ni\u00f1o conditions provide a favorable environment for infectious diseases such as malaria, dengue, and cholera to expand their range due to warming temperatures and shifts in precipitation patterns [N0067]. For instance, during the 2023-2024 El Ni\u00f1o, there was an increase in cholera cases in East Africa [N0071].\n\n3. **Extreme Weather Events**: El Ni\u00f1o can make extreme weather events more likely, including floods and droughts that exacerbate health risks such as hypothermia, drowning, undernutrition, injuries, infectious disease escalation, and mental health problems [N0071]. For example, unprecedented floods in Rio Grande do Sul during the 2024 El Ni\u00f1o displaced around 600,000 people and caused more than 180 deaths [N0071].\n\nThese impacts underscore the need for preparedness and proactive measures to mitigate health risks associated with the upcoming El Ni\u00f1o event.",
+          "sources": [
+            {
+              "id": "N0071",
+              "type": "news",
+              "title": "Explained: how El Ni\u00f1o impacts health | PreventionWeb",
+              "source": "preventionweb.net",
+              "url": "https://www.preventionweb.net/news/explained-how-el-nino-impacts-health",
+              "published_date": "Wed, 03 Jun 2026 14:58:10 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0067",
+              "type": "news",
+              "title": "A strong El Ni\u00f1o is coming: could it lead to more disease outbreaks?",
+              "source": "gavi.org",
+              "url": "https://www.gavi.org/vaccineswork/strong-el-nino-coming-could-it-lead-more-disease-outbreaks",
+              "published_date": "Thu, 04 Jun 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "0104",
+              "type": "literature",
+              "title": "El Ni\u00f1o Southern Oscillation (ENSO) and Health: An Overview for Climate and Health Researchers",
+              "journal": "Atmosphere",
+              "year": "2018",
+              "authors": "Glenn R. McGregor; Kristie Ebi",
+              "doi": "10.3390/atmos9070282",
+              "url": "https://doi.org/10.3390/atmos9070282"
+            },
+            {
+              "id": "0156",
+              "type": "literature",
+              "title": "Global Disease Outbreaks Associated with the 2015\u20132016 El Ni\u00f1o Event",
+              "journal": "Scientific Reports",
+              "year": "2019",
+              "authors": "Assaf Anyamba; Jean-Paul Chretien; Seth C. Britch; Radina P. Soebiyanto; Jennifer L. Small; Rikke Jepsen; Brett M. Forshey; Jose L. Sanchez; Ryan D. Smith; Ryan Harris; Compton J. Tucker; William B. Karesh; Kenneth J. Linthicum",
+              "doi": "10.1038/s41598-018-38034-z",
+              "url": "https://doi.org/10.1038/s41598-018-38034-z"
+            },
+            {
+              "id": "0109",
+              "type": "literature",
+              "title": "El Ni\u00f1o and health",
+              "journal": "",
+              "year": "",
+              "authors": "",
+              "doi": "https://doi.org/10.1016/S0140-6736(03)14695-8",
+              "url": ""
+            }
+          ],
+          "n_literature_chunks": 5,
+          "n_news_chunks": 3,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "public_health",
+          "label": "Public Health",
+          "question": "What public health impacts, such as disease outbreaks or heat stress, occurred during the 1982-83 El Nino?",
+          "synthesis": "During the 1982-83 El Ni\u00f1o event, vector-borne diseases spread by arthropods increased. In the US, these conditions led to encephalitis outbreaks in humans and animals. Additionally, cases of flea-spread, rodent-borne plague exploded, with nineteen cases of human plague reported in Native Americans, seven of whom lived on a Navajo Reservation in northeastern Arizona and northwestern New Mexico; three of the 19 plague cases were fatal [N0154].",
+          "sources": [
+            {
+              "id": "N0154",
+              "type": "news",
+              "title": "El Ni\u00f1o increases global health threats that require a One Health response - Bulletin of the Atomic Scientists",
+              "source": "thebulletin.org",
+              "url": "https://thebulletin.org/2023/07/el-nino-increases-global-health-threats-that-require-a-one-health-response",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "0104",
+              "type": "literature",
+              "title": "El Ni\u00f1o Southern Oscillation (ENSO) and Health: An Overview for Climate and Health Researchers",
+              "journal": "Atmosphere",
+              "year": "2018",
+              "authors": "Glenn R. McGregor; Kristie Ebi",
+              "doi": "10.3390/atmos9070282",
+              "url": "https://doi.org/10.3390/atmos9070282"
+            },
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            },
+            {
+              "id": "0109",
+              "type": "literature",
+              "title": "El Ni\u00f1o and health",
+              "journal": "",
+              "year": "",
+              "authors": "",
+              "doi": "https://doi.org/10.1016/S0140-6736(03)14695-8",
+              "url": ""
+            }
+          ],
+          "n_literature_chunks": 6,
+          "n_news_chunks": 2,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "public_health",
+          "label": "Public Health",
+          "question": "What public health impacts, such as disease outbreaks or heat stress, occurred during the 1997-98 El Nino?",
+          "synthesis": "During the 1997-98 El Ni\u00f1o event, there were significant public health impacts including increased incidences of infectious diseases and respiratory issues due to natural disasters such as droughts and forest fires. For example, drought-related forest fires in Indonesia led to a dramatic increase in respiratory disease visits at Kuala Lumpur General Hospital and in the State of Sarawak (both in Malaysia) [N0214]. Additionally, research has shown that El Ni\u00f1o can cause increased rainfall or drought conditions leading to natural disasters like floods or famines which may result in direct injuries, deaths, destruction of crops and property, and interruptions to development. These events make already-vulnerable populations more susceptible to health issues. However, the exact number of human deaths and illnesses directly linked to El Ni\u00f1o is difficult to estimate due to complex interactions with factors such as population density, health status, sanitation infrastructure, etc [N0214].",
+          "sources": [
+            {
+              "id": "0182",
+              "type": "literature",
+              "title": "Impacts of 1997\u201498 El Ni\u00f1o Generated Weather in the United States",
+              "journal": "Bulletin of the American Meteorological Society",
+              "year": "1999",
+              "authors": "Stanley A. Changnon",
+              "doi": "10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2",
+              "url": "https://doi.org/10.1175/1520-0477(1999)080<1819:ioenog>2.0.co;2"
+            },
+            {
+              "id": "N0214",
+              "type": "news",
+              "title": "El Ni\u00f1o and its health impacts - World | ReliefWeb",
+              "source": "reliefweb.int",
+              "url": "https://reliefweb.int/report/world/el-ni%C3%B1o-and-its-health-impacts",
+              "published_date": "",
+              "event_label": "1997_98"
+            },
+            {
+              "id": "0110",
+              "type": "literature",
+              "title": "El Ni\u00f1o and human health (2)",
+              "journal": "",
+              "year": "",
+              "authors": "",
+              "doi": "",
+              "url": "https://iris.who.int/server/api/core/bitstreams/331cfb3e-d6fd-43d9-83f1-feac969d175f/content"
+            }
+          ],
+          "n_literature_chunks": 6,
+          "n_news_chunks": 2,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "public_health",
+          "label": "Public Health",
+          "question": "What public health impacts, such as disease outbreaks or heat stress, occurred during the 2015-16 El Nino?",
+          "synthesis": "During the 2015-16 El Ni\u00f1o event, several significant public health impacts were observed:\n\n1. **Disease Outbreaks**: The strong 2015-16 El Ni\u00f1o led to early warnings for global disease outbreaks in multiple regions worldwide (including Southeast Asia, Tanzania, western US, and Brazil) due to shifts in rainfall, temperature, and vegetation that favored ecological conditions appropriate for pathogens and their vectors. Diseases such as chikungunya, hantavirus, Rift Valley fever, cholera, plague, and Zika were notably affected by these climate anomalies [0156].\n\n2. **Heat-Related Illnesses**: The 2015-16 El Ni\u00f1o contributed to a rise in heat-related illnesses due to soaring temperatures that strained healthcare systems and increased mortality rates among vulnerable populations such as the elderly, teenagers, and individuals with underlying health conditions [N0274].\n\n3. **Waterborne Diseases**: Excessive rainfall and flooding during this period contaminated water sources, leading to an increase in waterborne diseases like cholera and dysentery due to compromised sanitation infrastructure [N0274].\n\nThese impacts highlight the need for early warning systems and effective public health strategies to mitigate the effects of El Ni\u00f1o on community well-being.",
+          "sources": [
+            {
+              "id": "N0274",
+              "type": "literature",
+              "title": "Impact of El Ni\u00f1o on public health and its preparedness measures",
+              "source": "link.springer.com",
+              "url": "https://link.springer.com/article/10.1186/s42269-023-01160-4",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0156",
+              "type": "literature",
+              "title": "Global Disease Outbreaks Associated with the 2015\u20132016 El Ni\u00f1o Event",
+              "journal": "Scientific Reports",
+              "year": "2019",
+              "authors": "Assaf Anyamba; Jean-Paul Chretien; Seth C. Britch; Radina P. Soebiyanto; Jennifer L. Small; Rikke Jepsen; Brett M. Forshey; Jose L. Sanchez; Ryan D. Smith; Ryan Harris; Compton J. Tucker; William B. Karesh; Kenneth J. Linthicum",
+              "doi": "10.1038/s41598-018-38034-z",
+              "url": "https://doi.org/10.1038/s41598-018-38034-z"
+            },
+            {
+              "id": "N0272",
+              "type": "news",
+              "title": "ENSO and your health: how the 2015-16 El Ni\u00f1o led to early warnings for global disease outbreaks | NOAA Climate.gov",
+              "source": "climate.gov",
+              "url": "https://www.climate.gov/news-features/blogs/enso/enso-and-your-health-how-2015-16-el-ni%C3%B1o-led-early-warnings-global-disease",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0104",
+              "type": "literature",
+              "title": "El Ni\u00f1o Southern Oscillation (ENSO) and Health: An Overview for Climate and Health Researchers",
+              "journal": "Atmosphere",
+              "year": "2018",
+              "authors": "Glenn R. McGregor; Kristie Ebi",
+              "doi": "10.3390/atmos9070282",
+              "url": "https://doi.org/10.3390/atmos9070282"
+            }
+          ],
+          "n_literature_chunks": 7,
+          "n_news_chunks": 1,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    },
+    {
+      "domain": "hydrology_water_resources",
+      "label": "Water Resources & Hydrology",
+      "by_event": {
+        "current_2026": {
+          "domain": "hydrology_water_resources",
+          "label": "Water Resources & Hydrology",
+          "question": "What impacts is the upcoming 2026-27 El Nino expected to have on water resources, reservoir levels, and streamflow?",
+          "synthesis": "The upcoming 2026-27 El Ni\u00f1o event is expected to significantly impact water resources, reservoir levels, and streamflow in several regions:\n\n1. **Colorado River Basin (USA)**:\n   - The potential for a \"super\" El Ni\u00f1o could bring much-needed relief to the drought-stricken Colorado River system by raising hopes for improved snowpack, reservoir levels, and water supplies across the American West [N0082].\n   - However, while El Ni\u00f1o typically favors above-normal precipitation in the Southwest during winter, this wet signal weakens north of the Four Corners region [N0082].\n\n2. **Lake Gatun (Panama)**:\n   - There is a roughly 50% risk that El Ni\u00f1o conditions could reach an intensity that historically coincides with temporary restrictions on Panama Canal transits due to reduced water levels in Lake Gatun, which operates the canal's locks [N0081].\n   - Historical records show that during strong El Ni\u00f1o events like those of 2015-16 and 2023-24, lake levels dropped significantly, leading to capacity restrictions on vessel transits [N0081].\n\n3. **Mekong Delta (Vietnam)**:\n   - The event could threaten around 350,000 hectares of winter-spring rice in the Mekong Delta and pose risks to energy security through reduced water availability for hydropower generation on the \u0110\u00e0 River system [N0086].\n   - Reduced Mekong River flows combined with severe saltwater intrusion caused widespread disruption to domestic water supplies, agriculture, and aquaculture during previous strong El Ni\u00f1o events like 2015-16 [N0086].\n\n4. **Thailand**:\n   - A super El Ni\u00f1o could bring higher temperatures and significantly reduce water storage in reservoirs, prompting the Office of National Water Resources (ONWR) to call for closer real-time monitoring of water resources and continued implementation of the 2026 rainy-season water management plan [N0084].\n\nThese impacts highlight the variability and region-specific nature of El Ni\u00f1o's effects on water systems. While some areas may experience relief from drought conditions, others face heightened risks of water shortages and reduced reservoir levels due to altered precipitation patterns and higher temperatures associated with a strong El Ni\u00f1o event.",
+          "sources": [
+            {
+              "id": "N0082",
+              "type": "news",
+              "title": "How Super El Ni\u00f1o Could Impact Lake Powell, Lake Mead's Water Crisis - Newsweek",
+              "source": "newsweek.com",
+              "url": "https://www.newsweek.com/super-el-nino-could-impact-colorado-river-lake-powell-lake-mead-water-crisis-11966013",
+              "published_date": "Wed, 20 May 2026 00:00:00 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0081",
+              "type": "news",
+              "title": "Neutral Pacific conditions persist as El Ni\u00f1o risk... | myKN",
+              "source": "mykn.kuehne-nagel.com",
+              "url": "https://mykn.kuehne-nagel.com/news/article/neutral-pacific-conditions-persist-as-el-nio",
+              "published_date": "Tue, 14 Apr 2026 07:20:53 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0086",
+              "type": "news",
+              "title": "El Ni\u00f1o warning raises concerns over Mekong Delta rice, hydropower and water security \u2013 Asia News Network",
+              "source": "asianews.network",
+              "url": "https://asianews.network/el-nino-warning-raises-concerns-over-mekong-delta-rice-hydropower-and-water-security",
+              "published_date": "",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0093",
+              "type": "news",
+              "title": "Super El Ni\u00f1o Locks In Winter Split-Flow Pattern: What Each US Region Needs to Do Now",
+              "source": "techtimes.com",
+              "url": "https://www.techtimes.com/articles/322325/20260730/super-el-nino-locks-winter-split-flow-pattern-what-each-us-region-needs-do-now.htm",
+              "published_date": "Thu, 30 Jul 2026 19:58:57 GMT",
+              "event_label": "current_2026"
+            },
+            {
+              "id": "N0084",
+              "type": "news",
+              "title": "Thailand ramps up measures against potential super El Ni\u00f1o",
+              "source": "en.vietnamplus.vn",
+              "url": "https://en.vietnamplus.vn/thailand-ramps-up-measures-against-potential-super-el-nino-post347483.vnp",
+              "published_date": "Wed, 01 Jul 2026 01:10:31 GMT",
+              "event_label": "current_2026"
+            }
+          ],
+          "n_literature_chunks": 0,
+          "n_news_chunks": 8,
+          "event_key": "current_2026",
+          "event_display": "2026-27 (upcoming)"
+        },
+        "1982_83": {
+          "domain": "hydrology_water_resources",
+          "label": "Water Resources & Hydrology",
+          "question": "What impact did the 1982-83 El Nino have on water resources, reservoir levels, and streamflow?",
+          "synthesis": "The 1982-83 El Ni\u00f1o had significant impacts on water resources, reservoir levels, and streamflow:\n\n1. **Reservoir Levels**: During the 1982-83 El Ni\u00f1o event, there was a notable decrease in reservoir volume, reaching near dead storage conditions [N0163]. The reliability of reservoir capacity was severely affected, with significant deficits observed during January and November [N0163].\n\n2. **Streamflow Variability**: Streamflow patterns were altered significantly during the 1982-83 El Ni\u00f1o event. A PCA analysis showed that streamflow mode RPC 2 (reflecting precipitation variations) was robust even when excluding the extreme 1983 warm event, indicating a strong correlation with SOI and Ni\u00f1o-3 SSTs [0238]. Another less powerful streamflow mode, RPC 5, also captured variability related to ENSO, showing contrasting flow anomalies in different regions of North America and Chile [0238].\n\n3. **Regional Impacts**: In South America, the event led to dry conditions in Central and northernmost South America (through Amazonia) while causing wetter conditions in southeastern South America and parts of the southern United States [0238]. Additionally, flooding occurred in Brazil's Santa Catarina state during this period, affecting 186 out of 199 municipalities, leaving 220,000 people homeless and resulting in economic losses exceeding $1.1 billion [0048].\n\nThese impacts highlight the significant influence El Ni\u00f1o can have on water resources and hydrological systems across different regions.",
+          "sources": [
+            {
+              "id": "N0163",
+              "type": "news",
+              "title": "El-Nino effect on reservoir capacity reliability",
+              "source": "jwld.pl",
+              "url": "https://www.jwld.pl/files/Andawayanti_et_al_518.pdf",
+              "published_date": "",
+              "event_label": "1982_83"
+            },
+            {
+              "id": "0238",
+              "type": "literature",
+              "title": "Multiscale Streamflow Variability Associated with El Ni\u00f1o/Southern Oscillation",
+              "journal": "El Nino and the Southern Oscillation",
+              "year": "",
+              "authors": "",
+              "doi": "10.1017/cbo9780511573125.005",
+              "url": "https://doi.org/10.1017/cbo9780511573125.005"
+            },
+            {
+              "id": "0048",
+              "type": "literature",
+              "title": "Climate impacts of the El Ni\u00f1o\u2013Southern Oscillation on South America",
+              "journal": "Nature Reviews Earth & Environment",
+              "year": "2020",
+              "authors": "Wenju Cai; Michael J. McPhaden; Alice M. Grimm; Regina R. Rodrigues; Andr\u00e9a S. Taschetto; Ren\u00e9 D. Garreaud; Boris Dewitte; Germ\u00e1n Poveda; Yoo-Geun Ham; Agus Santoso; Benjamin Ng; Weston Anderson; Guojian Wang; Tao Geng; Hyun-Su Jo; Jos\u00e9 A. Marengo; Lincoln M. Alves; Marisol Osman; Shujun Li; Lixin Wu; Christina Karamperidou; Ken Takahashi; Carolina Vera",
+              "doi": "10.1038/s43017-020-0040-3",
+              "url": "https://doi.org/10.1038/s43017-020-0040-3"
+            }
+          ],
+          "n_literature_chunks": 6,
+          "n_news_chunks": 2,
+          "event_key": "1982_83",
+          "event_display": "1982-83"
+        },
+        "1997_98": {
+          "domain": "hydrology_water_resources",
+          "label": "Water Resources & Hydrology",
+          "question": "What impact did the 1997-98 El Nino have on water resources, reservoir levels, and streamflow?",
+          "synthesis": "The 1997-98 El Ni\u00f1o event had significant impacts on water resources, including flooding in central Chile where three times the average rainfall fell during June-July-August of that year [0238]. Additionally, literature indicates that ENSO events generally lead to deviations in streamflow rates across various regions. For instance, eastern Australian streamflows responded with low flows due to El Ni\u00f1o droughts on that continent [0238].\n\nHowever, the provided excerpts do not contain specific details about reservoir levels or precise measurements of streamflow changes during the 1997-98 event in South America. Therefore, while we can infer impacts based on general patterns and reported flooding events, exact figures for water resource metrics like reservoir levels are not available from these sources [0238].",
+          "sources": [
+            {
+              "id": "0048",
+              "type": "literature",
+              "title": "Climate impacts of the El Ni\u00f1o\u2013Southern Oscillation on South America",
+              "journal": "Nature Reviews Earth & Environment",
+              "year": "2020",
+              "authors": "Wenju Cai; Michael J. McPhaden; Alice M. Grimm; Regina R. Rodrigues; Andr\u00e9a S. Taschetto; Ren\u00e9 D. Garreaud; Boris Dewitte; Germ\u00e1n Poveda; Yoo-Geun Ham; Agus Santoso; Benjamin Ng; Weston Anderson; Guojian Wang; Tao Geng; Hyun-Su Jo; Jos\u00e9 A. Marengo; Lincoln M. Alves; Marisol Osman; Shujun Li; Lixin Wu; Christina Karamperidou; Ken Takahashi; Carolina Vera",
+              "doi": "10.1038/s43017-020-0040-3",
+              "url": "https://doi.org/10.1038/s43017-020-0040-3"
+            },
+            {
+              "id": "0238",
+              "type": "literature",
+              "title": "Multiscale Streamflow Variability Associated with El Ni\u00f1o/Southern Oscillation",
+              "journal": "El Nino and the Southern Oscillation",
+              "year": "",
+              "authors": "",
+              "doi": "10.1017/cbo9780511573125.005",
+              "url": "https://doi.org/10.1017/cbo9780511573125.005"
+            }
+          ],
+          "n_literature_chunks": 5,
+          "n_news_chunks": 0,
+          "event_key": "1997_98",
+          "event_display": "1997-98"
+        },
+        "2015_16": {
+          "domain": "hydrology_water_resources",
+          "label": "Water Resources & Hydrology",
+          "question": "What impact did the 2015-16 El Nino have on water resources, reservoir levels, and streamflow?",
+          "synthesis": "The 2015-16 El Ni\u00f1o had significant impacts on water resources, reservoir levels, and streamflow in South Africa. According to [N0283], the event exacerbated agricultural production challenges around the Limpopo Province, leading to drought conditions that affected different sectors dependent on water resources, including recreational, agricultural, industrial, and domestic uses.\n\nIn terms of specific impacts:\n- The study evaluated the relationship between El Ni\u00f1o-induced drought events and reservoir water levels over the Albasini Dam Catchment (ADC) areas in Limpopo Province. A strong correlation was found between drought indices and reservoir water levels at a 12th timescale, with coefficients of determination being 0.743 for precipitation and 0.59 for streamflow indices.\n- The decrease in mean annual precipitation (MAP) by 14% between 1991 and 1992 resulted in severe drought conditions [N0283]. Although this figure pertains to the 1991/92 event, it illustrates the kind of impact that can be expected during strong El Ni\u00f1o years.\n- The study also noted a phased relationship between El Ni\u00f1o-induced drought and reservoir water levels, indicating that these events negatively affect water resources [N0283].\n\nAdditionally, [0238] indicates that in eastern South Africa, low annual flows during El Ni\u00f1os are a response to warmer and drier conditions leading up to the mature phase of an El Ni\u00f1o event. This suggests that streamflow is reduced due to decreased precipitation and higher evaporation rates.\n\nOverall, these findings highlight how the 2015-16 El Ni\u00f1o led to significant reductions in water availability and reservoir levels, impacting various sectors reliant on water resources in South Africa.",
+          "sources": [
+            {
+              "id": "N0283",
+              "type": "literature",
+              "title": "El Ni\u00f1o-Induced Drought Impacts on Reservoir Water Resources in South Africa",
+              "source": "mdpi.com",
+              "url": "https://www.mdpi.com/2073-4433/15/3/249",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "N0287",
+              "type": "news",
+              "title": "How might a \u2018Super El Ni\u00f1o\u2019 affect food, forests and water? | PreventionWeb",
+              "source": "preventionweb.net",
+              "url": "https://www.preventionweb.net/news/how-might-super-el-nino-affect-food-forests-and-water",
+              "published_date": "",
+              "event_label": "2015_16"
+            },
+            {
+              "id": "0048",
+              "type": "literature",
+              "title": "Climate impacts of the El Ni\u00f1o\u2013Southern Oscillation on South America",
+              "journal": "Nature Reviews Earth & Environment",
+              "year": "2020",
+              "authors": "Wenju Cai; Michael J. McPhaden; Alice M. Grimm; Regina R. Rodrigues; Andr\u00e9a S. Taschetto; Ren\u00e9 D. Garreaud; Boris Dewitte; Germ\u00e1n Poveda; Yoo-Geun Ham; Agus Santoso; Benjamin Ng; Weston Anderson; Guojian Wang; Tao Geng; Hyun-Su Jo; Jos\u00e9 A. Marengo; Lincoln M. Alves; Marisol Osman; Shujun Li; Lixin Wu; Christina Karamperidou; Ken Takahashi; Carolina Vera",
+              "doi": "10.1038/s43017-020-0040-3",
+              "url": "https://doi.org/10.1038/s43017-020-0040-3"
+            },
+            {
+              "id": "0238",
+              "type": "literature",
+              "title": "Multiscale Streamflow Variability Associated with El Ni\u00f1o/Southern Oscillation",
+              "journal": "El Nino and the Southern Oscillation",
+              "year": "",
+              "authors": "",
+              "doi": "10.1017/cbo9780511573125.005",
+              "url": "https://doi.org/10.1017/cbo9780511573125.005"
+            },
+            {
+              "id": "0359",
+              "type": "literature",
+              "title": "Tracking the impacts of El Ni\u00f1o drought and fire in human-modified Amazonian forests",
+              "journal": "Proceedings of the National Academy of Sciences",
+              "year": "2021",
+              "authors": "Erika Berenguer; Gareth D. Lennox; Joice Ferreira; Yadvinder Malhi; Luiz E. O. C. Arag\u00e3o; Julia Rodrigues Barreto; Fernando Del Bon Esp\u00edrito-Santo; Axa Emanuelle S. Figueiredo; Filipe Fran\u00e7a; Toby Alan Gardner; Carlos A. Joly; Alessandro F. Palmeira; Carlos Alberto Quesada; Liana Chesini Rossi; Marina Maria Moraes de Seixas; Charlotte C. Smith; Kieran Withey; Jos Barlow",
+              "doi": "10.1073/pnas.2019377118",
+              "url": "https://doi.org/10.1073/pnas.2019377118"
+            }
+          ],
+          "n_literature_chunks": 6,
+          "n_news_chunks": 2,
+          "event_key": "2015_16",
+          "event_display": "2015-16"
+        }
+      }
+    }
+  ]
+}

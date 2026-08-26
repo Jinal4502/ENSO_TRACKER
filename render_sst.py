@@ -232,6 +232,7 @@ def render_sst(output_path: str = "docs/sst.html") -> None:
     <a href="sst.html" class="nav-active">Sea Surface Temp</a>
     <a href="impacts.html">Impacts</a>
     <a href="facts.html">Quick Facts</a>
+    <a href="research.html">Research</a>
   </div>
 </nav>
 

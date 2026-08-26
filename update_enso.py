@@ -26,6 +26,7 @@ from render_sst import render_sst
 from fetch_impacts import fetch_impacts_data
 from render_impacts import render_impacts
 from render_facts import render_facts
+from render_research import render_research
 
 HISTORY_FILE = "enso_history.json"
 DATA_FILE    = "enso_data.json"
@@ -199,6 +200,10 @@ def main() -> None:
     # 2g. Render facts page (static, no fetch needed)
     print("Generating facts page ...")
     render_facts("docs/facts.html")
+
+    # 2h. Render research intelligence page (from committed dashboard_historical.json)
+    print("Generating research page ...")
+    render_research("docs/research.html")
 
     # 3. History — append current snapshot, then find last week's entry
     history = load_history()

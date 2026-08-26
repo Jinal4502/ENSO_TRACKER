@@ -524,6 +524,7 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
     <a href="sst.html">Sea Surface Temp</a>
     <a href="impacts.html">Impacts</a>
     <a href="facts.html">Quick Facts</a>
+    <a href="research.html">Research</a>
   </div>
 </nav>
 <h1>ENSO Tracker</h1>
