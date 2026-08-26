@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 # ── HTML template (no f-string; placeholders swapped via .replace()) ──────────
-_HTML = '''<!doctype html>
+_HTML = r'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">

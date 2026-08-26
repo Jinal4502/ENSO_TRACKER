@@ -369,8 +369,7 @@ function renderSynthesis(text, sourceMap) {
   });
 
   // Step 2: minimal markdown → HTML (bold, numbered lists, paragraphs)
-  const lines = t.split('
-');
+  const lines = t.split('\n');
   let html = '', inList = false;
   for (const raw of lines) {
     const line = raw.trim();
@@ -593,8 +592,7 @@ function buildCompareView() {
         .replace(/\[N\d+\]|N\d+\s*(?:\[event:[^\]]*\])?|\[0\d+\]/g, '')
         .replace(/\*\*([^*]+)\*\*/g, '$1')
         .replace(/^\d+\.\s+/gm, '')
-        .replace(/
-+/g, ' ')
+        .replace(/\n+/g, ' ')
         .trim();
       const excerpt = plain.length > 210 ? plain.slice(0, 207) + '…' : plain;
 
