@@ -1,26 +1,26 @@
 {
-  "fetched_utc": "2026-08-31T19:53:09.879597+00:00",
+  "fetched_utc": "2026-09-07T18:39:23.224065+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o is strengthening, with a greater than 90% chance of a very strong event during the Northern Hemisphere fall and winter 2026-27.",
     "issued": ""
   },
   "latest_weekly": {
-    "date": "2026-08-26",
-    "nino12": 25.0,
-    "nino12_anom": 4.2,
-    "nino3": 28.3,
-    "nino3_anom": 3.4,
+    "date": "2026-09-02",
+    "nino12": 25.3,
+    "nino12_anom": 4.6,
+    "nino3": 28.4,
+    "nino3_anom": 3.5,
     "nino34": 29.4,
-    "nino34_anom": 2.6,
+    "nino34_anom": 2.7,
     "nino4": 29.6,
     "nino4_anom": 1.0
   },
   "latest_oni": {
     "year": 2026,
-    "season": "MJJ",
-    "sst": 29.02,
-    "oni": 1.39
+    "season": "JJA",
+    "sst": 29.09,
+    "oni": 1.8
   },
   "latest_roni": {
     "year": 2026,
@@ -29,17 +29,6 @@
     "roni": 1.5
   },
   "weekly_history": [
-    {
-      "date": "2025-09-03",
-      "nino12": 20.5,
-      "nino12_anom": -0.2,
-      "nino3": 24.5,
-      "nino3_anom": -0.4,
-      "nino34": 26.4,
-      "nino34_anom": -0.3,
-      "nino4": 28.5,
-      "nino4_anom": -0.2
-    },
     {
       "date": "2025-09-10",
       "nino12": 20.5,
@@ -570,12 +559,12 @@
     },
     {
       "date": "2026-08-12",
-      "nino12": 25.0,
-      "nino12_anom": 4.0,
+      "nino12": 25.1,
+      "nino12_anom": 4.1,
       "nino3": 28.4,
       "nino3_anom": 3.2,
-      "nino34": 29.6,
-      "nino34_anom": 2.7,
+      "nino34": 29.4,
+      "nino34_anom": 2.6,
       "nino4": 29.7,
       "nino4_anom": 1.0
     },
@@ -600,15 +589,20 @@
       "nino34_anom": 2.6,
       "nino4": 29.6,
       "nino4_anom": 1.0
+    },
+    {
+      "date": "2026-09-02",
+      "nino12": 25.3,
+      "nino12_anom": 4.6,
+      "nino3": 28.4,
+      "nino3_anom": 3.5,
+      "nino34": 29.4,
+      "nino34_anom": 2.7,
+      "nino4": 29.6,
+      "nino4_anom": 1.0
     }
   ],
   "oni_history": [
-    {
-      "year": 2023,
-      "season": "JJA",
-      "sst": 28.29,
-      "oni": 1.0
-    },
     {
       "year": 2023,
       "season": "JAS",
@@ -818,6 +812,12 @@
       "season": "MJJ",
       "sst": 29.02,
       "oni": 1.39
+    },
+    {
+      "year": 2026,
+      "season": "JJA",
+      "sst": 29.09,
+      "oni": 1.8
     }
   ],
   "roni_history": [
@@ -2303,7 +2303,6 @@
   ],
   "iri_strength": {
     "seasons": [
-      "ASO",
       "SON",
       "OND",
       "NDJ",
@@ -2311,7 +2310,8 @@
       "JFM",
       "FMA",
       "MAM",
-      "JAS"
+      "JAS",
+      "ASO"
     ],
     "traces": [
       {
@@ -2383,8 +2383,8 @@
           0,
           0,
           0,
-          0,
           11,
+          0,
           0
         ],
         "color": "#66bb6a"
@@ -2397,9 +2397,9 @@
           0,
           0,
           0,
-          0,
           17,
           22,
+          0,
           0
         ],
         "color": "#ffee58"
@@ -2407,7 +2407,6 @@
       {
         "name": "Moderate El Ni\u00f1o",
         "y": [
-          8,
           4,
           4,
           0,
@@ -2415,14 +2414,14 @@
           16,
           22,
           33,
-          12
+          12,
+          8
         ],
         "color": "#ffa726"
       },
       {
         "name": "Strong El Ni\u00f1o",
         "y": [
-          19,
           15,
           8,
           23,
@@ -2430,14 +2429,14 @@
           32,
           39,
           28,
-          35
+          35,
+          19
         ],
         "color": "#ef5350"
       },
       {
         "name": "Very Strong El Ni\u00f1o",
         "y": [
-          73,
           81,
           88,
           77,
@@ -2445,7 +2444,8 @@
           53,
           22,
           6,
-          54
+          54,
+          73
         ],
         "color": "#b71c1c"
       }
@@ -2453,12 +2453,12 @@
     "model_counts": [
       26,
       26,
-      26,
       22,
       20,
       19,
       18,
       18,
+      26,
       26
     ],
     "title": "ENSO Strength Categories"
