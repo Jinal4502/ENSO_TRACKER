@@ -79,7 +79,7 @@ REGION_CONFIG = {
     },
     "china": {
         "name": "China",
-        "csv": "data/china_monthly_grid.csv",
+        "csv": "data/china_monthly_grid.csv.gz",
         "center_lat": 36.0, "center_lon": 104.0, "zoom": 3.0,
         "marker_size": 20,
         "all_label": "All China",
@@ -92,7 +92,7 @@ REGION_CONFIG = {
     },
     "global": {
         "name": "Global",
-        "csv": "data/global_monthly_grid.csv",
+        "csv": "data/global_monthly_grid.csv.gz",
         "center_lat": 20.0, "center_lon": 0.0, "zoom": 0.6,
         "marker_size": 7,
         "all_label": "Global Average",
@@ -346,6 +346,17 @@ let stateRows      = {{}};
 // Shared cache
 let csvCache       = {{}};
 
+// ── CSV fetch (transparently decompresses .gz URLs) ────────────────────────────
+async function fetchCSVText(url) {{
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error("HTTP "+resp.status+" for "+url);
+  if (url.endsWith(".gz")) {{
+    const stream = resp.body.pipeThrough(new DecompressionStream("gzip"));
+    return await new Response(stream).text();
+  }}
+  return await resp.text();
+}}
+
 // ── CSV parser ────────────────────────────────────────────────────────────────
 function parseCSV(text) {{
   const lines = text.trim().split(/\\r?\\n/);
@@ -384,7 +395,7 @@ function compositeAnnotation(phase) {{
 function makeTrace(vals) {{
   const ms = REGION_CONFIG[MAP_KEY].marker_size;
   return {{
-    type:"scattermapbox", mode:"markers",
+    type:"scattergeo", mode:"markers",
     lat:fixedLats, lon:fixedLons,
     customdata:fixedStates.map(s=>STATE_NAMES[s]||s),
     marker:{{
@@ -402,14 +413,25 @@ function makeTrace(vals) {{
   }};
 }}
 
-// ── Base mapbox layout (always global) ───────────────────────────────────────
+// ── Base geo layout (always global, single non-repeating world) ────────────────
 function makeBaseLayout() {{
-  const rc = REGION_CONFIG[MAP_KEY];
   return {{
     autosize:true,
     paper_bgcolor:DARK.paper,
     uirevision:"map-global",
-    mapbox:{{style:"open-street-map",center:{{lat:rc.center_lat,lon:rc.center_lon}},zoom:rc.zoom}},
+    geo:{{
+      scope:"world",
+      projection:{{type:"natural earth"}},
+      showland:true, landcolor:"#161b22",
+      showcountries:true, countrycolor:"#30363d",
+      showcoastlines:true, coastlinecolor:"#30363d",
+      showocean:true, oceancolor:"#0d1117",
+      showlakes:false, showrivers:false,
+      showframe:false,
+      bgcolor:DARK.paper,
+      lonaxis:{{range:[-180,180]}},
+      lataxis:{{range:[-60,85]}},
+    }},
   }};
 }}
 
@@ -616,11 +638,7 @@ async function loadGlobalMap() {{
 
   if (!csvCache[MAP_KEY]) {{
     try {{
-      const resp = await fetch(rc.csv);
-      if (!resp.ok) throw new Error(
-        "Global precipitation data not yet available — run convert_global_precipitation.py "
-        +"locally and commit docs/data/global_monthly_grid.csv to the repo.");
-      csvCache[MAP_KEY] = await resp.text();
+      csvCache[MAP_KEY] = await fetchCSVText(rc.csv);
     }} catch(e) {{
       document.getElementById("loading").innerHTML =
         "<p style='color:var(--muted);max-width:480px;margin:auto'>"+e.message+"</p>";
@@ -712,9 +730,7 @@ async function loadRegionCharts(key) {{
 
   if (!csvCache[key]) {{
     try {{
-      const resp = await fetch(rc.csv);
-      if (!resp.ok) throw new Error(rc.name+" data not yet available — run convert_global_precipitation.py locally and commit the CSV files.");
-      csvCache[key] = await resp.text();
+      csvCache[key] = await fetchCSVText(rc.csv);
     }} catch(e) {{
       document.getElementById("lineDiv").innerHTML =
         "<p style='padding:1rem;color:var(--muted);font-size:.85rem'>"+e.message+"</p>";
