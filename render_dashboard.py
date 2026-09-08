@@ -626,26 +626,39 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   </div>
 </div>
 
-<!-- SST Model Plume -->
+<!-- Figure 4 + Strength Categories — tabbed -->
 <div class="chart-card" style="margin-bottom:1rem">
-  <h2>Figure 4 — IRI SST Model Forecast Plume (Niño-3.4 Anomaly) {TIP_PLUME}</h2>
-  <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
-    Individual model forecasts coloured by model — hover any line to see its name and value.
-    Ensemble averages and observed (dashed blue) are labelled in the legend.
-  </p>
-  {'<div id="plumeDiv" style="height:480px"></div>' if has_plume else
-   '<p style="color:var(--muted);font-size:.82rem">Model prediction data unavailable — install playwright to enable.</p>'}
-</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem">
+    <h2 style="margin:0">Figure 4 — IRI Model Forecasts {TIP_PLUME}</h2>
+    <div style="display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:.78rem">
+      <button id="tab-plume" onclick="showIriTab('plume')"
+        style="padding:.3rem .75rem;background:var(--el);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:600">
+        Forecast Plume
+      </button>
+      <button id="tab-strength" onclick="showIriTab('strength')"
+        style="padding:.3rem .75rem;background:var(--card2);color:var(--muted);border:none;cursor:pointer;font-family:inherit;border-left:1px solid var(--border)">
+        Strength Categories {TIP_STRENGTH}
+      </button>
+    </div>
+  </div>
 
-<!-- Strength Categories -->
-<div class="chart-card" style="margin-bottom:1rem">
-  <h2>{sp_title} {TIP_STRENGTH}</h2>
-  <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
-    Percentage of IRI models predicting each ENSO strength category per season.
-    Numbers inside bars show model count. Hover for details.
-  </p>
-  {'<div id="strengthDiv" style="height:480px"></div>' if has_strength else
-   '<p style="color:var(--muted);font-size:.82rem">Strength data unavailable.</p>'}
+  <div id="pane-plume">
+    <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
+      Individual model forecasts coloured by model — hover any line to see its name and value.
+      Ensemble averages and observed (dashed blue) are labelled in the legend.
+    </p>
+    {'<div id="plumeDiv" style="height:480px"></div>' if has_plume else
+     '<p style="color:var(--muted);font-size:.82rem">Model prediction data unavailable — install playwright to enable.</p>'}
+  </div>
+
+  <div id="pane-strength" style="display:none">
+    <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.8rem">
+      Percentage of IRI models predicting each ENSO strength category per season.
+      Numbers inside bars show model count. Hover for details.
+    </p>
+    {'<div id="strengthDiv" style="height:480px"></div>' if has_strength else
+     '<p style="color:var(--muted);font-size:.82rem">Strength data unavailable.</p>'}
+  </div>
 </div>
 
 <footer>
@@ -672,6 +685,25 @@ const chartDefaults = {{
     y: {{ ticks: {{ color: '#8b949e', font: {{ size: 10 }} }}, grid: {{ color: '#21262d' }} }}
   }}
 }};
+
+// Tab switcher for IRI Forecast card (Plume / Strength)
+function showIriTab(name) {{
+  var isPlume = name === 'plume';
+  document.getElementById('pane-plume').style.display    = isPlume ? '' : 'none';
+  document.getElementById('pane-strength').style.display = isPlume ? 'none' : '';
+  var tp = document.getElementById('tab-plume');
+  var ts = document.getElementById('tab-strength');
+  tp.style.background = isPlume ? 'var(--el)'   : 'var(--card2)';
+  tp.style.color      = isPlume ? '#fff'         : 'var(--muted)';
+  tp.style.fontWeight = isPlume ? '600'          : 'normal';
+  ts.style.background = isPlume ? 'var(--card2)' : 'var(--el)';
+  ts.style.color      = isPlume ? 'var(--muted)' : '#fff';
+  ts.style.fontWeight = isPlume ? 'normal'       : '600';
+  // Plotly charts need a resize trigger after being un-hidden
+  var target = isPlume ? 'plumeDiv' : 'strengthDiv';
+  var el = document.getElementById(target);
+  if (el && window.Plotly) {{ Plotly.Plots.resize(el); }}
+}}
 
 // Tab switcher for combined anomaly card
 function showTab(name) {{
