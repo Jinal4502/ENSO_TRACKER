@@ -270,7 +270,7 @@ function compositeAnnotation(phase) {
 function makeTrace(vals) {
   const ms = REGION_CONFIG[MAP_KEY].marker_size;
   return {
-    type:"scattermapbox", mode:"markers",
+    type:"scattergeo", mode:"markers",
     lat:fixedLats, lon:fixedLons,
     customdata:fixedStates,
     marker:{
@@ -288,13 +288,25 @@ function makeTrace(vals) {
   };
 }
 
+// ── Base geo layout (always global, single non-repeating world) ────────────────
 function makeBaseLayout() {
-  const rc = REGION_CONFIG[MAP_KEY];
   return {
     autosize:true,
     paper_bgcolor:DARK.paper,
     uirevision:"map-global",
-    mapbox:{style:"open-street-map",center:{lat:rc.center_lat,lon:rc.center_lon},zoom:rc.zoom},
+    geo:{
+      scope:"world",
+      projection:{type:"natural earth"},
+      showland:true, landcolor:"#161b22",
+      showcountries:true, countrycolor:"#30363d",
+      showcoastlines:true, coastlinecolor:"#30363d",
+      showocean:true, oceancolor:"#0d1117",
+      showlakes:false, showrivers:false,
+      showframe:false,
+      bgcolor:DARK.paper,
+      lonaxis:{range:[-180,180]},
+      lataxis:{range:[-60,85]},
+    },
   };
 }
 
