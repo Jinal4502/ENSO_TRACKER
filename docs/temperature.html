@@ -177,7 +177,7 @@
 </footer>
 
 <script>
-const REGION_CONFIG = {"usa": {"name": "United States", "csv": "data/usa_temp_monthly_grid.csv", "center_lat": 39.5, "center_lon": -96.0, "zoom": 2.5, "marker_size": 20, "all_label": "All USA", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "india": {"name": "India", "csv": "data/india_temp_monthly_grid.csv", "center_lat": 22.0, "center_lon": 82.0, "zoom": 3.6, "marker_size": 22, "all_label": "All India", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "australia": {"name": "Australia", "csv": "data/australia_temp_monthly_grid.csv", "center_lat": -26.0, "center_lon": 133.0, "zoom": 2.8, "marker_size": 24, "all_label": "All Australia", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "brazil": {"name": "Brazil", "csv": "data/brazil_temp_monthly_grid.csv", "center_lat": -10.0, "center_lon": -53.0, "zoom": 2.8, "marker_size": 24, "all_label": "All Brazil", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "east_africa": {"name": "East Africa", "csv": "data/east_africa_temp_monthly_grid.csv", "center_lat": 3.0, "center_lon": 38.0, "zoom": 3.2, "marker_size": 22, "all_label": "All East Africa", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "china": {"name": "China", "csv": "data/china_temp_monthly_grid.csv", "center_lat": 36.0, "center_lon": 104.0, "zoom": 3.0, "marker_size": 20, "all_label": "All China", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "global": {"name": "Global", "csv": "data/global_temp_monthly_grid.csv", "center_lat": 20.0, "center_lon": 0.0, "zoom": 0.6, "marker_size": 7, "all_label": "Global Average", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 2.5\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}};
+const REGION_CONFIG = {"usa": {"name": "United States", "csv": "data/usa_temp_monthly_grid.csv", "center_lat": 39.5, "center_lon": -96.0, "zoom": 2.5, "marker_size": 20, "all_label": "All USA", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "india": {"name": "India", "csv": "data/india_temp_monthly_grid.csv", "center_lat": 22.0, "center_lon": 82.0, "zoom": 3.6, "marker_size": 22, "all_label": "All India", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "australia": {"name": "Australia", "csv": "data/australia_temp_monthly_grid.csv", "center_lat": -26.0, "center_lon": 133.0, "zoom": 2.8, "marker_size": 24, "all_label": "All Australia", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "brazil": {"name": "Brazil", "csv": "data/brazil_temp_monthly_grid.csv", "center_lat": -10.0, "center_lon": -53.0, "zoom": 2.8, "marker_size": 24, "all_label": "All Brazil", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "east_africa": {"name": "East Africa", "csv": "data/east_africa_temp_monthly_grid.csv", "center_lat": 3.0, "center_lon": 38.0, "zoom": 3.2, "marker_size": 22, "all_label": "All East Africa", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "china": {"name": "China", "csv": "data/china_temp_monthly_grid.csv.gz", "center_lat": 36.0, "center_lon": 104.0, "zoom": 3.0, "marker_size": 20, "all_label": "All China", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 1.0\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}, "global": {"name": "Global", "csv": "data/global_temp_monthly_grid.csv.gz", "center_lat": 20.0, "center_lon": 0.0, "zoom": 0.6, "marker_size": 7, "all_label": "Global Average", "subregion_label": "Region", "source_html": "GHCN-CAMS 2m air temperature \u00b7 2.5\u00b0 grid \u00b7 <a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html' target='_blank'>NOAA/PSL</a>"}};
 const MAP_KEY = "global";   // map always shows global data
 
 const MONTH_NAMES  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -224,6 +224,17 @@ let stateRows      = {};
 // Shared cache
 let csvCache       = {};
 
+// ── CSV fetch (transparently decompresses .gz URLs) ────────────────────────────
+async function fetchCSVText(url) {
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error("HTTP "+resp.status+" for "+url);
+  if (url.endsWith(".gz")) {
+    const stream = resp.body.pipeThrough(new DecompressionStream("gzip"));
+    return await new Response(stream).text();
+  }
+  return await resp.text();
+}
+
 function parseCSV(text) {
   const lines = text.trim().split(/\r?\n/);
   const keys  = lines[0].split(",").map(k => k.trim());
@@ -259,7 +270,7 @@ function compositeAnnotation(phase) {
 function makeTrace(vals) {
   const ms = REGION_CONFIG[MAP_KEY].marker_size;
   return {
-    type:"scattermapbox", mode:"markers",
+    type:"scattergeo", mode:"markers",
     lat:fixedLats, lon:fixedLons,
     customdata:fixedStates,
     marker:{
@@ -277,13 +288,25 @@ function makeTrace(vals) {
   };
 }
 
+// ── Base geo layout (always global, single non-repeating world) ────────────────
 function makeBaseLayout() {
-  const rc = REGION_CONFIG[MAP_KEY];
   return {
     autosize:true,
     paper_bgcolor:DARK.paper,
     uirevision:"map-global",
-    mapbox:{style:"open-street-map",center:{lat:rc.center_lat,lon:rc.center_lon},zoom:rc.zoom},
+    geo:{
+      scope:"world",
+      projection:{type:"natural earth"},
+      showland:true, landcolor:"#161b22",
+      showcountries:true, countrycolor:"#30363d",
+      showcoastlines:true, coastlinecolor:"#30363d",
+      showocean:true, oceancolor:"#0d1117",
+      showlakes:false, showrivers:false,
+      showframe:false,
+      bgcolor:DARK.paper,
+      lonaxis:{range:[-180,180]},
+      lataxis:{range:[-60,85]},
+    },
   };
 }
 
@@ -478,11 +501,7 @@ async function loadGlobalMap() {
 
   if (!csvCache[MAP_KEY]) {
     try {
-      const resp = await fetch(rc.csv);
-      if (!resp.ok) throw new Error(
-        "Global temperature data not yet available — run convert_temperature.py "
-        +"locally and commit docs/data/global_temp_monthly_grid.csv to the repo.");
-      csvCache[MAP_KEY] = await resp.text();
+      csvCache[MAP_KEY] = await fetchCSVText(rc.csv);
     } catch(e) {
       document.getElementById("loading").innerHTML =
         "<p style='color:var(--muted);max-width:480px;margin:auto'>"+e.message+"</p>";
@@ -574,9 +593,7 @@ async function loadRegionCharts(key) {
 
   if (!csvCache[key]) {
     try {
-      const resp = await fetch(rc.csv);
-      if (!resp.ok) throw new Error(rc.name+" temperature data not yet available — run convert_temperature.py locally and commit the CSV files.");
-      csvCache[key] = await resp.text();
+      csvCache[key] = await fetchCSVText(rc.csv);
     } catch(e) {
       document.getElementById("lineDiv").innerHTML =
         "<p style='padding:1rem;color:var(--muted);font-size:.85rem'>"+e.message+"</p>";
