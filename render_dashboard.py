@@ -566,21 +566,34 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
   </div>
 </div>
 
-<!-- Weekly anomaly chart -->
+<!-- Combined anomaly chart -->
 <div class="chart-card">
-  <h2>Niño-3.4 Weekly Anomaly — Last 52 Weeks {TIP_WEEKLY}</h2>
-  <canvas id="weeklyChart"></canvas>
-  <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;display:flex;gap:1rem;flex-wrap:wrap">
-    <span><span style="display:inline-block;width:10px;height:10px;background:#fa8c16;border-radius:2px;margin-right:4px"></span>El Niño (≥ +0.5 °C)</span>
-    <span><span style="display:inline-block;width:10px;height:10px;background:#389e0d;border-radius:2px;margin-right:4px"></span>Neutral</span>
-    <span><span style="display:inline-block;width:10px;height:10px;background:#2f54eb;border-radius:2px;margin-right:4px"></span>La Niña (≤ −0.5 °C)</span>
-  </p>
-</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+    <h2 style="margin:0">ENSO Anomaly {TIP_WEEKLY}</h2>
+    <div style="display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:.78rem">
+      <button id="tab-weekly" onclick="showTab('weekly')"
+        style="padding:.3rem .75rem;background:var(--el);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:600">
+        Weekly · 52 wks
+      </button>
+      <button id="tab-oni" onclick="showTab('oni')"
+        style="padding:.3rem .75rem;background:var(--card2);color:var(--muted);border:none;cursor:pointer;font-family:inherit;border-left:1px solid var(--border)">
+        ONI &amp; RONI · 3 yr {TIP_ONI}
+      </button>
+    </div>
+  </div>
 
-<!-- ONI vs RONI chart -->
-<div class="chart-card">
-  <h2>ONI vs RONI — Last 3 Years (Monthly) {TIP_ONI}</h2>
-  <canvas id="oniChart"></canvas>
+  <div id="pane-weekly">
+    <canvas id="weeklyChart"></canvas>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;display:flex;gap:1rem;flex-wrap:wrap">
+      <span><span style="display:inline-block;width:10px;height:10px;background:#fa8c16;border-radius:2px;margin-right:4px"></span>El Niño (≥ +0.5 °C)</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#389e0d;border-radius:2px;margin-right:4px"></span>Neutral</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#2f54eb;border-radius:2px;margin-right:4px"></span>La Niña (≤ −0.5 °C)</span>
+    </p>
+  </div>
+
+  <div id="pane-oni" style="display:none">
+    <canvas id="oniChart"></canvas>
+  </div>
 </div>
 
 <!-- Impacts -->
@@ -659,6 +672,21 @@ const chartDefaults = {{
     y: {{ ticks: {{ color: '#8b949e', font: {{ size: 10 }} }}, grid: {{ color: '#21262d' }} }}
   }}
 }};
+
+// Tab switcher for combined anomaly card
+function showTab(name) {{
+  var isWeekly = name === 'weekly';
+  document.getElementById('pane-weekly').style.display = isWeekly ? '' : 'none';
+  document.getElementById('pane-oni').style.display    = isWeekly ? 'none' : '';
+  var tw = document.getElementById('tab-weekly');
+  var to = document.getElementById('tab-oni');
+  tw.style.background = isWeekly ? 'var(--el)'    : 'var(--card2)';
+  tw.style.color      = isWeekly ? '#fff'          : 'var(--muted)';
+  tw.style.fontWeight = isWeekly ? '600'           : 'normal';
+  to.style.background = isWeekly ? 'var(--card2)'  : 'var(--el)';
+  to.style.color      = isWeekly ? 'var(--muted)'  : '#fff';
+  to.style.fontWeight = isWeekly ? 'normal'        : '600';
+}}
 
 // Weekly anomaly — per-bar color by phase; default legend hidden (HTML color key shown instead)
 new Chart(document.getElementById('weeklyChart'), {{
