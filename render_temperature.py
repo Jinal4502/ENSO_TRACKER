@@ -77,6 +77,32 @@ REGION_CONFIG = {
             " target='_blank'>NOAA/PSL</a>"
         ),
     },
+    "china": {
+        "name": "China",
+        "csv": "data/china_temp_monthly_grid.csv",
+        "center_lat": 36.0, "center_lon": 104.0, "zoom": 3.0,
+        "marker_size": 20,
+        "all_label": "All China",
+        "subregion_label": "Region",
+        "source_html": (
+            "GHCN-CAMS 2m air temperature · 1.0° grid · "
+            "<a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html'"
+            " target='_blank'>NOAA/PSL</a>"
+        ),
+    },
+    "global": {
+        "name": "Global",
+        "csv": "data/global_temp_monthly_grid.csv",
+        "center_lat": 20.0, "center_lon": 0.0, "zoom": 0.6,
+        "marker_size": 7,
+        "all_label": "Global Average",
+        "subregion_label": "Region",
+        "source_html": (
+            "GHCN-CAMS 2m air temperature · 2.5° grid · "
+            "<a href='https://psl.noaa.gov/data/gridded/data.ghcncams.html'"
+            " target='_blank'>NOAA/PSL</a>"
+        ),
+    },
 }
 
 _RC_JSON = json.dumps(REGION_CONFIG)
@@ -173,21 +199,26 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
 
 <div id="content">
 
+  <!-- Region selector — controls charts only; map always shows global -->
   <div class="card" style="padding:.75rem 1rem;margin-bottom:1rem">
     <div class="region-bar">
-      <span class="region-label">Region:</span>
+      <span class="region-label">Charts Region:</span>
       <div class="btn-row" id="regionSelector" style="margin:0">
         <button class="btn active" data-region="usa">United States</button>
         <button class="btn" data-region="india">India</button>
         <button class="btn" data-region="australia">Australia</button>
         <button class="btn" data-region="brazil">Brazil</button>
         <button class="btn" data-region="east_africa">East Africa</button>
+        <button class="btn" data-region="china">China</button>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h2>Temperature Map</h2>
+    <h2>Global Land Temperature Map</h2>
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:.4rem">
+      Global land coverage · 2.5° grid · region selector below applies to time-series charts only
+    </p>
 
     <div class="tab-row" id="mapTabs">
       <button class="tab active" data-tab="tracker">Monthly Tracker</button>
@@ -259,6 +290,7 @@ def render_temperature(output_path: str = "docs/temperature.html") -> None:
 
 <script>
 const REGION_CONFIG = {_RC_JSON};
+const MAP_KEY = "global";   // map always shows global data
 
 const MONTH_NAMES  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 let YR0 = "1970", YR1 = "2026";
@@ -286,9 +318,8 @@ const ENSO_PHASES = ["El Niño","Neutral","La Niña"];
 const ENSO_COLORS = ["#ef5350","#8b949e","#1e88e5"];
 const ENSO_FILL   = {{"El Niño":"rgba(239,83,80,0.18)","La Niña":"rgba(30,136,229,0.18)"}};
 
-let currentRegion  = "usa";
+// Map state (global CSV, loaded once)
 let currentMode    = "tracker";
-let csvCache       = {{}};
 let fixedLats      = [];
 let fixedLons      = [];
 let fixedStates    = [];
@@ -296,10 +327,14 @@ let cellList       = [];
 let monthlyData    = {{}};
 let sortedKeys     = [];
 let composites     = {{}};
-let stateRows      = {{}};
 let cmapMin        = -10;
 let cmapMax        = 40;
 let cachedSliderSteps = [];
+// Chart state (per-region CSV)
+let currentRegion  = "usa";
+let stateRows      = {{}};
+// Shared cache
+let csvCache       = {{}};
 
 function parseCSV(text) {{
   const lines = text.trim().split(/\\r?\\n/);
@@ -334,7 +369,7 @@ function compositeAnnotation(phase) {{
 }}
 
 function makeTrace(vals) {{
-  const ms = REGION_CONFIG[currentRegion].marker_size;
+  const ms = REGION_CONFIG[MAP_KEY].marker_size;
   return {{
     type:"scattermapbox", mode:"markers",
     lat:fixedLats, lon:fixedLons,
@@ -354,19 +389,19 @@ function makeTrace(vals) {{
   }};
 }}
 
-function makeBaseLayout(regionKey) {{
-  const rc = REGION_CONFIG[regionKey];
+function makeBaseLayout() {{
+  const rc = REGION_CONFIG[MAP_KEY];
   return {{
     autosize:true,
     paper_bgcolor:DARK.paper,
-    uirevision:"map-"+regionKey,
+    uirevision:"map-global",
     mapbox:{{style:"open-street-map",center:{{lat:rc.center_lat,lon:rc.center_lon}},zoom:rc.zoom}},
   }};
 }}
 
 function makeTrackerLayout(fd, sliderSteps) {{
   return {{
-    ...makeBaseLayout(currentRegion),
+    ...makeBaseLayout(),
     margin:{{l:0,r:65,t:0,b:130}},
     annotations: trackerAnnotations(fd),
     updatemenus:[{{
@@ -397,7 +432,7 @@ function makeTrackerLayout(fd, sliderSteps) {{
 
 function makeCompositeLayout(phase) {{
   return {{
-    ...makeBaseLayout(currentRegion),
+    ...makeBaseLayout(),
     margin:{{l:0,r:65,t:0,b:20}},
     annotations:compositeAnnotation(phase),
     updatemenus:[], sliders:[],
@@ -449,7 +484,7 @@ document.getElementById("regionSelector").addEventListener("click", e => {{
   if (!btn || btn.dataset.region === currentRegion) return;
   document.querySelectorAll("#regionSelector .btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
-  loadRegion(btn.dataset.region);
+  loadRegionCharts(btn.dataset.region);
 }});
 
 function renderTimeSeries(stateKey) {{
@@ -548,62 +583,40 @@ function renderClimatology(stateKey) {{
   }},{{responsive:true}});
 }}
 
-async function loadRegion(key) {{
-  const rc = REGION_CONFIG[key];
-  currentRegion = key;
-  const initialLoad = document.getElementById("content").style.display !== "block";
+// ── Load global temperature map ───────────────────────────────────────────────
+async function loadGlobalMap() {{
+  const rc = REGION_CONFIG[MAP_KEY];
+  document.getElementById("loading").textContent = "Loading global temperature data…";
 
-  if (initialLoad) {{
-    document.getElementById("loading").textContent = "Loading "+rc.name+" data…";
-    document.getElementById("loading").style.display = "block";
-  }} else {{
-    Plotly.purge("mapDiv");
-    document.getElementById("mapDiv").innerHTML =
-      "<div style='height:440px;display:flex;align-items:center;justify-content:center;color:var(--muted)'>Loading "+rc.name+"…</div>";
-  }}
-
-  if (!csvCache[key]) {{
+  if (!csvCache[MAP_KEY]) {{
     try {{
       const resp = await fetch(rc.csv);
       if (!resp.ok) throw new Error(
-        rc.name+" temperature data not yet available — run convert_temperature.py locally and commit the CSV files.");
-      csvCache[key] = await resp.text();
+        "Global temperature data not yet available — run convert_temperature.py "
+        +"locally and commit docs/data/global_temp_monthly_grid.csv to the repo.");
+      csvCache[MAP_KEY] = await resp.text();
     }} catch(e) {{
-      const msg = e.message;
-      if (initialLoad) {{
-        document.getElementById("loading").innerHTML =
-          "<p style='color:var(--muted);max-width:480px;margin:auto'>"+msg+"</p>";
-      }} else {{
-        document.getElementById("mapDiv").innerHTML =
-          "<div style='height:440px;display:flex;align-items:center;justify-content:center;padding:2rem;text-align:center'>"
-          +"<p style='color:var(--muted);font-size:.85rem'>"+msg+"</p></div>";
-      }}
+      document.getElementById("loading").innerHTML =
+        "<p style='color:var(--muted);max-width:480px;margin:auto'>"+e.message+"</p>";
       return;
     }}
   }}
 
-  const rows = parseCSV(csvCache[key]);
+  const rows = parseCSV(csvCache[MAP_KEY]);
 
   fixedLats=[]; fixedLons=[]; fixedStates=[]; cellList=[];
   monthlyData={{}}; sortedKeys=[]; composites={{}};
-  stateRows={{}}; cachedSliderSteps=[]; cmapMin=-10; cmapMax=40;
-  currentMode="tracker";
+  cachedSliderSteps=[]; cmapMin=-10; cmapMax=40; currentMode="tracker";
 
   const cellSet=new Set();
   const cellStateMap={{}};
-  for(const r of rows){{cellSet.add(r.lat+","+r.lon); cellStateMap[r.lat+","+r.lon]=r.state;}}
+  for(const r of rows){{cellSet.add(r.lat+","+r.lon); cellStateMap[r.lat+","+r.lon]=r.state||"";}}
   cellList=[...cellSet].sort();
   fixedLats=cellList.map(k=>+k.split(",")[0]);
   fixedLons=cellList.map(k=>+k.split(",")[1]);
   fixedStates=cellList.map(k=>cellStateMap[k]||"");
   const cellIdx=Object.fromEntries(cellList.map((k,i)=>[k,i]));
   const nCells=cellList.length;
-
-  stateRows["all"]=rows;
-  for(const r of rows){{
-    if(!stateRows[r.state]) stateRows[r.state]=[];
-    stateRows[r.state].push(r);
-  }}
 
   const rawMonthly={{}};
   for(const r of rows){{
@@ -615,12 +628,11 @@ async function loadRegion(key) {{
   sortedKeys=Object.keys(rawMonthly).sort();
   for(const k of sortedKeys) monthlyData[k]=rawMonthly[k];
 
-  // Colorscale bounds: 2nd–98th percentile of all values
   const allVals=[];
   for(const k of sortedKeys) for(const v of monthlyData[k].vals) if(v!==null) allVals.push(v);
   allVals.sort((a,b)=>a-b);
-  cmapMin = Math.floor(allVals[Math.floor(allVals.length*0.02)]);
-  cmapMax = Math.ceil( allVals[Math.floor(allVals.length*0.98)]);
+  cmapMin=Math.floor(allVals[Math.floor(allVals.length*0.02)]);
+  cmapMax=Math.ceil(allVals[Math.floor(allVals.length*0.98)]);
 
   function buildComposite(phase){{
     const S=new Array(nCells).fill(0),N=new Array(nCells).fill(0);
@@ -642,17 +654,10 @@ async function loadRegion(key) {{
     }};
   }});
 
-  YR0=sortedKeys[0].split("-")[0];
-  YR1=sortedKeys[sortedKeys.length-1].split("-")[0];
-  document.getElementById("pageTitle").textContent=rc.name+" Land Temperature";
-  document.getElementById("pageSubtitle").innerHTML=rc.source_html+" · "+YR0+"–"+YR1;
-  document.getElementById("subregionHeader").textContent="Select "+rc.subregion_label;
-
-  const subregions=[...new Set(rows.map(r=>r.state))].sort();
-  const sel=document.getElementById("stateSelector");
-  let pillsHtml=`<button class="btn active" data-state="all">${{rc.all_label}}</button>`;
-  for(const s of subregions) pillsHtml+=`<button class="btn" data-state="${{s}}">${{s}}</button>`;
-  sel.innerHTML=pillsHtml;
+  const mapYR0=sortedKeys[0].split("-")[0];
+  const mapYR1=sortedKeys[sortedKeys.length-1].split("-")[0];
+  document.getElementById("pageTitle").textContent="Global Land Temperature";
+  document.getElementById("pageSubtitle").innerHTML=rc.source_html+" · "+mapYR0+"–"+mapYR1;
 
   document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
   document.querySelector("[data-tab='tracker']").classList.add("active");
@@ -661,38 +666,63 @@ async function loadRegion(key) {{
   document.getElementById("trackerDesc").style.display="";
   document.getElementById("compositeControls").style.display="none";
 
-  if(initialLoad){{
-    document.getElementById("loading").style.display="none";
-    document.getElementById("content").style.display="block";
-  }} else {{
-    document.getElementById("mapDiv").innerHTML="";
-  }}
+  document.getElementById("loading").style.display="none";
+  document.getElementById("content").style.display="block";
 
   const fd0=monthlyData[sortedKeys[0]];
-  await Plotly.newPlot(
-    "mapDiv",
-    [makeTrace(fd0.vals)],
-    makeTrackerLayout(fd0,cachedSliderSteps),
-    {{responsive:true}}
-  );
+  await Plotly.newPlot("mapDiv",[makeTrace(fd0.vals)],makeTrackerLayout(fd0,cachedSliderSteps),{{responsive:true}});
 
   const frames=sortedKeys.map(k=>{{
     const fd=monthlyData[k];
-    return {{
-      name:k,
-      data:[{{marker:{{color:fd.vals}}}}],
-      traces:[0],
-      layout:{{annotations:trackerAnnotations(fd)}},
-    }};
+    return {{name:k,data:[{{marker:{{color:fd.vals}}}}],traces:[0],layout:{{annotations:trackerAnnotations(fd)}}}};
   }});
   await Plotly.addFrames("mapDiv",frames);
+}}
+
+// ── Load region charts (line + climatology only) ──────────────────────────────
+async function loadRegionCharts(key) {{
+  const rc = REGION_CONFIG[key];
+  currentRegion = key;
+
+  if (!csvCache[key]) {{
+    try {{
+      const resp = await fetch(rc.csv);
+      if (!resp.ok) throw new Error(rc.name+" temperature data not yet available — run convert_temperature.py locally and commit the CSV files.");
+      csvCache[key] = await resp.text();
+    }} catch(e) {{
+      document.getElementById("lineDiv").innerHTML =
+        "<p style='padding:1rem;color:var(--muted);font-size:.85rem'>"+e.message+"</p>";
+      document.getElementById("climDiv").innerHTML="";
+      return;
+    }}
+  }}
+
+  const rows = parseCSV(csvCache[key]);
+  stateRows={{}};
+  stateRows["all"]=rows;
+  for(const r of rows){{
+    if(!stateRows[r.state]) stateRows[r.state]=[];
+    stateRows[r.state].push(r);
+  }}
+
+  const rKeys=[...new Set(rows.map(r=>r.year+"-"+r.month.padStart(2,"0")))].sort();
+  YR0=rKeys[0].split("-")[0];
+  YR1=rKeys[rKeys.length-1].split("-")[0];
+
+  document.getElementById("subregionHeader").textContent="Select "+rc.subregion_label;
+  const subregions=[...new Set(rows.map(r=>r.state))].sort();
+  const sel=document.getElementById("stateSelector");
+  let pillsHtml=`<button class="btn active" data-state="all">${{rc.all_label}}</button>`;
+  for(const s of subregions) pillsHtml+=`<button class="btn" data-state="${{s}}">${{s}}</button>`;
+  sel.innerHTML=pillsHtml;
 
   renderTimeSeries("all");
   renderClimatology("all");
 }}
 
 async function init() {{
-  await loadRegion("usa");
+  await loadGlobalMap();
+  await loadRegionCharts("usa");
 }}
 
 init().catch(err=>{{

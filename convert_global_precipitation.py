@@ -89,6 +89,28 @@ REGIONS = {
             ("Great Lakes",   -5.0,   5.0, 28.0, 38.0),
         ],
     },
+    "china": {
+        "name": "China",
+        "lat_min": 18.0, "lat_max": 54.0,
+        "lon_min": 73.0, "lon_max": 135.0,
+        "subregions": [
+            ("North",    38.0, 54.0,  97.0, 135.0),
+            ("Northwest",36.0, 54.0,  73.0,  97.0),
+            ("Central",  28.0, 38.0,  97.0, 122.0),
+            ("South",    18.0, 28.0, 107.0, 125.0),
+            ("Southwest",18.0, 32.0,  73.0, 107.0),
+            ("East",     28.0, 38.0, 118.0, 135.0),
+        ],
+    },
+    "global": {
+        "name": "Global",
+        "lat_min": -90.0, "lat_max": 90.0,
+        "lon_min": -180.0, "lon_max": 180.0,
+        "grid_deg": 2.5,   # coarser resolution for global map
+        "subregions": [
+            ("Global", -90.0, 91.0, -181.0, 181.0),  # catch-all: all land cells
+        ],
+    },
 }
 
 
@@ -316,10 +338,15 @@ def convert_all_regions(only: Optional[str] = None) -> None:
 
         lat_min, lat_max = rcfg["lat_min"], rcfg["lat_max"]
         lon_min, lon_max = rcfg["lon_min"], rcfg["lon_max"]
+        og = rcfg.get("grid_deg", OUT_GRID)  # per-region output resolution
 
         lat_idx  = np.where((lat >= lat_min) & (lat <= lat_max))[0]
         lon_mask = (lon_180 >= lon_min) & (lon_180 <= lon_max)
         lon_idx  = np.where(lon_mask)[0]
+
+        if len(lat_idx) == 0 or len(lon_idx) == 0:
+            print(f"  [WARN] No grid cells found for {rcfg['name']} — skipping")
+            continue
 
         sub_lat = lat[lat_idx]
         sub_lon = lon_180[lon_idx]
@@ -342,15 +369,15 @@ def convert_all_regions(only: Optional[str] = None) -> None:
             with np.errstate(invalid="ignore", divide="ignore"):
                 prcp_smooth[t] = np.where(sm_den > 0.1, sm_num / sm_den, np.nan)
 
-        # Aggregate 0.5° → 1.0° output grid
-        out_lats = np.arange(lat_min, lat_max, OUT_GRID)
-        out_lons = np.arange(lon_min, lon_max, OUT_GRID)
-        cen_lat  = out_lats + OUT_GRID / 2
-        cen_lon  = out_lons + OUT_GRID / 2
+        # Aggregate 0.5° → output grid
+        out_lats = np.arange(lat_min, lat_max, og)
+        out_lons = np.arange(lon_min, lon_max, og)
+        cen_lat  = out_lats + og / 2
+        cen_lon  = out_lons + og / 2
         n_lat, n_lon = len(out_lats), len(out_lons)
 
-        lat_bins = np.floor((sub_lat - lat_min) / OUT_GRID).astype(int)
-        lon_bins = np.floor((sub_lon - lon_min) / OUT_GRID).astype(int)
+        lat_bins = np.floor((sub_lat - lat_min) / og).astype(int)
+        lon_bins = np.floor((sub_lon - lon_min) / og).astype(int)
 
         prcp_coarse = np.full((T, n_lat, n_lon), np.nan)
         for bi in range(n_lat):
@@ -378,7 +405,7 @@ def convert_all_regions(only: Optional[str] = None) -> None:
                 if sr is not None:
                     cell_info[(bi, bj)] = (float(clat), float(clon), sr)
 
-        print(f"  Output cells at {OUT_GRID}°: {len(cell_info)}")
+        print(f"  Output cells at {og}°: {len(cell_info)}")
 
         csv_path  = DATA_DIR / f"{region_key}_monthly_grid.csv"
         meta_path = DATA_DIR / f"{region_key}_meta.json"
@@ -407,9 +434,9 @@ def convert_all_regions(only: Optional[str] = None) -> None:
             "last_month":  last,
             "n_months":    T,
             "n_cells":     len(cell_info),
-            "grid_deg":    OUT_GRID,
+            "grid_deg":    og,
             "sources":     "GPCC v7 (1970-2013) + CPC Unified (2014-present)",
-            "smoothing":   f"gaussian_sigma{GAUSS_SIGMA}_then_aggregated_to_{OUT_GRID}deg",
+            "smoothing":   f"gaussian_sigma{GAUSS_SIGMA}_then_aggregated_to_{og}deg",
             "states":      subregion_names,
         }
         with open(meta_path, "w") as f:

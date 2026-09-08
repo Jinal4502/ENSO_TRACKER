@@ -95,6 +95,28 @@ REGIONS = {
             ("Great Lakes",   -5.0,   5.0, 28.0, 38.0),
         ],
     },
+    "china": {
+        "name": "China",
+        "lat_min": 18.0, "lat_max": 54.0,
+        "lon_min": 73.0, "lon_max": 135.0,
+        "subregions": [
+            ("North",    38.0, 54.0,  97.0, 135.0),
+            ("Northwest",36.0, 54.0,  73.0,  97.0),
+            ("Central",  28.0, 38.0,  97.0, 122.0),
+            ("South",    18.0, 28.0, 107.0, 125.0),
+            ("Southwest",18.0, 32.0,  73.0, 107.0),
+            ("East",     28.0, 38.0, 118.0, 135.0),
+        ],
+    },
+    "global": {
+        "name": "Global",
+        "lat_min": -90.0, "lat_max": 90.0,
+        "lon_min": -180.0, "lon_max": 180.0,
+        "grid_deg": 2.5,   # coarser resolution for global map
+        "subregions": [
+            ("Global", -90.0, 91.0, -181.0, 181.0),  # catch-all: all land cells
+        ],
+    },
 }
 
 
@@ -192,6 +214,7 @@ def convert_all_regions(only: Optional[str] = None) -> None:
 
         lat_min, lat_max = rcfg["lat_min"], rcfg["lat_max"]
         lon_min, lon_max = rcfg["lon_min"], rcfg["lon_max"]
+        og = rcfg.get("grid_deg", OUT_GRID)  # per-region output resolution
 
         lat_idx = np.where((lat >= lat_min) & (lat <= lat_max))[0]
         lon_idx = np.where((lon_180 >= lon_min) & (lon_180 <= lon_max))[0]
@@ -220,15 +243,15 @@ def convert_all_regions(only: Optional[str] = None) -> None:
             with np.errstate(invalid="ignore", divide="ignore"):
                 temp_smooth[t] = np.where(sm_den > 0.1, sm_num / sm_den, np.nan)
 
-        # Aggregate 0.5° → 1.0° (mean for temperature, not sum)
-        out_lats = np.arange(lat_min, lat_max, OUT_GRID)
-        out_lons = np.arange(lon_min, lon_max, OUT_GRID)
-        cen_lat  = out_lats + OUT_GRID / 2
-        cen_lon  = out_lons + OUT_GRID / 2
+        # Aggregate 0.5° → output grid (mean for temperature, not sum)
+        out_lats = np.arange(lat_min, lat_max, og)
+        out_lons = np.arange(lon_min, lon_max, og)
+        cen_lat  = out_lats + og / 2
+        cen_lon  = out_lons + og / 2
         n_lat, n_lon = len(out_lats), len(out_lons)
 
-        lat_bins = np.floor((sub_lat - lat_min) / OUT_GRID).astype(int)
-        lon_bins = np.floor((sub_lon - lon_min) / OUT_GRID).astype(int)
+        lat_bins = np.floor((sub_lat - lat_min) / og).astype(int)
+        lon_bins = np.floor((sub_lon - lon_min) / og).astype(int)
 
         temp_coarse = np.full((T, n_lat, n_lon), np.nan)
         for bi in range(n_lat):
@@ -253,7 +276,7 @@ def convert_all_regions(only: Optional[str] = None) -> None:
                 if sr is not None:
                     cell_info[(bi, bj)] = (float(clat), float(clon), sr)
 
-        print(f"  Output cells at {OUT_GRID}°: {len(cell_info)}")
+        print(f"  Output cells at {og}°: {len(cell_info)}")
 
         csv_path  = DATA_DIR / f"{region_key}_temp_monthly_grid.csv"
         meta_path = DATA_DIR / f"{region_key}_temp_meta.json"
@@ -281,10 +304,10 @@ def convert_all_regions(only: Optional[str] = None) -> None:
             "last_month":  last,
             "n_months":    T,
             "n_cells":     len(cell_info),
-            "grid_deg":    OUT_GRID,
+            "grid_deg":    og,
             "source":      "GHCN-CAMS 2m air temperature (NOAA PSL), 0.5° monthly",
             "variable":    "temp_c (degrees Celsius)",
-            "smoothing":   f"gaussian_sigma{GAUSS_SIGMA}_then_mean_aggregated_to_{OUT_GRID}deg",
+            "smoothing":   f"gaussian_sigma{GAUSS_SIGMA}_then_mean_aggregated_to_{og}deg",
             "states":      sorted({v[2] for v in cell_info.values()}),
         }
         with open(meta_path, "w") as f:
