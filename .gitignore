@@ -3,3 +3,10 @@ __pycache__/
 .env
 .claude/
 *.nc
+
+# Uncompressed source for the gzipped map grids (too large for GitHub);
+# regenerate with convert_global_precipitation.py / convert_temperature.py
+docs/data/global_monthly_grid.csv
+docs/data/global_temp_monthly_grid.csv
+docs/data/china_monthly_grid.csv
+docs/data/china_temp_monthly_grid.csv
