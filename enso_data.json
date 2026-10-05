@@ -1,26 +1,26 @@
 {
-  "fetched_utc": "2026-09-28T20:26:34.053596+00:00",
+  "fetched_utc": "2026-10-05T21:25:39.073503+00:00",
   "discussion": {
     "status": "El Ni\u00f1o Advisory",
     "synopsis": "El Ni\u00f1o is strengthening, with a greater than 90% chance of a very strong event during the Northern Hemisphere fall and winter 2026-27.",
     "issued": ""
   },
   "latest_weekly": {
-    "date": "2026-09-23",
-    "nino12": 25.4,
-    "nino12_anom": 4.7,
-    "nino3": 28.8,
-    "nino3_anom": 3.9,
-    "nino34": 29.7,
-    "nino34_anom": 3.1,
-    "nino4": 29.8,
-    "nino4_anom": 1.1
+    "date": "2026-09-30",
+    "nino12": 26.1,
+    "nino12_anom": 5.3,
+    "nino3": 29.0,
+    "nino3_anom": 4.0,
+    "nino34": 29.9,
+    "nino34_anom": 3.2,
+    "nino4": 29.9,
+    "nino4_anom": 1.2
   },
   "latest_oni": {
     "year": 2026,
-    "season": "JJA",
-    "sst": 29.09,
-    "oni": 1.8
+    "season": "JAS",
+    "sst": 29.12,
+    "oni": 2.16
   },
   "latest_roni": {
     "year": 2026,
@@ -29,17 +29,6 @@
     "roni": 1.5
   },
   "weekly_history": [
-    {
-      "date": "2025-10-01",
-      "nino12": 20.6,
-      "nino12_anom": -0.1,
-      "nino3": 24.6,
-      "nino3_anom": -0.3,
-      "nino34": 26.2,
-      "nino34_anom": -0.5,
-      "nino4": 28.3,
-      "nino4_anom": -0.4
-    },
     {
       "date": "2025-10-08",
       "nino12": 20.8,
@@ -571,13 +560,13 @@
     {
       "date": "2026-09-09",
       "nino12": 25.2,
-      "nino12_anom": 4.5,
+      "nino12_anom": 4.6,
       "nino3": 28.6,
       "nino3_anom": 3.7,
-      "nino34": 29.6,
-      "nino34_anom": 2.9,
-      "nino4": 29.6,
-      "nino4_anom": 0.9
+      "nino34": 29.5,
+      "nino34_anom": 2.8,
+      "nino4": 29.5,
+      "nino4_anom": 0.8
     },
     {
       "date": "2026-09-16",
@@ -600,15 +589,20 @@
       "nino34_anom": 3.1,
       "nino4": 29.8,
       "nino4_anom": 1.1
+    },
+    {
+      "date": "2026-09-30",
+      "nino12": 26.1,
+      "nino12_anom": 5.3,
+      "nino3": 29.0,
+      "nino3_anom": 4.0,
+      "nino34": 29.9,
+      "nino34_anom": 3.2,
+      "nino4": 29.9,
+      "nino4_anom": 1.2
     }
   ],
   "oni_history": [
-    {
-      "year": 2023,
-      "season": "JAS",
-      "sst": 28.21,
-      "oni": 1.25
-    },
     {
       "year": 2023,
       "season": "ASO",
@@ -818,6 +812,12 @@
       "season": "JJA",
       "sst": 29.09,
       "oni": 1.8
+    },
+    {
+      "year": 2026,
+      "season": "JAS",
+      "sst": 29.12,
+      "oni": 2.16
     }
   ],
   "roni_history": [
@@ -2303,7 +2303,6 @@
   ],
   "iri_strength": {
     "seasons": [
-      "SON",
       "OND",
       "NDJ",
       "DJF",
@@ -2311,7 +2310,8 @@
       "FMA",
       "MAM",
       "JAS",
-      "ASO"
+      "ASO",
+      "SON"
     ],
     "traces": [
       {
@@ -2382,8 +2382,8 @@
           0,
           0,
           0,
-          0,
           11,
+          0,
           0,
           0
         ],
@@ -2396,9 +2396,9 @@
           0,
           0,
           0,
-          0,
           17,
           22,
+          0,
           0,
           0
         ],
@@ -2408,21 +2408,20 @@
         "name": "Moderate El Ni\u00f1o",
         "y": [
           4,
-          4,
           0,
           0,
           16,
           22,
           33,
           12,
-          8
+          8,
+          4
         ],
         "color": "#ffa726"
       },
       {
         "name": "Strong El Ni\u00f1o",
         "y": [
-          15,
           8,
           23,
           20,
@@ -2430,14 +2429,14 @@
           39,
           28,
           35,
-          19
+          19,
+          15
         ],
         "color": "#ef5350"
       },
       {
         "name": "Very Strong El Ni\u00f1o",
         "y": [
-          81,
           88,
           77,
           80,
@@ -2445,19 +2444,20 @@
           22,
           6,
           54,
-          73
+          73,
+          81
         ],
         "color": "#b71c1c"
       }
     ],
     "model_counts": [
       26,
-      26,
       22,
       20,
       19,
       18,
       18,
+      26,
       26,
       26
     ],

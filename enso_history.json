@@ -2044,5 +2044,36 @@
       "synopsis": "El Ni\u00f1o is strengthening, with a greater than 90% chance of a very strong event during the Northern Hemisphere fall and winter 2026-27.",
       "issued": ""
     }
+  },
+  {
+    "fetched_utc": "2026-10-05T21:25:39.073503+00:00",
+    "latest_weekly": {
+      "date": "2026-09-30",
+      "nino12": 26.1,
+      "nino12_anom": 5.3,
+      "nino3": 29.0,
+      "nino3_anom": 4.0,
+      "nino34": 29.9,
+      "nino34_anom": 3.2,
+      "nino4": 29.9,
+      "nino4_anom": 1.2
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "JAS",
+      "sst": 29.12,
+      "oni": 2.16
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "El Ni\u00f1o is strengthening, with a greater than 90% chance of a very strong event during the Northern Hemisphere fall and winter 2026-27.",
+      "issued": ""
+    }
   }
 ]
