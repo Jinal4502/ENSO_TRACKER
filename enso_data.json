@@ -1041,7 +1041,7 @@
   "iri_images": {
     "cpc_probs": "https://cpc.ncep.noaa.gov/archives/enso/roni/images/2026/enso-probs-092026.png",
     "iri_sst_history": "https://iri.columbia.edu/wp-content/uploads/2026/09/figure2.png",
-    "iri_probs": "https://iri.columbia.edu/wp-content/uploads/2026/09/figure3.png",
+    "iri_probs": "https://iri.columbia.edu/wp-content/uploads/2026/08/figure3.png",
     "sst_plume": "https://ensoforecast.iri.columbia.edu/cgi-bin/sst_table_img?month=8&year=2026"
   },
   "iri_model_predictions": [

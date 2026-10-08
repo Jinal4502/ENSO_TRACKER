@@ -4,8 +4,28 @@ Takes the data dict from fetch_enso.py and writes a self-contained HTML dashboar
 No external dependencies — pure Python stdlib + inline JS/CSS.
 """
 
+import base64
 import json
 import os
+import urllib.request
+
+
+def _embed_image(url: str, timeout: int = 15) -> str:
+    """Download an image URL and return it as a base64 data URI.
+    IRI/CPC servers block hotlinking from GitHub Pages, causing broken images.
+    Falls back to the original URL if download fails."""
+    if not url:
+        return url
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "ENSOTracker/1.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            content_type = resp.headers.get("Content-Type", "image/png").split(";")[0].strip()
+            data = resp.read()
+        encoded = base64.b64encode(data).decode("ascii")
+        return f"data:{content_type};base64,{encoded}"
+    except Exception as exc:
+        print(f"  [WARN] Could not embed image {url}: {exc} — using URL fallback")
+        return url
 
 
 def classify(nino34_anom: float) -> tuple[str, str]:
@@ -108,9 +128,10 @@ def render(data: dict, output_path: str = "docs/index.html") -> None:
         for t in sp_traces
     ])
 
-    img_cpc       = iri_imgs.get("cpc_probs", "")
-    img_sst_hist  = iri_imgs.get("iri_sst_history", "")
-    img_iri_probs = iri_imgs.get("iri_probs", "")
+    print("  Embedding IRI/CPC figures as data URIs ...")
+    img_cpc       = _embed_image(iri_imgs.get("cpc_probs", ""))
+    img_sst_hist  = _embed_image(iri_imgs.get("iri_sst_history", ""))
+    img_iri_probs = _embed_image(iri_imgs.get("iri_probs", ""))
 
     # SST model predictions (from Playwright Highcharts extraction)
     import hashlib

@@ -365,7 +365,7 @@ def get_iri_image_urls() -> dict:
     now = datetime.now(timezone.utc)
     year, month = now.year, now.month
 
-    # Determine which month's figures are actually available
+    # Determine which month's figures are actually available (check figure2 first)
     fig_year, fig_month = year, month
     test_url = (f"https://iri.columbia.edu/wp-content/uploads/"
                 f"{fig_year}/{fig_month:02d}/figure2.png")
@@ -373,6 +373,15 @@ def get_iri_image_urls() -> dict:
         fig_year, fig_month = _prev_month(year, month)
         print(f"  [INFO] IRI figures not yet published for {year}/{month:02d} "
               f"— using {fig_year}/{fig_month:02d}")
+
+    # figure3 (probability forecast) may lag figure2 — check independently
+    fig3_year, fig3_month = fig_year, fig_month
+    test_fig3 = (f"https://iri.columbia.edu/wp-content/uploads/"
+                 f"{fig3_year}/{fig3_month:02d}/figure3.png")
+    if not _url_exists(test_fig3):
+        fig3_year, fig3_month = _prev_month(fig3_year, fig3_month)
+        print(f"  [INFO] IRI figure3 not yet published for "
+              f"{fig_year}/{fig_month:02d} — using {fig3_year}/{fig3_month:02d}")
 
     sst_year, sst_month = _prev_month(fig_year, fig_month)
 
@@ -387,7 +396,7 @@ def get_iri_image_urls() -> dict:
         ),
         "iri_probs": (
             f"https://iri.columbia.edu/wp-content/uploads/"
-            f"{fig_year}/{fig_month:02d}/figure3.png"
+            f"{fig3_year}/{fig3_month:02d}/figure3.png"
         ),
         "sst_plume": (
             f"https://ensoforecast.iri.columbia.edu/cgi-bin/"
