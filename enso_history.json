@@ -2199,5 +2199,36 @@
       "synopsis": "El Ni\u00f1o continues to strengthen, with a strong-to-very strong El Ni\u00f1o likely through January-March 2027 (remaining greater than an 83% chance).",
       "issued": ""
     }
+  },
+  {
+    "fetched_utc": "2026-11-09T23:19:20.795563+00:00",
+    "latest_weekly": {
+      "date": "2026-11-04",
+      "nino12": 27.0,
+      "nino12_anom": 5.6,
+      "nino3": 29.5,
+      "nino3_anom": 4.4,
+      "nino34": 30.1,
+      "nino34_anom": 3.3,
+      "nino4": 30.1,
+      "nino4_anom": 1.5
+    },
+    "latest_oni": {
+      "year": 2026,
+      "season": "ASO",
+      "sst": 29.23,
+      "oni": 2.46
+    },
+    "latest_roni": {
+      "year": 2026,
+      "month": 6,
+      "season": "Jun",
+      "roni": 1.5
+    },
+    "discussion": {
+      "status": "El Ni\u00f1o Advisory",
+      "synopsis": "El Ni\u00f1o continues to strengthen, with a strong-to-very strong El Ni\u00f1o likely through January-March 2027 (remaining greater than an 83% chance).",
+      "issued": ""
+    }
   }
 ]
