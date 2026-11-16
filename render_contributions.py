@@ -225,8 +225,9 @@ _HEAD = """\
   .filter-btn:hover { color:var(--text); }
   .filter-btn.active { color:#fff !important; font-weight:600; }
   /* Map */
-  .map-wrap { border-radius:10px; overflow:hidden; border:1px solid var(--border);
-    margin-bottom:.85rem; }
+  .map-wrap { border-radius:0; overflow:hidden; border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border); margin-bottom:.85rem;
+    margin-left:-1.5rem; margin-right:-1.5rem; }
   #map { height:82vh; min-height:500px; width:100%; background:#0d1117; }
   /* Legend */
   .legend { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.6rem;
@@ -314,6 +315,7 @@ _HEAD = """\
     background:#a855f7; display:inline-block; flex-shrink:0; }
   @media (max-width:600px) {
     body { padding:1rem; }
+    .map-wrap { margin-left:-1rem; margin-right:-1rem; }
     .stats { gap:1.2rem; }
     #map { height:60vh; }
   }
@@ -460,7 +462,7 @@ _TAIL = """\
       const c = cluster.getChildCount();
       const sz = c < 10 ? 36 : c < 20 ? 42 : 48;
       return L.divIcon({
-        html: `<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:rgba(168,85,247,.82);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.4);box-shadow:0 0 14px rgba(168,85,247,.55)">${c}</div>`,
+        html: `<div title="${c} contribution${c > 1 ? "s" : ""} in this area — click to zoom in" style="width:${sz}px;height:${sz}px;border-radius:50%;background:rgba(168,85,247,.82);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.4);box-shadow:0 0 14px rgba(168,85,247,.55)">${c}</div>`,
         className: "", iconSize: [sz, sz], iconAnchor: [sz / 2, sz / 2],
       });
     },
@@ -558,6 +560,9 @@ def render(entries: list) -> str:
   {_filter_btn("multiple", "Multiple",        "#a855f7")}
 </div>
 
+<p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">
+  Numbered circles group nearby markers — hover for count, click or zoom in to expand.
+</p>
 <div class="map-wrap">
   <div id="map"></div>
 </div>
