@@ -69,9 +69,6 @@ COORDS = {
 # Rows excluded after quality review — no substantive El Niño observation
 EXCLUDE_ROWS = {
     1,   # Ecuador – obs: "Observed" (single placeholder word)
-    5,   # India/Dhanbad – methodology description, not an observation
-    6,   # Qatar – "We are still analyzing…" — no data/severity
-    9,   # India/Bihar – "The overall state had faced the challenge." — meaningless
     33,  # Rwanda – "No number" — empty after cleaning
     39,  # UK – explicitly filling out form to stay in loop, not a contribution
 }
