@@ -50,7 +50,7 @@
   /* Map */
   .map-wrap { border-radius:10px; overflow:hidden; border:1px solid var(--border);
     margin-bottom:.85rem; }
-  #map { height:72vh; min-height:420px; width:100%; background:#0d1117; }
+  #map { height:82vh; min-height:500px; width:100%; background:#0d1117; }
   /* Legend */
   .legend { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.6rem;
     padding:.6rem .8rem; background:var(--card); border:1px solid var(--border);
@@ -1386,10 +1386,10 @@
     if (d.anon) {
       whoHtml = `<div class="pcard-who"><div class="pname">Anonymous Contributor</div></div>`;
     } else if (d.name) {
-      const parts = [d.role, d.affil].filter(Boolean).join(" &middot; ");
+      const parts = [d.role, d.affil].filter(Boolean).map(s => esc(s)).join(" · ");
       whoHtml = `<div class="pcard-who">
         <div class="pname">${esc(d.name)}</div>
-        ${parts ? `<div class="pmeta">${esc(parts)}</div>` : ""}
+        ${parts ? `<div class="pmeta">${parts}</div>` : ""}
       </div>`;
     }
 
