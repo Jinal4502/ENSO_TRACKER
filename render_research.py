@@ -310,6 +310,7 @@ details[open] .sources-summary::before { content: "▾ "; }
     <a href="impacts.html">Impacts</a>
     <a href="facts.html">Quick Facts</a>
     <a href="research.html" class="nav-active">Research</a>
+    <a href="contributions.html">Contributions</a>
   </div>
 </nav>
 

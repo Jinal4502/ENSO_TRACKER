@@ -321,6 +321,7 @@ def render_hurricanes(data: dict, output: str = "docs/hurricanes.html") -> None:
     <a href="impacts.html">Impacts</a>
     <a href="facts.html">Quick Facts</a>
     <a href="research.html">Research</a>
+    <a href="contributions.html">Contributions</a>
   </div>
 </nav>
 <h1>Global Tropical Cyclone Tracks &amp; ENSO</h1>

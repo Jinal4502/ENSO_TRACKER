@@ -187,6 +187,7 @@ def render_precipitation(meta: dict, output_path: str = "docs/precipitation.html
     <a href="impacts.html">Impacts</a>
     <a href="facts.html">Quick Facts</a>
     <a href="research.html">Research</a>
+    <a href="contributions.html">Contributions</a>
   </div>
 </nav>
 

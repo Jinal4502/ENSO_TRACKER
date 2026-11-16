@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Niño Contributions · ENSO Tracker</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<style>
+  :root {
+    --accent: hsl(265,75%,62%);
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    padding: 1.5rem; }
+  /* Nav */
+  .topnav { display:flex; align-items:center; justify-content:space-between;
+    padding:.5rem 0; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }
+  .nav-brand { font-weight:700; font-size:.95rem; color:var(--text); text-decoration:none; }
+  .nav-links { display:flex; gap:.4rem; flex-wrap:wrap; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:.82rem;
+    padding:.3rem .7rem; border-radius:5px; }
+  .nav-links a:hover { color:var(--text); background:var(--card); }
+  .nav-links a.nav-active { color:#fff; background:var(--accent); font-weight:600; }
+  /* Header */
+  h1 { font-size:1.4rem; font-weight:700; margin-bottom:.2rem; }
+  .subtitle { color:var(--muted); font-size:.85rem; margin-bottom:1.2rem; }
+  /* Stats */
+  .stats { display:flex; gap:2rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .stat { display:flex; flex-direction:column; }
+  .stat-num { font-size:1.6rem; font-weight:700; color:var(--accent); line-height:1; }
+  .stat-label { font-size:.7rem; color:var(--muted); text-transform:uppercase;
+    letter-spacing:.06em; margin-top:.18rem; }
+  /* Filters */
+  .filters { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:.85rem; align-items:center; }
+  .filters-label { font-size:.72rem; color:var(--muted); text-transform:uppercase;
+    letter-spacing:.05em; margin-right:.2rem; }
+  .filter-btn { background:var(--card); border:1px solid var(--border); color:var(--muted);
+    font-size:.78rem; padding:.3rem .75rem; border-radius:20px; cursor:pointer;
+    transition:all .15s; white-space:nowrap; }
+  .filter-btn:hover { color:var(--text); }
+  .filter-btn.active { color:#fff !important; font-weight:600; }
+  /* Map */
+  .map-wrap { border-radius:10px; overflow:hidden; border:1px solid var(--border);
+    margin-bottom:.85rem; }
+  #map { height:72vh; min-height:420px; width:100%; background:#0d1117; }
+  /* Legend */
+  .legend { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.6rem;
+    padding:.6rem .8rem; background:var(--card); border:1px solid var(--border);
+    border-radius:8px; align-items:center; }
+  .legend-title { font-size:.7rem; color:var(--muted); text-transform:uppercase;
+    letter-spacing:.05em; margin-right:.3rem; }
+  .leg-item { display:flex; align-items:center; gap:.35rem; font-size:.75rem;
+    color:var(--muted); cursor:pointer; padding:.15rem .3rem; border-radius:4px;
+    transition:.12s; }
+  .leg-item:hover { color:var(--text); background:rgba(255,255,255,.04); }
+  .leg-dot { width:11px; height:11px; border-radius:50%; border:1.5px solid rgba(255,255,255,.25);
+    flex-shrink:0; }
+  .leg-sev { font-size:.7rem; color:var(--muted); margin-left:.8rem;
+    padding-left:.8rem; border-left:1px solid var(--border); }
+  /* Popup */
+  .leaflet-popup-content-wrapper {
+    background:#1c2130;
+    border:1px solid #2d3550;
+    border-radius:10px;
+    box-shadow:0 12px 40px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.04);
+    padding:0;
+    max-width:380px;
+    overflow:hidden;
+  }
+  .leaflet-popup-content { margin:0 !important; width:100% !important; }
+  .leaflet-popup-tip-container { margin-top:-1px; }
+  .leaflet-popup-tip { background:#1c2130; }
+  .leaflet-popup-close-button {
+    color:#8b949e !important; top:9px !important; right:11px !important;
+    font-size:17px !important; font-weight:400 !important; z-index:10;
+  }
+  .leaflet-popup-close-button:hover { color:#e6edf3 !important; }
+  /* Popup card */
+  .pcard { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    color:#c9d1d9; }
+  .pcard-head { padding:.75rem 2.2rem .6rem 1rem; border-bottom:1px solid #2d3550;
+    display:flex; justify-content:space-between; align-items:center; gap:.6rem;
+    flex-wrap:wrap; }
+  .phazard-badge { font-size:.7rem; font-weight:700; text-transform:uppercase;
+    letter-spacing:.06em; padding:.22rem .6rem; border-radius:4px; white-space:nowrap; }
+  .psev-row { display:flex; align-items:center; gap:.35rem; }
+  .psev-dot { width:7px; height:7px; border-radius:50%; background:#2d3550; flex-shrink:0; }
+  .psev-dot.on { background:currentColor; }
+  .psev-text { font-size:.68rem; color:#8b949e; white-space:nowrap; }
+  .pcard-loc { padding:.45rem 1rem; font-size:.82rem; color:#8b949e;
+    border-bottom:1px solid #2d3550; display:flex; align-items:baseline; gap:.4rem;
+    flex-wrap:wrap; }
+  .pcard-loc strong { color:#c9d1d9; }
+  .pcard-loc .pwhen { font-size:.72rem; color:#6e7681; }
+  .pcard-who { padding:.5rem 1rem; border-bottom:1px solid #2d3550; }
+  .pcard-who .pname { font-size:.88rem; font-weight:600; color:#e6edf3; }
+  .pcard-who .pmeta { font-size:.74rem; color:#8b949e; margin-top:.15rem; line-height:1.4; }
+  .pcard-what { padding:.38rem 1rem; border-bottom:1px solid #2d3550;
+    font-size:.72rem; color:#8b949e; }
+  .pcard-what em { font-style:normal; color:#a78bfa; }
+  .pcard-tags { padding:.5rem 1rem; border-bottom:1px solid #2d3550;
+    display:flex; flex-wrap:wrap; gap:.3rem; }
+  .ptag { font-size:.67rem; padding:.15rem .4rem; border-radius:3px;
+    background:#21262d; color:#8b949e; border:1px solid #2d3550; }
+  .pcard-obs { padding:.6rem 1rem; font-size:.8rem; line-height:1.6; color:#c9d1d9;
+    border-bottom:1px solid #2d3550; max-height:170px; overflow-y:auto;
+    white-space:pre-wrap; }
+  .pcard-obs::-webkit-scrollbar { width:4px; }
+  .pcard-obs::-webkit-scrollbar-track { background:transparent; }
+  .pcard-obs::-webkit-scrollbar-thumb { background:#30363d; border-radius:2px; }
+  .pcard-links { padding:.5rem 1rem; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .plink { font-size:.72rem; color:#58a6ff; text-decoration:none; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; max-width:320px; display:inline-block; }
+  .plink:hover { text-decoration:underline; }
+  /* Cluster */
+  .marker-cluster-small,
+  .marker-cluster-medium,
+  .marker-cluster-large { background:transparent !important; }
+  .marker-cluster-small div,
+  .marker-cluster-medium div,
+  .marker-cluster-large div {
+    background:rgba(168,85,247,.75) !important;
+    color:#fff !important; font-weight:700; font-size:.78rem;
+    border:2px solid rgba(255,255,255,.35) !important;
+  }
+  /* Severity legend circles */
+  .leg-sev-row { display:flex; align-items:center; gap:.5rem; }
+  .sev-circle { border-radius:50%; border:1.5px solid rgba(255,255,255,.3);
+    background:#a855f7; display:inline-block; flex-shrink:0; }
+  @media (max-width:600px) {
+    body { padding:1rem; }
+    .stats { gap:1.2rem; }
+    #map { height:60vh; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <a class="nav-brand" href="index.html">ENSO Tracker</a>
+  <div class="nav-links">
+    <a href="index.html">ENSO Dashboard</a>
+    <a href="hurricanes.html">Cyclone Tracker</a>
+    <a href="precipitation.html">Precipitation</a>
+    <a href="temperature.html">Land Temp</a>
+    <a href="sst.html">Sea Surface Temp</a>
+    <a href="impacts.html">Impacts</a>
+    <a href="facts.html">Quick Facts</a>
+    <a href="research.html">Research</a>
+    <a href="contributions.html" class="nav-active">Contributions</a>
+  </div>
+</nav>
+<h1>El Niño 2026-27 · Global Impact Contributions</h1>
+<p class="subtitle">Observations, analyses, and outlooks submitted by researchers and practitioners worldwide. Click any marker to explore.</p>
+<div class="stats">
+  <div class="stat"><span class="stat-num">40</span><span class="stat-label">Contributions</span></div>
+  <div class="stat"><span class="stat-num">21</span><span class="stat-label">Countries</span></div>
+  <div class="stat"><span class="stat-num" id="vis-count">40</span><span class="stat-label">Visible</span></div>
+</div>
+
+<div class="filters">
+  <span class="filters-label">Filter:</span>
+  <button class="filter-btn active" data-hkey="all" data-color="" style="background:var(--accent);color:#fff;border-color:transparent">All</button>
+  <button class="filter-btn" data-hkey="drought" data-color="#f97316">Drought</button>
+  <button class="filter-btn" data-hkey="flood" data-color="#3b82f6">Riverine Flood</button>
+  <button class="filter-btn" data-hkey="flash" data-color="#06b6d4">Flash Flood</button>
+  <button class="filter-btn" data-hkey="heat" data-color="#ef4444">Heatwave</button>
+  <button class="filter-btn" data-hkey="fire" data-color="#c2410c">Wildfire</button>
+  <button class="filter-btn" data-hkey="rain_hi" data-color="#60a5fa">&#8593; Rainfall</button>
+  <button class="filter-btn" data-hkey="rain_lo" data-color="#fbbf24">&#8595; Rainfall</button>
+  <button class="filter-btn" data-hkey="multiple" data-color="#a855f7">Multiple</button>
+</div>
+
+<div class="map-wrap">
+  <div id="map"></div>
+</div>
+
+<div class="legend">
+  <span class="legend-title">Hazard</span>
+  <div class="leg-item" data-hkey="drought"><div class="leg-dot" style="background:#f97316"></div>Drought</div>
+  <div class="leg-item" data-hkey="flood"><div class="leg-dot" style="background:#3b82f6"></div>Riverine Flood</div>
+  <div class="leg-item" data-hkey="flash"><div class="leg-dot" style="background:#06b6d4"></div>Flash Flood</div>
+  <div class="leg-item" data-hkey="heat"><div class="leg-dot" style="background:#ef4444"></div>Heatwave</div>
+  <div class="leg-item" data-hkey="fire"><div class="leg-dot" style="background:#c2410c"></div>Wildfire</div>
+  <div class="leg-item" data-hkey="rain_hi"><div class="leg-dot" style="background:#60a5fa"></div>&uarr; Rainfall</div>
+  <div class="leg-item" data-hkey="rain_lo"><div class="leg-dot" style="background:#fbbf24"></div>&darr; Rainfall</div>
+  <div class="leg-item" data-hkey="multiple"><div class="leg-dot" style="background:#a855f7"></div>Multiple</div>
+  <span class="leg-sev">
+    <div class="leg-sev-row">
+      <div class="sev-circle" style="width:9px;height:9px"></div>
+      <div class="sev-circle" style="width:14px;height:14px"></div>
+      <div class="sev-circle" style="width:19px;height:19px"></div>
+      <div class="sev-circle" style="width:24px;height:24px"></div>
+      <div class="sev-circle" style="width:29px;height:29px"></div>
+      <span style="font-size:.7rem;color:var(--muted);margin-left:.3rem">Minor → Extreme</span>
+    </div>
+  </span>
+</div>
+
+<script>const DATA = [
+  {
+    "id": 1,
+    "lat": -0.18,
+    "lon": -78.47,
+    "country": "Ecuador",
+    "place": "Quito",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Hydropower and energy",
+      "Public health",
+      "Ecosystems",
+      "Livelihoods and income",
+      "Food prices",
+      "Displacement and migration"
+    ],
+    "when": "Sep 2026",
+    "obs": "",
+    "links": [],
+    "name": "Christian Franco-Crespo",
+    "role": "Researcher",
+    "affil": "Central University of Ecuador",
+    "anon": false
+  },
+  {
+    "id": 2,
+    "lat": -1.0,
+    "lon": -79.5,
+    "country": "Ecuador",
+    "place": "Enso influence zone",
+    "hazard": "Above-normal rainfall",
+    "hkey": "rain_hi",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Fisheries",
+      "Water supply",
+      "Hydropower and energy",
+      "Public health",
+      "Infrastructure and transport",
+      "Livelihoods and income",
+      "Food prices"
+    ],
+    "when": "Aug 2026",
+    "obs": "It is a predicted ENSO influence plus climate change",
+    "links": [],
+    "name": "Sheila Serrani",
+    "role": "Researcher",
+    "affil": "Universidad Politécnica Salesiana",
+    "anon": false
+  },
+  {
+    "id": 3,
+    "lat": 37.57,
+    "lon": 127.0,
+    "country": "South Korea",
+    "place": "Seoul",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Hydropower and energy",
+      "Ecosystems"
+    ],
+    "when": "Mar 2027",
+    "obs": "South Korea relies heavily on summer monsoon precipitation to secure its annual water resources. However, recent anomalous climatic shifts, potentially linked to the developing Super El Niño, have severely disrupted our crucial summer and autumn rainfall. Because the Korean winter is naturally dry, this preceding deficit means our major river basins and reservoirs are entering the dry season at critically low levels. We are on a direct trajectory toward a severe nationwide drought by early 2027 (March). This impending crisis will drastically impact municipal and agricultural water supplies. Additionally, depleted reservoir levels will constrain hydroelectric power generation and strain the energy grid. Furthermore, prolonged low river runoff poses an acute threat to the survival of our freshwater ecosystems. I propose this study investigate how El Niño-driven disruptions to critical summer monsoons cascade into severe spring water emergencies in highly seasonal climates.",
+    "links": [],
+    "name": "Hyun-Han Kwon",
+    "role": "Researcher",
+    "affil": "University of Seoul",
+    "anon": false
+  },
+  {
+    "id": 4,
+    "lat": 50.0,
+    "lon": -84.5,
+    "country": "Canada",
+    "place": "Northern Ontario",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 5,
+    "sev_label": "Extreme",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Water supply",
+      "Hydropower and energy",
+      "Public health",
+      "Infrastructure and transport",
+      "Livelihoods and income",
+      "Displacement and migration"
+    ],
+    "when": "Jul 2026",
+    "obs": "Significant summer storms this summer in Saskatchewan and Manitoba, large forest fires in Ontario",
+    "links": [],
+    "name": null,
+    "role": null,
+    "affil": null,
+    "anon": true
+  },
+  {
+    "id": 5,
+    "lat": 23.79,
+    "lon": 86.43,
+    "country": "India",
+    "place": "Dhanbad",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Water supply"
+    ],
+    "when": "Oct 2026",
+    "obs": "Uncertainty assessment of Aet for indian mainland recent and future climate change",
+    "links": [],
+    "name": "Rahul kumar",
+    "role": "Researcher",
+    "affil": "IIT (ISM) Dhanbad",
+    "anon": false
+  },
+  {
+    "id": 6,
+    "lat": 25.28,
+    "lon": 51.52,
+    "country": "Qatar",
+    "place": "Middle East and North Africa",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": null,
+    "sev_label": "",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Water supply",
+      "Hydropower and energy"
+    ],
+    "when": "",
+    "obs": "We are still analyzing the impacts on heat, rain, and water availability",
+    "links": [],
+    "name": "Hamid Norouzi",
+    "role": "Practitioner",
+    "affil": "City University of New York - City Tech",
+    "anon": false
+  },
+  {
+    "id": 7,
+    "lat": -2.5,
+    "lon": 37.8,
+    "country": "Kenya",
+    "place": "Lower Makueni",
+    "hazard": "Riverine flood",
+    "hkey": "flood",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income",
+      "Food prices",
+      "Displacement and migration"
+    ],
+    "when": "Oct 2026",
+    "obs": "The river beds along river Athi and Kikuu are shallow. River Kikuu which pours its water to River Athi  cannot penetrate in to it when full into its capacity because of the high level. This pushes river Kikuu water back wards finding it way to areas along the riverline. Streams also pouring water to river Kikuu are also affected. The riverbanks burst, change course at some points and wash soil, crops and other property along the rivers. Wildlife like hippopotamus are flushed out of River Athi and roam around. Soil erosion and washed dirt contaminate the water. Crossing the rivers become a problem with the only bridge being at Kiaoni and Kiangini. The streams drift culverts or manual rubber boats for crossing  river Athi (Called Domboro) becames unaccessible",
+    "links": [],
+    "name": "Solomon Mbivya",
+    "role": "NGO or international organization",
+    "affil": "World Vision Kenya",
+    "anon": false
+  },
+  {
+    "id": 8,
+    "lat": 17.5,
+    "lon": 121.5,
+    "country": "Philippines",
+    "place": "Northern Luzon Island and Luzon Strait",
+    "hazard": "Above-normal rainfall",
+    "hkey": "rain_hi",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Ecosystems"
+    ],
+    "when": "Dec 2026",
+    "obs": "When the cold PDO regime since May 2020 encounters the 2026/27 Super El Niño, the expected drought in the northern Luzon Island will be relieved and modulated by the ongoing cold-phase PDO. This will impact the riverine discharge from the Cagayan River due to the Above-normal precipitation in the river's basin. Ultimately, the sea surface chlorophyll-a in the coastal northern Luzon Island is expected to be more than the typical El Niño-senario and transported to the South China Sea by enhanced Kuroshio intrusion.",
+    "links": [],
+    "name": "Yu-Hao Tseng",
+    "role": "Student",
+    "affil": "Department of Marine Environmental Informatics, National Taiwan Ocean University",
+    "anon": false
+  },
+  {
+    "id": 9,
+    "lat": 25.1,
+    "lon": 85.3,
+    "country": "India",
+    "place": "Bihar ,India",
+    "hazard": "Heatwave",
+    "hkey": "heat",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops"
+    ],
+    "when": "",
+    "obs": "The overall state had faced the challenge.",
+    "links": [],
+    "name": "Sagar Kumar",
+    "role": "Researcher",
+    "affil": "IIT GUWAHATI",
+    "anon": false
+  },
+  {
+    "id": 10,
+    "lat": 23.03,
+    "lon": 72.59,
+    "country": "India",
+    "place": "",
+    "hazard": "Heatwave",
+    "hkey": "heat",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Expert analysis",
+    "sectors": [
+      "Public health"
+    ],
+    "when": "Before 2026",
+    "obs": "Heatwaves are becoming an increasing concern in Indian cities, particularly in rapidly urbanizing areas such as Ahmedabad and Surat. Our recent study, published in Environmental Research Letters (2025), examined indoor and outdoor urban microclimates across 93 households in these two cities using hourly temperature and humidity observations collected over approximately one year.\n\nWe found that urban heat exposure varies considerably across locations and between indoor and outdoor environments. Areas with greater building density tended to experience higher nighttime outdoor temperatures, while vegetation generally helped reduce heat exposure. These findings suggest that densely built neighborhoods with limited green spaces may face greater heat stress, particularly during extreme heat events.\n\nOutdoor workers, elderly people, children, and households with limited access to cooling may be especially vulnerable. As heatwaves become more frequent and intense, improving urban greenery, building design, and neighborhood-level heat monitoring will be increasingly important for protecting public health.",
+    "links": [],
+    "name": "Yusuf Jamal",
+    "role": "Researcher",
+    "affil": "Integral University",
+    "anon": false
+  },
+  {
+    "id": 11,
+    "lat": -7.5,
+    "lon": 112.5,
+    "country": "Indonesia",
+    "place": "East Java Province, Indonesia",
+    "hazard": "Below-normal rainfall",
+    "hkey": "rain_lo",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Oct 2026",
+    "obs": "East Java, Indonesia, faces potential hydroclimatic risks associated with the developing 2026/27 El Niño, particularly delayed rainfall onset, prolonged dry conditions, and localized water scarcity. BMKG's recent seasonal assessments indicate a delayed onset of the rainy season across much of Indonesia, with parts of East Java potentially experiencing very low rainfall through November 2026.\n\nFrom a civil engineering and climate-risk perspective, these conditions could affect agricultural water demand, reservoir storage, groundwater availability, and infrastructure operations. Rural communities, agricultural producers, and water-dependent sectors may face increased vulnerability where existing water resources are limited.\n\nI recommend integrating ERA5 reanalysis, ground-based meteorological observations, satellite precipitation estimates, and hydrological indicators to evaluate rainfall anomalies, drought development, and spatial variations in vulnerability. Comparing the 2026/27 event with historical El Niño episodes could help identify emerging risks, assess preparedness measures, and support evidence-based water management and infrastructure resilience planning.\n\nThis contribution represents a prospective risk assessment rather than a confirmed field observation.",
+    "links": [
+      "https://www.bmkg.go.id/iklim/prediksi-musim/prediksi-musim-hujan-2026-2027-di-indonesia",
+      "https://www.bmkg.go.id/iklim/dinamika-atmosfer/analisis-dinamika-atmosfer-dasarian-iii-september-2026",
+      "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 12,
+    "lat": 24.0,
+    "lon": 76.0,
+    "country": "India",
+    "place": "",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops"
+    ],
+    "when": "",
+    "obs": "The summer monsoon drought and its impact on several sectors (agriculture, water availability, hydropower etc) will be examined in context of Super El Nino in India.",
+    "links": [],
+    "name": "Vimal Mishra",
+    "role": "Researcher",
+    "affil": "IIT Gandhinagar",
+    "anon": false
+  },
+  {
+    "id": 13,
+    "lat": -8.6,
+    "lon": 116.3,
+    "country": "Indonesia",
+    "place": "West Nusa Tenggara (NTB), Indonesia",
+    "hazard": "Below-normal rainfall",
+    "hkey": "rain_lo",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Oct 2026",
+    "obs": "West Nusa Tenggara (NTB), Indonesia, faces potential water security and agricultural risks associated with the strong 2026/27 El Niño event. According to BMKG's seasonal outlook, approximately 93% of the province is expected to enter the rainy season in December 2026, while parts of NTB may experience monthly rainfall below 50 mm during October–November 2026.\n\nThese conditions could increase pressure on agricultural irrigation, livestock water availability, household water supplies, and rural livelihoods, particularly in communities dependent on seasonal rainfall.\n\nFrom a climate-risk and infrastructure perspective, I recommend integrating ERA5 reanalysis, satellite-based precipitation estimates, meteorological station observations, and drought indicators to assess rainfall deficits and potential impacts on water resources.\n\nPriority actions include monitoring reservoir storage, assessing irrigation water demand, improving drought early-warning communication, and identifying vulnerable agricultural communities. Comparing the emerging 2026/27 conditions with previous El Niño episodes could also support regional preparedness and evidence-based adaptation.\n\nThis assessment is based on publicly available meteorological outlooks rather than independent field observations.",
+    "links": [
+      "https://staklim-ntb.bmkg.go.id/",
+      "https://www.bmkg.go.id/iklim/dinamika-atmosfer/analisis-dinamika-atmosfer-dasarian-iii-september-2026",
+      "https://www.bmkg.go.id/iklim/prediksi-musim-hujan-2026-2027-di-indonesia"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 14,
+    "lat": 13.5,
+    "lon": 38.0,
+    "country": "Ethiopia",
+    "place": "Tekeze Basin, Ethiopia, Horn of Africa",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 5,
+    "sev_label": "Extreme",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Livelihoods and income"
+    ],
+    "when": "Sep 2026",
+    "obs": "In Ethiopia, the 2026 El Niño has contributed to below-average and delayed rainfall during the June–September Kiremt rainy season, particularly in northern, central, and eastern areas. According to FEWS NET, rainfall deficits reached approximately 40–70% below normal across parts of northern, eastern, and central Ethiopia during June–July 2026. \n\nThe most affected groups include smallholder farmers, pastoralists, internally displaced people, and low-income households who depend on rain-fed agriculture and livestock. Reduced rainfall threatens crop production, pasture availability, livestock productivity, and household food security, potentially increasing food prices and humanitarian needs. \n\nMeanwhile, the October–December 2026 outlook indicates a 90% chance of enhanced rainfall over southern Ethiopia, increasing the risk of river flooding, flash floods, crop damage, and displacement in vulnerable areas.",
+    "links": [
+      "https://fews.net/east-africa/ethiopia/key-message-update/july-2026"
+    ],
+    "name": "Belaynesh Haftu Teweldemedhin",
+    "role": "Researcher",
+    "affil": "Aksum University",
+    "anon": false
+  },
+  {
+    "id": 15,
+    "lat": -3.5,
+    "lon": 104.5,
+    "country": "Indonesia",
+    "place": "South Sumatra Province, Indonesia",
+    "hazard": "Wildfire",
+    "hkey": "fire",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Sep 2026",
+    "obs": "South Sumatra, Indonesia, faces elevated drought and peatland fire risks associated with the ongoing strong 2026/27 El Niño event. BMKG's October 2026 climate outlook indicates predominantly low rainfall across the province during the second and third ten-day periods of October, potentially increasing vegetation dryness and the vulnerability of peatland ecosystems.\n\nProlonged dry conditions could increase the likelihood of forest and land fires, with potential consequences for air quality, public health, agricultural productivity, transportation, and local livelihoods.\n\nFrom a climate-risk and infrastructure resilience perspective, I recommend integrating ERA5 reanalysis, satellite precipitation estimates, fire hotspot observations, peatland groundwater levels, and meteorological station records to assess evolving hazards and regional vulnerability.\n\nPriority measures include improving early-warning systems, monitoring peatland moisture conditions, strengthening fire prevention, and identifying communities and transportation corridors exposed to smoke hazards.\n\nThis contribution is based on publicly available meteorological information and represents a prospective risk assessment rather than independently verified field observations.",
+    "links": [
+      "https://staklim-sumsel.bmkg.go.id/2026/10/",
+      "https://www.bmkg.go.id/berita/bmkg-perkuat-langkah-preventif-hadapi-musim-kemarau-dan-potensi-karhutla-di-sumatera-selatan",
+      "https://www.bmkg.go.id/iklim/prediksi-musim-hujan-2026-2027-di-indonesia"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 16,
+    "lat": -9.4,
+    "lon": 124.9,
+    "country": "Indonesia",
+    "place": "Timor Island, East Nusa Tenggara Province, Indonesia",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Public health",
+      "Livelihoods and income"
+    ],
+    "when": "Oct 2026",
+    "obs": "Timor Island in East Nusa Tenggara, Indonesia, faces potential drought and rural water security challenges associated with the strong 2026/27 El Niño event. BMKG's October 2026 climate assessment indicates meteorological drought warnings in parts of East Nusa Tenggara, with some areas potentially experiencing monthly rainfall below 50 mm during October–November 2026.\n\nProlonged dry conditions may reduce surface water availability, constrain livestock watering and agricultural irrigation, and increase pressure on rural communities dependent on seasonal rainfall. Households with limited access to reliable water infrastructure may face particular challenges.\n\nI recommend integrating ERA5 reanalysis, satellite precipitation estimates, meteorological observations, and standardized drought indices to evaluate rainfall deficits and identify vulnerable locations. Additional monitoring of groundwater, reservoirs, livestock water requirements, and community water access could support targeted adaptation measures.\n\nPriority actions include strengthening drought early-warning systems, improving water storage and distribution, and developing locally appropriate preparedness strategies.\n\nThis assessment is based on publicly available meteorological information rather than independent field observations.",
+    "links": [
+      "https://www.bmkg.go.id/iklim/dinamika-atmosfer/analisis-dinamika-atmosfer-dasarian-iii-september-2026",
+      "https://www.bmkg.go.id/iklim/prediksi-musim/prediksi-musim-hujan-2026-2027-di-indonesia",
+      "https://www.bmkg.go.id/iklim/prediksi-hujan-bulanan/curah-hujan-deterministik"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 17,
+    "lat": -4.5,
+    "lon": 120.3,
+    "country": "Indonesia",
+    "place": "Bone and Wajo Regencies, South Sulawesi, Indonesia",
+    "hazard": "Below-normal rainfall",
+    "hkey": "rain_lo",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Livelihoods and income",
+      "Food prices"
+    ],
+    "when": "Nov 2026",
+    "obs": "Parts of South Sulawesi, Indonesia, may experience agricultural and water management challenges associated with the strong 2026/27 El Niño event. BMKG's October 2026 outlook indicates below-normal rainfall conditions across several areas, including Bone and Wajo Regencies.\n\nReduced rainfall could affect irrigation reliability, agricultural water availability, and crop production, particularly in rain-dependent farming communities. Prolonged rainfall deficits may also increase competition between agricultural, domestic, and environmental water demands.\n\nFrom a climate-risk and civil engineering perspective, I recommend integrating ERA5 reanalysis, satellite precipitation data, meteorological station observations, and hydrological monitoring to evaluate rainfall anomalies and emerging water shortages. Assessing irrigation system performance, reservoir operations, and agricultural exposure could help identify vulnerable areas.\n\nPriority recommendations include strengthening drought early-warning systems, improving irrigation efficiency, monitoring water storage, and coordinating water allocation during dry periods.\n\nThis is a prospective assessment based on publicly available climate forecasts, not independently verified field observations.",
+    "links": [
+      "https://www.bmkg.go.id/iklim/prediksi-hujan-bulanan/curah-hujan-deterministik",
+      "https://www.bmkg.go.id/iklim/prediksi-hujan-dasarian/sifat-hujan-deterministik",
+      "https://www.bmkg.go.id/iklim/dinamika-atmosfer/analisis-dinamika-atmosfer-dasarian-iii-september-2026"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 18,
+    "lat": -8.65,
+    "lon": 115.2,
+    "country": "Indonesia",
+    "place": "Badung Regency (Kuta, Seminyak, Canggu and Nusa Dua), Bali, Indonesia",
+    "hazard": "Below-normal rainfall",
+    "hkey": "rain_lo",
+    "severity": 2,
+    "sev_label": "Low",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Nov 2026",
+    "obs": "Bali, Indonesia, faces potential water security challenges as the 2026/27 El Niño coincides with substantial tourism-related water demand. BMKG's October 2026 assessment identifies drought warnings in parts of Bali and the possibility of very low rainfall during October. Historical research has also documented increasing tourism water consumption and groundwater pressures, particularly in Badung Regency.\n\nReduced rainfall could constrain groundwater recharge, agricultural irrigation, and municipal water supplies, potentially intensifying competition among hotels, households, and farming communities.\n\nI recommend integrating ERA5 reanalysis, CHIRPS precipitation estimates, groundwater monitoring, reservoir storage records, and tourism water-demand indicators to evaluate emerging risks. Priority measures include drought early warning, water-use efficiency, groundwater protection, rainwater harvesting, and equitable allocation strategies.\n\nMonitoring how residents, farmers, tourism operators, and water utilities prepare and respond would provide valuable lessons for climate-resilient water management.\n\nThis assessment draws on publicly available forecasts and historical research, not independent field observations of the 2026/27 event.",
+    "links": [
+      "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml",
+      "https://www.bmkg.go.id/iklim/dinamika-atmosfer/analisis-dinamika-atmosfer-dasarian-iii-september-2026",
+      "https://www.inajl.org/index.php/inajl/article/view/14",
+      "https://www.sciencedirect.com/science/article/pii/S0160738320302632",
+      "https://www.sciencedirect.com/science/article/pii/S0160738312000047"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 19,
+    "lat": -1.68,
+    "lon": 113.4,
+    "country": "Indonesia",
+    "place": "Central Kalimantan Province, Indonesian Borneo",
+    "hazard": "Wildfire",
+    "hkey": "fire",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income",
+      "Displacement and migration"
+    ],
+    "when": "Sep 2026",
+    "obs": "Central Kalimantan, Indonesia, is experiencing heightened forest and peatland fire activity during the 2026 El Niño-associated dry season. According to Indonesia's Ministry of Forestry, 122 high-confidence satellite hotspots were detected in the province on 9 October 2026, up from 86 the previous day. These detections indicate increased fire-related thermal activity but do not independently establish the number or extent of actual fires.\n\nPeatland fires pose serious risks to ecosystems, air quality, public health, and local livelihoods. Historical research demonstrates that El Niño-related drought, peat drainage, and falling groundwater levels can amplify fire vulnerability.\n\nI recommend integrating NASA FIRMS hotspot observations, satellite-derived soil moisture, groundwater monitoring, ERA5 reanalysis, and PM2.5 measurements to assess evolving fire and haze risks. Priority measures include peatland rewetting, verified hotspot response, community-based prevention, and coordinated smoke-health warnings.\n\nThis assessment synthesizes publicly available official observations and peer-reviewed research rather than firsthand field monitoring.",
+    "links": [
+      "https://www.kehutanan.go.id/news/kemenhut-fokus-pantau-hotspot-karhutla-kalimantan-tengah",
+      "https://science.nasa.gov/missions/aqua/peatland-fires-darken-skies-in-indonesia/",
+      "https://www.bmkg.go.id/cuaca/potensi-hujan-sepekan/prakiraan-cuaca-indonesia-sepekan-periode-09-15-oktober-2026-meski-kemarau-mendominasi-potensi-hujan-masih-ada-di-sejumlah-wilayah",
+      "https://sipongi.gakkum.kehutanan.go.id/",
+      "https://sipongi.gakkum.kehutanan.go.id/indikasi-luas-kebakaran"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 20,
+    "lat": -8.47,
+    "lon": 140.4,
+    "country": "Indonesia",
+    "place": "Merauke Regency, South Papua Province, Indonesia — particularly Kurik and Tanah Miring Districts",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 2,
+    "sev_label": "Low",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Nov 2026",
+    "obs": "Merauke Regency, South Papua, Indonesia, faces potential agricultural water-security challenges during the 2026/27 El Niño. According to Indonesia's statistics agency (BPS), South Papua produced approximately 362,542 tonnes of paddy in 2025, highlighting the importance of reliable water management for regional food production.\n\nRecent research in Merauke demonstrates that irrigation requirements vary considerably with planting schedules, with some dry-season scenarios requiring more than 1 litre per second per hectare. Rainfall deficits could therefore increase pressure on irrigation networks, rain-fed agriculture, and water-storage infrastructure.\n\nI recommend combining BMKG forecasts, ERA5 reanalysis, CHIRPS rainfall estimates, Standardized Precipitation Index monitoring, and field-based irrigation observations to evaluate emerging vulnerabilities. Priority actions include adapting planting calendars, assessing canal and reservoir reliability, protecting wetland hydrology, and involving local and Indigenous communities in adaptation planning.\n\nThis is a prospective assessment based on publicly available climate information, statistics, and research, not independently observed 2026/27 agricultural losses.",
+    "links": [
+      "https://www.bmkg.go.id/cuaca/potensi-hujan-sepekan/prakiraan-cuaca-indonesia-sepekan-periode-09-15-oktober-2026-meski-kemarau-mendominasi-potensi-hujan-masih-ada-di-sejumlah-wilayah",
+      "https://papua.bps.go.id/en/pressrelease/2026/02/02/1411/paddy-harvested-area-and-production-in-papua-selatan-province-in-2025--fixed-number-.html",
+      "https://ejurnal.itenas.ac.id/index.php/rekakarya/article/view/15053",
+      "https://iieta.org/journals/ijsse/paper/10.18280/ijsse.150417",
+      "https://pasca.unhas.ac.id/ojs/index.php/ijesca/article/view/6718"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 21,
+    "lat": -1.0,
+    "lon": 40.0,
+    "country": "Kenya",
+    "place": "Lower Tana River Basin, Tana River County, Kenya",
+    "hazard": "Riverine flood",
+    "hkey": "flood",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income",
+      "Displacement and migration"
+    ],
+    "when": "Oct 2026",
+    "obs": "The Lower Tana River Basin in Kenya faces elevated flood risk during the October–December 2026 rainfall season. The IGAD Climate Prediction and Applications Centre (ICPAC) forecasts substantially increased probabilities of above-normal rainfall across northeastern Kenya, while Kenya's national seasonal outlook also identifies Tana River County among areas expecting enhanced rainfall.\n\nHeavy precipitation and increased river discharge could threaten floodplain settlements, agricultural land, roads, bridges, water infrastructure, and public health. Flood risk may be compounded by upstream catchment rainfall and reservoir operations.\n\nI recommend integrating ICPAC seasonal forecasts, CHIRPS precipitation estimates, ERA5 reanalysis, satellite flood mapping, river-gauge observations, and reservoir discharge records to assess evolving conditions.\n\nPriority measures include flood early-warning systems, infrastructure vulnerability assessments, evacuation preparedness, floodplain management, and coordination among upstream and downstream water authorities.\n\nThis is a prospective risk assessment based on publicly available climate outlooks and research, not an independently verified report of flooding in 2026.",
+    "links": [
+      "https://www.icpac.net/publications/summary-for-decision-makers-october-to-december-2026-season/",
+      "https://www.icpac.net/news/the-greater-horn-of-africa-is-expected-to-experience-a-wetter-than-normal-october-december-ond-2026-season-as-el-ni%C3%B1o-strengthens/",
+      "https://meteo.go.ke/our-products/seasonal-forecast/",
+      "https://wmo.int/media/news/el-nino-impacts-greater-horn-of-africa",
+      "https://fews.net/east-africa/seasonal-monitor/september-2026"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 22,
+    "lat": -5.19,
+    "lon": -80.63,
+    "country": "Peru",
+    "place": "Lower Piura River Basin, Piura and Catacaos, Piura Region, Peru",
+    "hazard": "Riverine flood",
+    "hkey": "flood",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Public health",
+      "Infrastructure and transport",
+      "Livelihoods and income",
+      "Displacement and migration"
+    ],
+    "when": "Dec 2026",
+    "obs": "The Lower Piura River Basin in northern Peru faces potentially significant flood and infrastructure risks during the 2026/27 Coastal El Niño. Peru's ENFEN maintains a Coastal El Niño alert and forecasts above-normal rainfall along the northern coast during the December 2026–March 2027 summer season. CENEPRED has also identified flood-prone communities and critical exposure in Piura.\n\nHistorical flooding, particularly in 2017, demonstrates the vulnerability of urban drainage systems, agricultural floodplains, roads, and river crossings.\n\nI recommend integrating SENAMHI rainfall and river-gauge observations, CHIRPS precipitation estimates, satellite flood mapping, and hydrodynamic modeling to assess flood extent, bridge scour, riverbank erosion, and infrastructure disruption.\n\nPriority actions include strengthening early-warning systems, inspecting vulnerable bridges, maintaining drainage infrastructure, and improving floodplain preparedness.\n\nThis is a secondary-source prospective risk assessment, not a firsthand report of flooding or infrastructure damage during the current event.",
+    "links": [
+      "https://enfen.imarpe.gob.pe/comunicado-oficial-enfen-n-14-2026-estado-de-sistema-de-alerta-alerta-de-el-nino-costero/",
+      "https://www.gob.pe/institucion/cenepred/noticias/1418184-cenepred-presento-el-estudio-de-escenario-de-riesgos-ante-lluvias-intensas-por-el-fenomeno-el-nino-2027-en-piura",
+      "https://sigrid.cenepred.gob.pe/sigridv3/documento/22326",
+      "https://www.senamhi.gob.pe/?dp=piura&p=monitoreo-piura",
+      "https://dimse.cenepred.gob.pe/visorescenarios/Views/"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 23,
+    "lat": -17.0,
+    "lon": 28.8,
+    "country": "Zambia",
+    "place": "Lake Kariba, Middle Zambezi River Basin, Zambia–Zimbabwe border",
+    "hazard": "Below-normal rainfall",
+    "hkey": "rain_lo",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Hydropower and energy",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Oct 2026",
+    "obs": "Lake Kariba, shared by Zambia and Zimbabwe, faces potential hydropower and water-security risks during the 2026/27 El Niño. The Southern Africa Regional Climate Outlook Forum forecasts increased likelihood of below-normal rainfall across southern Zambia and Zimbabwe. According to the Zambezi River Authority, Lake Kariba's usable storage was 38.04% on 5 October 2026, compared with 14.30% one year earlier, although levels were declining seasonally.\n\nReduced catchment rainfall could constrain future inflows and electricity generation, potentially affecting households, industry, and water-dependent livelihoods.\n\nI recommend integrating Zambezi River Authority reservoir records, national seasonal forecasts, CHIRPS rainfall estimates, ERA5 reanalysis, and hydrological models to assess storage reliability and power-generation vulnerability.\n\nPriorities include adaptive reservoir operations, transparent transboundary water allocation, drought early warning, and energy diversification.\n\nThis contribution synthesizes official observations and published research; potential 2026/27 impacts are not presented as independently verified damage.",
+    "links": [
+      "https://www.zambezira.org/hydrology/lake-levels/1000",
+      "https://www.zambezira.org/hydrology/kariba-reservoir-data",
+      "https://csc.sadc.int/statement-thirty-third-southern-africa-regional-climate-outlook-forum-sarcof-33",
+      "https://zmd.gov.zm/products/seasonal-forecast/seasonal-rainfall-forecast-20262027/",
+      "https://www.weatherzw.org.zw/products/seasonal-forecast/2026-2027-seasonal-forecast/"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 24,
+    "lat": -27.5,
+    "lon": 152.5,
+    "country": "Australia",
+    "place": "Southeast Queensland, Australia — particularly the Scenic Rim and surrounding rural–urban interface",
+    "hazard": "Wildfire",
+    "hkey": "fire",
+    "severity": 2,
+    "sev_label": "Low",
+    "what": "Expert analysis",
+    "sectors": [
+      "Livestock",
+      "Water supply",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income"
+    ],
+    "when": "Sep 2026",
+    "obs": "Southeast Queensland, Australia, faces heightened bushfire preparedness challenges during the strengthening 2026/27 El Niño. The Australasian Fire and Emergency Service Authorities Council (AFAC) identifies parts of southeast Queensland as having above-normal bushfire potential during spring 2026. Australia's Bureau of Meteorology also forecasts warmer-than-average temperatures across much of the country, although rainfall projections vary regionally.\n\nElevated fire-weather conditions could threaten rural communities, ecosystems, transportation networks, power infrastructure, and public health through smoke exposure. The severity of potential impacts depends on rainfall, vegetation fuel loads, wind conditions, and preparedness measures.\n\nI recommend integrating Bureau of Meteorology climate observations, ERA5 reanalysis, NASA FIRMS active-fire detections, soil-moisture indicators, and Australian Fire Danger Rating System information.\n\nPriority actions include monitoring fuel dryness, strengthening community warnings, evaluating infrastructure exposure, and documenting emergency preparedness.\n\nThis is a secondary-source risk assessment, not a firsthand report of bushfire damage attributable to El Niño.",
+    "links": [
+      "https://afac.com.au/public-resources/seasonal-bushfire-outlook-spring-2026",
+      "https://www.bom.gov.au/climate/ahead/outlooks/archive/20261001-outlook.shtml",
+      "https://www.bom.gov.au/news-and-media/el-nino-what-it-means-for-australias-climate",
+      "https://www.bom.gov.au/news-and-media/el-nino-strength-doesnt-always-match-impact-on-australia",
+      "https://www.agriculture.gov.au/abares/products/weekly_update/weekly-update-260924"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 25,
+    "lat": -6.1,
+    "lon": 107.1,
+    "country": "Indonesia",
+    "place": "Pakisjaya District, Karawang Regency, West Java — Citarum irrigation service area",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 2,
+    "sev_label": "Low",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Infrastructure and transport",
+      "Livelihoods and income"
+    ],
+    "when": "Aug 2026",
+    "obs": "Official reports document agricultural drought in Karawang Regency, West Java, during the 2026 dry season. Perum Jasa Tirta II reported approximately 1,000 hectares of affected farmland in Pakisjaya District in August 2026, alongside reduced irrigation-channel flows.\n\nPublished Jatiluhur Reservoir observations indicate a water-level decline from 94.32 m on 18 September to 91.41 m on 10 October 2026, a difference of 2.91 m. However, seasonal reservoir operations and withdrawals must be considered before attributing this change to El Niño.\n\nI recommend combining daily reservoir levels, inflows, irrigation deliveries, rainfall anomalies, and agricultural exposure to quantify water shortages and evaluate management responses. Potential analyses include historical seasonal comparisons, water-balance assessment, and identification of critical irrigation thresholds.\n\nThis contribution is an independently synthesized comparison of publicly reported measurements, not firsthand field monitoring. Establishing ENSO attribution requires additional hydrological and meteorological analysis.",
+    "links": [
+      "https://www.jasatirta2.co.id/",
+      "https://www.jasatirta2.co.id/publikasi/detail_berita/perum-jasa-tirta-ii-perkuat-kolaborasi-bahas-mitigasi-kekeringan-di-kabupaten-karawangxiavzcgotfsemfh0tg93",
+      "https://mediaindonesia.com/jabar/berita/935191/pjt-ii-lanjutkan-operasi-modifikasi-cuaca-untuk-jaga-ketersediaan-air-di-das-citarum",
+      "https://www.jasatirta2.co.id/publikasi/detail_berita/pjt-ii-kembali-laksanakan-operasi-modifikasi-cuaca-tahap-ii-untuk-jaga-ketersediaan-air-das-citarumjtxdgakdctxljxa8c4vi",
+      "https://www.bmkg.go.id/iklim/dinamika-atmosfer/analisis-dinamika-atmosfer-dasarian-iii-september-2026"
+    ],
+    "name": "Estovio Farrel Timothy",
+    "role": "Researcher",
+    "affil": "Johns Hopkins University",
+    "anon": false
+  },
+  {
+    "id": 26,
+    "lat": 36.8,
+    "lon": 9.5,
+    "country": "Tunisia",
+    "place": "Tunisia – North Africa, with a focus on the Chiba, Madjerda and Merguellil watersheds.",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 2,
+    "sev_label": "Low",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Ecosystems"
+    ],
+    "when": "Feb 2026",
+    "obs": "Tunisia is a semi-arid Mediterranean country highly vulnerable to rainfall variability, recurrent droughts, and flash floods. The anticipated 2026–2027 El Niño event highlights the importance of monitoring potential changes in precipitation patterns, water availability, and hydroclimatic extremes across North Africa. Potentially affected sectors include water supply, irrigated and rainfed agriculture, groundwater resources, and aquatic and terrestrial ecosystems. In watersheds such as Chiba and Merguellil, changes in rainfall amount, intensity, and seasonal distribution could influence reservoir storage, surface runoff, soil erosion, and groundwater recharge. However, the regional effects of El Niño over Tunisia remain uncertain and should be assessed using meteorological observations, climate forecasts, and hydrological monitoring rather than assumed from global projections alone. Integrating ground-based observations, satellite precipitation products, and hydrological modeling could help identify emerging anomalies, assess potential risks, and support adaptive water management. Particular attention should be given to drought preparedness, flood risk monitoring, and the sustainable allocation of limited water resources.",
+    "links": [],
+    "name": "Khaoula Khemiri",
+    "role": "Researcher",
+    "affil": "National Agronomic Institute of Tunisia (INAT), University of Carthage, Tunis, Tunisia",
+    "anon": false
+  },
+  {
+    "id": 27,
+    "lat": 31.63,
+    "lon": 74.87,
+    "country": "India",
+    "place": "Amritsar (Punjab)",
+    "hazard": "Heatwave",
+    "hkey": "heat",
+    "severity": 2,
+    "sev_label": "Low",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Public health"
+    ],
+    "when": "Before 2026",
+    "obs": "Night temperature is increasing and Punjab has huge population of agriculture working and night temperature is hovering sometimes 5-6 degree C above normal. This is very dangerous trend and electricity peak is all time high and electricity supply will become unsustainable after few years. It is affecting sleep pattern and reducing physical strength by 20-30% on daily basis. Also, more crop disease and vector born diseases during June-July-August months.",
+    "links": [],
+    "name": null,
+    "role": null,
+    "affil": null,
+    "anon": true
+  },
+  {
+    "id": 28,
+    "lat": 22.3,
+    "lon": 114.2,
+    "country": "Hong Kong",
+    "place": "City",
+    "hazard": "Flash flood",
+    "hkey": "flash",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Water supply"
+    ],
+    "when": "Jun 2026",
+    "obs": "As of October 2026, El Niño is established and expected to intensify into early 2027. In Hong Kong, El Niño is historically associated with wetter winter and spring conditions, although individual extreme events cannot be attributed to ENSO alone. The Hong Kong Observatory forecasts normal-to-above-normal rainfall for October–December 2026. For example, winter rainfall reached 209 mm during the 1997–1998 El Niño and 317 mm during 1982–1983, both above normal. More recently, September 2026 recorded only 94.3 mm, approximately 29% of its monthly normal, illustrating substantial rainfall variability. If wetter conditions develop, intense rainfall could increase urban flooding, drainage overload, transport disruption and landslide risks, particularly in densely populated districts and steep terrain. Reservoir operations and water-resource management may also be affected. These represent potential impacts rather than confirmed El Niño-attributed losses. Continued monitoring of precipitation anomalies, extreme rainfall and reported impacts is essential.",
+    "links": [
+      "https://www.hko.gov.hk/en/wxinfo/season/season.htm",
+      "https://www.hko.gov.hk/en/lrf/enso/enso-EN-impact-stat.htm",
+      "https://www.hko.gov.hk/en/wxinfo/pastwx/mws2026/mws202609.htm",
+      "https://cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml"
+    ],
+    "name": "Kunlong He",
+    "role": "Researcher",
+    "affil": "The Hong Kong University of Science and Technology",
+    "anon": false
+  },
+  {
+    "id": 29,
+    "lat": 28.47,
+    "lon": 77.03,
+    "country": "India",
+    "place": "Gurugram",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Hydropower and energy",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income",
+      "Food prices",
+      "Displacement and migration"
+    ],
+    "when": "Before 2026",
+    "obs": "I expect El Niño to increase the risk of climate-related disasters by influencing rainfall patterns, intensifying heatwaves, and increasing the likelihood of droughts in vulnerable regions. In India, El Niño may weaken the southwest monsoon, potentially causing below-normal rainfall, water scarcity, agricultural losses, and reduced groundwater recharge. However, its impacts vary, and El Niño does not always lead to drought. I am particularly interested in understanding how these climate extremes affect water bodies, ecosystems, agriculture, and communities dependent on natural resources. Farmers, rural communities, urban populations, and economically vulnerable groups are likely to face significant challenges, including crop failure, drinking water shortages, heat-related illnesses, and livelihood insecurity. I expect greater emphasis on early warning systems, disaster preparedness, climate-resilient water management, ecosystem restoration, and nature-based solutions. I also hope to understand the potential scale of these impacts through rainfall anomalies, temperature records, drought frequency, crop losses, and the number of people affected, enabling better planning and disaster risk reduction.",
+    "links": [],
+    "name": "Dr. Syed Maqbool Geelani",
+    "role": "NGO or international organization",
+    "affil": "GuruJal-Abhipsa Foundation",
+    "anon": false
+  },
+  {
+    "id": 30,
+    "lat": 12.3,
+    "lon": 76.65,
+    "country": "India",
+    "place": "Cauvery River Basin, South India (Karnataka and Tamil Nadu States)",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 5,
+    "sev_label": "Extreme",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Public health",
+      "Livelihoods and income",
+      "Displacement and migration"
+    ],
+    "when": "",
+    "obs": "I observed the nexus between El Nino, drought, and political tension over the Cauver River between the south Indian states of Karnataka and Tamil Nadu. In a dataset strecthing between 1973 and 2023, the research revealed over 83.3% linkelihood of a major drought occuring during an El Nino year. Drawing the nexus of political tension, this region is water stressed, and a drough destroys prime agriculture lands and leads to political tension over water sharing. \nFollowing the numbers, with the incoming 2027 El Nino, the Cauvery watershed will see extreme heat, with a very high likelhood of a major drought, which will result in tumultous public outcry, health and hygeiene concerns, and political backlash from either side of the border.\nI have attached a google drive link with the research paper.",
+    "links": [
+      "https://drive.google.com/drive/folders/1a_tJcSbBKzf9LHwRiR8fbxW7NKGyV4-l?usp=sharing"
+    ],
+    "name": "Aditya Rajiv Gowda",
+    "role": "Student",
+    "affil": "MSc. Sustainability Management | Columbia University",
+    "anon": false
+  },
+  {
+    "id": 31,
+    "lat": -34.0,
+    "lon": -71.0,
+    "country": "Chile",
+    "place": "Central Chile",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Water supply",
+      "Hydropower and energy",
+      "Infrastructure and transport"
+    ],
+    "when": "Oct 2026",
+    "obs": "Unexpected Rainfalls during Oct-Nov Can affect directly the thaw season affecting electrical generation and agriculture",
+    "links": [],
+    "name": null,
+    "role": null,
+    "affil": null,
+    "anon": true
+  },
+  {
+    "id": 32,
+    "lat": -33.45,
+    "lon": -70.67,
+    "country": "Chile",
+    "place": "Santiago, Chile",
+    "hazard": "Flash flood",
+    "hkey": "flash",
+    "severity": 1,
+    "sev_label": "Minor",
+    "what": "Observed impact",
+    "sectors": [
+      "Infrastructure and transport"
+    ],
+    "when": "Oct 2026",
+    "obs": "During July and August, there was particularly intense rainfall in central Chile; some of these events were followed by the formation of tornadic clouds and heavy hail—with hailstones reaching nearly 10 mm in diameter—a phenomenon that occurs very rarely in Chile. The high-intensity rainfall triggered landslides and flooding in the capital, Santiago. On October 16, 2026, an F0-intensity tornado caused minor damage in the city center.",
+    "links": [
+      "https://www.biobiochile.cl/noticias/nacional/region-metropolitana/2026/10/14/no-fue-el-primero-el-registro-historico-que-confirma-que-ya-hubo-otro-tornado-en-santiago.shtml"
+    ],
+    "name": "Fernando Santibáñez-Quezada",
+    "role": "Researcher",
+    "affil": "Universidad de Chile",
+    "anon": false
+  },
+  {
+    "id": 33,
+    "lat": -1.94,
+    "lon": 29.87,
+    "country": "Rwanda",
+    "place": "EAST AFRICA",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Fisheries",
+      "Water supply",
+      "Hydropower and energy",
+      "Public health",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Livelihoods and income",
+      "Food prices",
+      "Displacement and migration"
+    ],
+    "when": "Oct 2026",
+    "obs": "",
+    "links": [],
+    "name": "Dr.Kazora Jonah",
+    "role": "Government agency",
+    "affil": "Rwanda Meteorology Agency",
+    "anon": false
+  },
+  {
+    "id": 34,
+    "lat": -25.0,
+    "lon": -57.5,
+    "country": "Paraguay",
+    "place": "Cuenca del río Paraná",
+    "hazard": "Riverine flood",
+    "hkey": "flood",
+    "severity": 5,
+    "sev_label": "Extreme",
+    "what": "Observed impact",
+    "sectors": [
+      "Hydropower and energy",
+      "Infrastructure and transport",
+      "Ecosystems",
+      "Displacement and migration"
+    ],
+    "when": "Oct 2026",
+    "obs": "Abundantes lluvias se han registrado entre los meses de agosto, setiembre y octubre en la cuenca del río Paraná, las hidroeléctricas empezaron a abrir las compuertas ante la imposibilidad de almacenamiento y se generaron inundaciones en las ciudades ribereñas.",
+    "links": [
+      "https://www.lanacion.com.py/pais/2026/10/14/inundaciones-desplazan-a-cientos-de-familias-en-ciudad-del-este-y-ayolas/"
+    ],
+    "name": null,
+    "role": null,
+    "affil": null,
+    "anon": true
+  },
+  {
+    "id": 35,
+    "lat": 6.0,
+    "lon": 37.0,
+    "country": "Ethiopia",
+    "place": "Gamo Highlands, Ethiopia",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Livestock",
+      "Water supply",
+      "Livelihoods and income",
+      "Food prices"
+    ],
+    "when": "Jun 2026",
+    "obs": "I would like to contribute observations from the Gamo Highlands of southern Ethiopia, where the most recent Kiremt (June–September, JJAS) season has been marked by an alarming lack of rainfall in areas that normally receive substantial seasonal precipitation.\n\nThe situation represents a striking departure from the conditions traditionally associated with this season. In the Gamo Highlands, Kiremt is typically characterized by persistent cloud cover, sometimes with dense low-level clouds and fog so thick that vehicle drivers must switch on their headlights even during the daytime. This season, however, the skies have remained unusually clear, and the expected rainfall has largely failed in the areas I have observed.\n\nThe consequences for local livelihoods are already serious. Agriculture is the principal source of livelihood for many households, yet extensive areas of farmland remain bare because farmers have been unable to plant, while seeds already sown have failed to germinate under the dry conditions. Food prices have risen considerably, increasing pressure on households whose incomes and food supplies depend heavily on rain-fed agriculture. Livestock are showing signs of deterioration, while springs are drying up and access to water for domestic consumption is becoming increasingly difficult.",
+    "links": [],
+    "name": "Markato Markos",
+    "role": "Researcher",
+    "affil": "Mattu University",
+    "anon": false
+  },
+  {
+    "id": 36,
+    "lat": -28.3,
+    "lon": -49.9,
+    "country": "Brazil",
+    "place": "são joaquim, sc",
+    "hazard": "Above-normal rainfall",
+    "hkey": "rain_hi",
+    "severity": 3,
+    "sev_label": "Moderate",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops"
+    ],
+    "when": "Nov 2027",
+    "obs": "we expect to oserve damage on apple industry in Brazil",
+    "links": [],
+    "name": "José Itamar Boneti",
+    "role": "Researcher",
+    "affil": "Fito desenvolvimento e produção ltda",
+    "anon": false
+  },
+  {
+    "id": 37,
+    "lat": 31.96,
+    "lon": 77.11,
+    "country": "India",
+    "place": "Kullu Taluk, Himachal Pradesh",
+    "hazard": "Flash flood",
+    "hkey": "flash",
+    "severity": 5,
+    "sev_label": "Extreme",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Livestock",
+      "Public health",
+      "Livelihoods and income"
+    ],
+    "when": "Before 2026",
+    "obs": "Researchers are mapping flash flood susceptibility in the Kullu taluk of Himachal Pradesh using Geographical Information System (GIS) tools and the Analytic Hierarchy Process (AHP).\n By weighting 11 environmental factors such as Land Use/Land Cover (27%), NDWI (19%), and Drainage Density (14%)  the study generates a predictive zonation map to help local authorities establish early warning systems and mitigate hazard impacts.   \nWho is affected:\nCommunities and infrastructure located in high-risk valley areas are most vulnerable, specifically settlements along the Beas and Parvati river regions, including Kullu, Bhuntar, Kasol, Kias, Neoli, Tharas, and Guachha. \n  Key Numbers:\nStudy Area Extent: 2,879 km²   Average Annual Rainfall: ~1,240 mm   Elevation Range: 947 m to 6,436 m   Snow Cover Area: 1,481.3 km²   Susceptibility Zonation:Low Risk: 50.24% of the area   Moderate Risk: 48.90% of the area   High Risk: 0.84% of the area",
+    "links": [
+      "https://docs.google.com/presentation/d/1pnbI8fvOJs25j9itO2I-mtZKrt1ZcLuC/edit?usp=sharing&ouid=113043033126407396109&rtpof=true&sd=true"
+    ],
+    "name": "Daarwin G",
+    "role": "NGO or international organization",
+    "affil": "GuruJal",
+    "anon": false
+  },
+  {
+    "id": 38,
+    "lat": 36.2,
+    "lon": 138.3,
+    "country": "Japan",
+    "place": "Japan",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Expected / Outlook",
+    "sectors": [
+      "Fisheries"
+    ],
+    "when": "Aug 2026",
+    "obs": "There is a possibility that Japan will experience a record-breaking warm winter as 3-month average.\nHowever, once cold air flows in, there is a risk of heavy snowfall. Also, it is highly likely that the global mean temperature record will be broken this year and next year. Furthermore, anchovy catches off the coast of Peru are likely to decline, and it is anticipated that skipjack tuna will no longer be caught in the waters near east of Indonesia.",
+    "links": [
+      "https://www.jamstec.go.jp/aplinfo/sintexf/e/seasonal/outlook.html",
+      "https://www.jamstec.go.jp/virtualearth/expert/en/index.html"
+    ],
+    "name": "Takeshi Doi",
+    "role": "Researcher",
+    "affil": "JAMSTEC",
+    "anon": false
+  },
+  {
+    "id": 39,
+    "lat": 51.5,
+    "lon": -0.1,
+    "country": "United Kingdom",
+    "place": "",
+    "hazard": "Multiple or general",
+    "hkey": "multiple",
+    "severity": null,
+    "sev_label": "",
+    "what": "Expert analysis",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Infrastructure and transport",
+      "Livelihoods and income"
+    ],
+    "when": "",
+    "obs": "Filling out this form to be kept in the loop with future advancements / as the project evolves.  I've selected options in the above questions to reflect my general research & expertise for future submissions.",
+    "links": [],
+    "name": "Meredith Hess",
+    "role": "Researcher",
+    "affil": "University of Leeds",
+    "anon": false
+  },
+  {
+    "id": 41,
+    "lat": 34.0,
+    "lon": -112.0,
+    "country": "United States",
+    "place": "South Western US",
+    "hazard": "Drought",
+    "hkey": "drought",
+    "severity": 4,
+    "sev_label": "High",
+    "what": "Observed impact",
+    "sectors": [
+      "Crops",
+      "Water supply",
+      "Livelihoods and income",
+      "Food prices"
+    ],
+    "when": "Before 2026",
+    "obs": "My research using GRACE/GRACE-FO satellite observations across the Colorado River Basin and the western U.S. shows a strong connection between hydroclimate variability, drought, and groundwater depletion. During prolonged dry periods, reduced precipitation and snowpack decrease surface-water availability and reservoir storage. Communities and agriculture then rely more heavily on groundwater, increasing pressure on already stressed aquifers. In the Colorado River Basin, our updated analysis through 2026 shows that groundwater remains a major component of the basin’s long-term water-storage loss, while recent declines in surface-water storage, particularly in major reservoirs, have added substantially to the overall losses. Wet periods associated with favorable climate conditions can provide temporary recovery through increased snowpack, runoff, and groundwater recharge, but these gains have generally not been sufficient to reverse the longer-term depletion. This highlights the importance of monitoring El Niño/La Niña variability together with groundwater, snow, reservoirs, and soil moisture rather than considering each component separately.",
+    "links": [
+      "https://www.latimes.com/environment/story/2025-05-27/colorado-river-groundwater"
+    ],
+    "name": "Karem Abdelmohsen",
+    "role": "Researcher",
+    "affil": "Arizona State University",
+    "anon": false
+  }
+];</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+(function () {
+  const COLORS = {
+    multiple: "#a855f7",
+    drought:  "#f97316",
+    flood:    "#3b82f6",
+    flash:    "#06b6d4",
+    rain_hi:  "#60a5fa",
+    rain_lo:  "#fbbf24",
+    heat:     "#ef4444",
+    fire:     "#c2410c",
+  };
+  const HLABELS = {
+    multiple: "Multiple / General",
+    drought:  "Drought",
+    flood:    "Riverine Flood",
+    flash:    "Flash Flood",
+    rain_hi:  "Above-normal Rainfall",
+    rain_lo:  "Below-normal Rainfall",
+    heat:     "Heatwave",
+    fire:     "Wildfire",
+  };
+  const SEV = {1:"Minor",2:"Low",3:"Moderate",4:"High",5:"Extreme"};
+
+  // Map
+  const map = L.map("map", {
+    center: [15, 10], zoom: 2, minZoom: 1, maxZoom: 10, worldCopyJump: true,
+  });
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright" style="color:#58a6ff">OSM</a> contributors © <a href="https://carto.com/attributions" style="color:#58a6ff">CARTO</a>',
+    subdomains: "abcd", maxZoom: 19,
+  }).addTo(map);
+
+  function makeIcon(hkey, sev) {
+    const col = COLORS[hkey] || "#a855f7";
+    const s   = sev || 2;
+    const r   = 7 + s * 2.5;
+    const d   = r * 2;
+    const glow = s >= 4 ? `box-shadow:0 0 ${s * 4}px ${col}99` : `box-shadow:0 0 ${s * 2}px ${col}66`;
+    return L.divIcon({
+      html: `<div style="width:${d}px;height:${d}px;border-radius:50%;background:${col};border:2px solid rgba(255,255,255,.65);${glow};opacity:.92;cursor:pointer"></div>`,
+      className: "", iconSize: [d, d], iconAnchor: [r, r], popupAnchor: [0, -r - 4],
+    });
+  }
+
+  function sevDots(sev, col) {
+    if (!sev) return "";
+    let h = `<div class="psev-row" style="color:${col}">`;
+    for (let i = 1; i <= 5; i++) h += `<div class="psev-dot${i <= sev ? " on" : ""}"></div>`;
+    h += `<span class="psev-text">${SEV[sev] || sev}</span></div>`;
+    return h;
+  }
+
+  function esc(s) {
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  function makePopup(d) {
+    const col    = COLORS[d.hkey] || "#a855f7";
+    const hLabel = HLABELS[d.hkey] || d.hazard;
+    const loc    = d.place ? `${d.place}, ${d.country}` : d.country;
+
+    let whoHtml = "";
+    if (d.anon) {
+      whoHtml = `<div class="pcard-who"><div class="pname">Anonymous Contributor</div></div>`;
+    } else if (d.name) {
+      const parts = [d.role, d.affil].filter(Boolean).join(" &middot; ");
+      whoHtml = `<div class="pcard-who">
+        <div class="pname">${esc(d.name)}</div>
+        ${parts ? `<div class="pmeta">${esc(parts)}</div>` : ""}
+      </div>`;
+    }
+
+    const tags = (d.sectors || []).map(s =>
+      `<span class="ptag">${esc(s)}</span>`).join("");
+    const tagsHtml = tags
+      ? `<div class="pcard-tags">${tags}</div>` : "";
+
+    const obsHtml = d.obs
+      ? `<div class="pcard-obs">${esc(d.obs)}</div>` : "";
+
+    const linksHtml = d.links && d.links.length
+      ? `<div class="pcard-links">${d.links.map(u => {
+          let label;
+          try { label = new URL(u).hostname.replace("www.", ""); } catch(e) { label = "Link"; }
+          return `<a href="${u}" target="_blank" rel="noopener" class="plink">&#8599; ${esc(label)}</a>`;
+        }).join("")}</div>` : "";
+
+    return `<div class="pcard">
+      <div class="pcard-head">
+        <span class="phazard-badge" style="background:${col}22;color:${col};border:1px solid ${col}55">${hLabel}</span>
+        ${d.severity ? sevDots(d.severity, col) : ""}
+      </div>
+      <div class="pcard-loc">
+        <strong>&#128205; ${esc(loc)}</strong>
+        ${d.when ? `<span class="pwhen">&#183; Est. ${esc(d.when)}</span>` : ""}
+      </div>
+      ${whoHtml}
+      ${d.what ? `<div class="pcard-what">Sharing: <em>${esc(d.what)}</em></div>` : ""}
+      ${tagsHtml}
+      ${obsHtml}
+      ${linksHtml}
+    </div>`;
+  }
+
+  // Build marker layer
+  const mcg = L.markerClusterGroup({
+    maxClusterRadius: 55,
+    iconCreateFunction(cluster) {
+      const c = cluster.getChildCount();
+      const sz = c < 10 ? 36 : c < 20 ? 42 : 48;
+      return L.divIcon({
+        html: `<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:rgba(168,85,247,.82);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.4);box-shadow:0 0 14px rgba(168,85,247,.55)">${c}</div>`,
+        className: "", iconSize: [sz, sz], iconAnchor: [sz / 2, sz / 2],
+      });
+    },
+  });
+
+  const allMarkers = DATA.map(d => {
+    const m = L.marker([d.lat, d.lon], { icon: makeIcon(d.hkey, d.severity) });
+    m.bindPopup(makePopup(d), { maxWidth: 380 });
+    m._hkey = d.hkey;
+    mcg.addLayer(m);
+    return m;
+  });
+  mcg.addTo(map);
+
+  // Filter logic
+  let active = "all";
+  const visEl = document.getElementById("vis-count");
+
+  function applyFilter(hkey) {
+    active = hkey;
+    mcg.clearLayers();
+    let count = 0;
+    allMarkers.forEach(m => {
+      if (hkey === "all" || m._hkey === hkey) { mcg.addLayer(m); count++; }
+    });
+    visEl.textContent = count;
+  }
+
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-btn").forEach(b => {
+        b.classList.remove("active");
+        b.style.background  = "";
+        b.style.borderColor = "";
+        b.style.color       = "";
+      });
+      btn.classList.add("active");
+      const c = btn.dataset.color;
+      if (c) { btn.style.background = c + "33"; btn.style.borderColor = c + "88"; btn.style.color = "#fff"; }
+      else { btn.style.background = "var(--accent)"; btn.style.color = "#fff"; btn.style.borderColor = "transparent"; }
+      applyFilter(btn.dataset.hkey);
+    });
+  });
+
+  // Legend click = filter
+  document.querySelectorAll(".leg-item[data-hkey]").forEach(el => {
+    el.addEventListener("click", () => {
+      const btn = document.querySelector(`.filter-btn[data-hkey="${el.dataset.hkey}"]`);
+      if (btn) btn.click();
+    });
+  });
+})();
+</script>
+</body>
+</html>

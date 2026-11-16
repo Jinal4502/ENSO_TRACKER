@@ -268,6 +268,7 @@ def render_facts(output_path: str = "docs/facts.html") -> None:
     <a href="impacts.html">Impacts</a>
     <a href="facts.html" class="nav-active">Quick Facts</a>
     <a href="research.html">Research</a>
+    <a href="contributions.html">Contributions</a>
   </div>
 </nav>
 
